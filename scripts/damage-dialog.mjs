@@ -44,7 +44,7 @@ export function onRenderRollDialog(app, element) {
 
 	if (!app[WRAPPED]) {
 		const targets = Array.from(game.user.targets);
-		app[WRAPPED] = { extras: collectExtras({ actor, item, targets }) };
+		app[WRAPPED] = { item, extras: collectExtras({ actor, item, targets }) };
 		wrapCallback(app);
 	}
 	const { extras } = app[WRAPPED];
@@ -96,6 +96,12 @@ function wrapCallback(app) {
 			applied.push(extra);
 		}
 		log("damage extras applied", hitType, applied.map((e) => e.id));
+		// For the readable breakdown in chat
+		if (rollConfig.options) {
+			const item = app[WRAPPED]?.item;
+			rollConfig.options.d4eaInfo = { actor: item?.actor?.name ?? "", power: item?.name ?? "", ability: item?.system?.attack?.ability ?? "", damage: true };
+			rollConfig.options.d4eaExtras = applied.map((e) => ({ label: e.label, formula: e.formula }));
+		}
 		pending = null;
 		const result = await original(form, rollConfig);
 		for (const extra of applied) await extra.onApplied?.();

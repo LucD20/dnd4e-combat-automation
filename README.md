@@ -3,7 +3,7 @@
 Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a burocracia de combate do D&D 4e.
 *(English below.)*
 
-## O que faz (v0.5.3)
+## O que faz (v0.5.4)
 
 | Recurso | Como funciona |
 |---|---|
@@ -23,7 +23,7 @@ Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a
 | **Tiro Primoroso** | +1 nos ataques à distância quando nenhum aliado está mais perto do alvo. |
 | **PV temporários** | Vigor da Fúria Sangrenta (Grontar, automático ao derrubar um inimigo) e Virtude da Bravura (cartão para o bardo quando um aliado a até 5 quadrados deixa um inimigo sangrando ou o derruba; uma vez por rodada). |
 | **Atributos modificados** | Nas fichas (padrão e do Fox, personagens e monstros), defesas alteradas por efeitos temporários ficam vermelhas (penalidade) ou verdes (bônus), e o tooltip mostra o que está mudando, ex.: "Palavra Pavorosa: −3". A janela de ataque lista os modificadores automáticos de cada alvo (Tiro Primoroso +1, Zombaria Malévola −2…), cada um com liga/desliga. |
-| **Rolagens legíveis** | No chat, as variáveis da rolagem viram nomes com valor: "1d20 + Arma +2 + Atributo +4 + ½ Nível +0 + Vantagem de Combate +2 + Tiro Primoroso +1". |
+| **Rolagens legíveis** | No chat, cada rolagem mostra quem rolou, o poder e a fórmula resumida ("Aegustarion — Ataque Básico à Distância: 1d20 + 7") e as listas **Bônus** (Arma (Treinamento) +2, Atributo (Destreza) +4, ½ Nível +0), **Situacional** (Vantagem de Combate, Tiro Primoroso, dano extra da Presa…) e **Penalidades**. |
 | **Idioma do jogo 4e** | Em *Configurações do módulo → Idioma do jogo 4e*, cada usuário escolhe o idioma do sistema dnd4e (atributos, perícias, condições, rótulos da ficha) e deste módulo, independente da interface do Foundry. Ex.: Foundry em inglês, conteúdo 4e em português. |
 
 Cartões que dependem do resultado de um ataque esperam a animação do **Dice So Nice** terminar.

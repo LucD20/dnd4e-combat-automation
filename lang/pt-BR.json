@@ -258,7 +258,7 @@
       "StirringName": "{power} (+{heal} PV para aliados que acertarem)",
       "StirringDesc": "Até o fim do encontro, um aliado de {source} que acertar esta criatura recupera {heal} pontos de vida.",
       "StirringHeal": "<strong>{actor}</strong> recupera {heal} pontos de vida (Grito Inspirador).",
-      "PrimeShot": "Tiro Primoroso +1",
+      "PrimeShot": "Tiro Primoroso",
       "GreatCleave": "Grande Trespassar +{count} (inimigos adjacentes)",
       "GreatCleaveHint": "+1 de dano para cada inimigo adjacente a você.",
       "AutoModsLegend": "Modificadores automáticos (automação 4e)"
@@ -274,7 +274,7 @@
       "ValorNotHigher": "{ally} já tem essa quantidade de PV temporários; Virtude da Bravura usada sem efeito."
     },
     "RollVars": {
-      "wepAttack": "Arma",
+      "wepAttack": "Arma (Treinamento)",
       "impAttack": "Implemento",
       "powerMod": "Atributo",
       "lvhalf": "½ Nível",
@@ -290,7 +290,12 @@
       "extraDamage": "Dano extra",
       "bonusDamage": "Bônus de dano",
       "ammo": "Munição",
-      "wep2ndryDamage": "Dano secundário da arma"
+      "wep2ndryDamage": "Dano secundário da arma",
+      "powerModNamed": "Atributo ({ability})",
+      "fixed": "Bônus fixo",
+      "sectionBonus": "Bônus",
+      "sectionSituational": "Situacional",
+      "sectionPenalty": "Penalidades"
     }
   },
   "EFFECT": {

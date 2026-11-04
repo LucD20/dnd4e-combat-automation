@@ -167,6 +167,7 @@ export function onPreAttackRoll(item, attacker, target, config) {
 	for (const m of mods) bonuses.untyped.push(String(m.value));
 	// Remember them on the roll so the chat card can show them
 	config.targetOptions.d4eaMods = mods.map((m) => ({ label: m.label, value: m.value }));
+	config.targetOptions.d4eaInfo = { actor: attacker?.name ?? "", power: item?.name ?? "", ability: item?.system?.attack?.ability ?? "" };
 	if (mods.length) console.log(`${MODULE_ID} | attack modifiers ${attacker?.name} -> ${target?.name ?? "-"}:`, mods.map((m) => `${m.label} ${m.value > 0 ? "+" : ""}${m.value}`).join(", "));
 }
 

@@ -258,7 +258,7 @@
       "StirringName": "{power} (+{heal} HP to allies who hit)",
       "StirringDesc": "Until the end of the encounter, an ally of {source} who hits this creature regains {heal} hit points.",
       "StirringHeal": "<strong>{actor}</strong> regains {heal} hit points (Stirring Shout).",
-      "PrimeShot": "Prime Shot +1",
+      "PrimeShot": "Prime Shot",
       "GreatCleave": "Great Cleave +{count} (adjacent enemies)",
       "GreatCleaveHint": "+1 damage for each enemy adjacent to you.",
       "AutoModsLegend": "Automatic modifiers (4e automation)"
@@ -274,7 +274,7 @@
       "ValorNotHigher": "{ally} already has as many temporary hit points; Virtue of Valor used without effect."
     },
     "RollVars": {
-      "wepAttack": "Weapon",
+      "wepAttack": "Weapon (Training)",
       "impAttack": "Implement",
       "powerMod": "Ability",
       "lvhalf": "½ Level",
@@ -290,7 +290,12 @@
       "extraDamage": "Extra damage",
       "bonusDamage": "Damage bonus",
       "ammo": "Ammunition",
-      "wep2ndryDamage": "Weapon secondary damage"
+      "wep2ndryDamage": "Weapon secondary damage",
+      "powerModNamed": "Ability ({ability})",
+      "fixed": "Fixed bonus",
+      "sectionBonus": "Bonuses",
+      "sectionSituational": "Situational",
+      "sectionPenalty": "Penalties"
     }
   }
 }

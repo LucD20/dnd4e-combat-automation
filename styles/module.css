@@ -187,6 +187,11 @@ input.d4ea-mod-penalty, input.d4ea-mod-bonus { font-weight: bold !important; }
 .d4ea-atk-mod.off { background: #777 !important; text-decoration: line-through !important; opacity: 0.8 !important; }
 
 /* Chat: readable roll breakdown */
-.d4ea-roll-var b, .d4ea-roll-mod b { font-weight: bold; }
-.d4ea-roll-mod.bonus { color: #2e7d32 !important; }
-.d4ea-roll-mod.penalty { color: #c62828 !important; }
+.d4ea-breakdown { margin: 4px 0 !important; padding: 4px 6px !important; border-radius: 4px !important; background: rgba(0, 0, 0, 0.04) !important; font-size: 0.9em !important; text-align: left !important; }
+.d4ea-breakdown .d4ea-bd-head { margin-bottom: 2px !important; }
+.d4ea-breakdown h5 { margin: 4px 0 1px !important; font-size: 0.85em !important; text-transform: uppercase !important; letter-spacing: 0.04em !important; border: none !important; }
+.d4ea-breakdown ul { list-style: none !important; margin: 0 !important; padding: 0 0 0 6px !important; }
+.d4ea-breakdown li { display: flex !important; justify-content: space-between !important; gap: 6px !important; margin: 0 !important; }
+.d4ea-breakdown .bonus h5, .d4ea-breakdown .bonus b { color: #1565c0 !important; }
+.d4ea-breakdown .situational h5, .d4ea-breakdown .situational b { color: #2e7d32 !important; }
+.d4ea-breakdown .penalty h5, .d4ea-breakdown .penalty b { color: #c62828 !important; }

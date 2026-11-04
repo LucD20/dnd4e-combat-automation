@@ -1,16 +1,23 @@
-import { MODULE_ID } from "./constants.mjs";
 import { setting } from "./utils.mjs";
 
 /*
  * Readable roll breakdowns in chat. The dnd4e system shows the roll "expression" with raw
  * variables ("1d20 + @wepAttack + @powerMod + @lvhalf"); each variable span is paired by id with
- * the span of its value in the formula. We replace each variable with a label and its value
- * ("Arma +2", "Atributo +4") and append the module's automatic modifiers (Prime Shot, Vicious
- * Mockery), which the system's expression doesn't include.
+ * the span of its value in the formula. We replace that line with a grouped breakdown:
+ *
+ *   Aegustarion — Ranged Basic Attack: 1d20 + 7
+ *   Bonuses        Weapon (Training) +2 · Ability (Dexterity) +4 · ½ Level +0
+ *   Situational    Prime Shot +1
+ *   Penalties      Long Range −2
+ *
+ * The module's own modifiers (Prime Shot, Vicious Mockery) and damage extras (Hunter's Quarry...)
+ * are stored on the roll options and included too.
  */
 
+const L = (k, d) => (d ? game.i18n.format(`DND4EAUTO.RollVars.${k}`, d) : game.i18n.localize(`DND4EAUTO.RollVars.${k}`));
+
 const LABEL_KEYS = {
-	wepAttack: "wepAttack", impAttack: "impAttack", powerMod: "powerMod", lvhalf: "lvhalf", bonus: "bonus",
+	wepAttack: "wepAttack", impAttack: "impAttack", lvhalf: "lvhalf", bonus: "bonus",
 	powBase: "powBase", powMax: "powMax", wepDamage: "wepDamage", impDamage: "impDamage",
 	wepCritBonus: "wepCritBonus", impCritBonus: "impCritBonus", highCrit: "highCrit", versatile: "versatile",
 	extraDamage: "extraDamage", actorBonusDamage: "bonusDamage", dmg: "bonusDamage",
@@ -18,54 +25,88 @@ const LABEL_KEYS = {
 	wep2ndryDamage: "wep2ndryDamage", pow2ndryDamage: "wep2ndryDamage",
 };
 
-function labelFor(variable) {
+function abilityName(ability) {
+	const a = CONFIG.DND4E?.abilities?.[ability];
+	const label = typeof a === "string" ? a : a?.label;
+	return label ? game.i18n.localize(label) : "";
+}
+
+function labelFor(variable, info) {
+	if (variable === "powerMod") {
+		const ab = abilityName(info?.ability);
+		return ab ? L("powerModNamed", { ability: ab }) : L("powerMod");
+	}
 	const common = CONFIG.DND4E?.commonAttackBonuses?.[variable];
 	if (common?.label) return game.i18n.localize(common.label);
 	const key = LABEL_KEYS[variable];
-	return key ? game.i18n.localize(`DND4EAUTO.RollVars.${key}`) : null;
+	return key ? L(key) : variable;
 }
 
-function signedValue(text) {
-	const t = String(text ?? "").trim();
-	if (!t) return "";
-	if (/^[+-]/.test(t)) return t;
-	return /^\d+(\.\d+)?$/.test(t) ? `+${t}` : t;
-}
+const isSituational = (variable) => variable === "bonus" || !!CONFIG.DND4E?.commonAttackBonuses?.[variable];
+const isDice = (text) => /\d*d\d+/i.test(text);
+const fmt = (v) => (v > 0 ? `+${v}` : v < 0 ? `−${Math.abs(v)}` : "+0");
 
-function relabel(container, rollEl) {
-	for (const span of container.querySelectorAll(".roll-expression")) {
-		if (span.querySelector(".roll-expression")) continue; // only leaf spans
-		const m = span.textContent.trim().match(/^@([A-Za-z0-9_]+)$/);
-		if (!m) continue;
-		const label = labelFor(m[1]);
-		if (!label) continue;
+/** Collect { label, value (number|null), text, kind: "bonus"|"situational"|"penalty"|"dice" } from a rendered roll. */
+function collect(rollEl, expression, roll) {
+	const info = roll?.options?.d4eaInfo;
+	const extras = roll?.options?.d4eaExtras ?? [];
+	const items = [];
+	for (const span of expression.querySelectorAll(".roll-expression")) {
+		if (span.querySelector(".roll-expression")) continue; // only leaf parts
+		const text = span.textContent.trim();
+		if (!text) continue;
 		const formulaSpan = span.id ? rollEl.querySelector(`#${CSS.escape(span.id.replace(/^exp/, "form"))}`) : null;
-		const value = formulaSpan ? signedValue(formulaSpan.textContent) : "";
-		span.innerHTML = `${foundry.utils.escapeHTML(label)}${value ? ` <b>${foundry.utils.escapeHTML(value)}</b>` : ""}`;
-		span.classList.add("d4ea-roll-var");
+		const valueText = (formulaSpan?.textContent ?? text).trim();
+		const varMatch = text.match(/^@([A-Za-z0-9_]+)$/);
+		const numeric = Number(valueText.replace(/[()\s]/g, ""));
+		if (!varMatch) {
+			if (isDice(valueText)) {
+				const extra = extras.find((e) => valueText.includes(String(e.formula)));
+				items.push(extra ? { label: extra.label, text: valueText, kind: "situational", value: null } : { text: valueText.replace(/\[[^\]]*\]/g, ""), kind: "dice" });
+			} else if (Number.isFinite(numeric)) {
+				items.push({ label: L("fixed"), value: numeric, kind: numeric < 0 ? "penalty" : "bonus" });
+			}
+			continue;
+		}
+		const variable = varMatch[1];
+		const label = labelFor(variable, info);
+		if (Number.isFinite(numeric)) {
+			items.push({ label, value: numeric, kind: numeric < 0 ? "penalty" : (isSituational(variable) ? "situational" : "bonus") });
+		} else {
+			items.push({ label, text: valueText.replace(/\[[^\]]*\]/g, ""), value: null, kind: isDice(valueText) ? "damageDice" : "bonus" });
+		}
 	}
-	// Variables outside spans (when the system couldn't pair them): label only
-	const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-	const nodes = [];
-	while (walker.nextNode()) nodes.push(walker.currentNode);
-	for (const node of nodes) {
-		if (!node.nodeValue.includes("@") || node.parentElement?.classList.contains("d4ea-roll-var")) continue;
-		node.nodeValue = node.nodeValue.replace(/@([A-Za-z0-9_]+)/g, (all, v) => labelFor(v) ?? all);
+	for (const m of roll?.options?.d4eaMods ?? []) {
+		items.push({ label: m.label, value: m.value, kind: m.value < 0 ? "penalty" : "situational" });
 	}
+	return { items, info };
+}
+
+function renderBreakdown({ items, info }) {
+	const dice = items.filter((i) => i.kind === "dice").map((i) => i.text);
+	const damageDice = items.filter((i) => i.kind === "damageDice" || (i.value === null && i.text && i.kind !== "dice"));
+	const sum = items.reduce((a, i) => a + (Number.isFinite(i.value) ? i.value : 0), 0);
+	const summary = [...dice, ...damageDice.map((i) => i.text)].join(" + ") + (sum ? ` ${sum > 0 ? "+" : "−"} ${Math.abs(sum)}` : "");
+	const who = [info?.actor, info?.power].filter(Boolean).join(" — ");
+	const line = (i) => `<li><span>${foundry.utils.escapeHTML(i.label)}</span><b>${i.value === null ? foundry.utils.escapeHTML(i.text ?? "") : fmt(i.value)}</b></li>`;
+	const section = (title, cls, list) => (list.length ? `<div class="d4ea-bd-section ${cls}"><h5>${title}</h5><ul>${list.map(line).join("")}</ul></div>` : "");
+	const bonuses = items.filter((i) => i.kind === "bonus" || i.kind === "damageDice");
+	return `<div class="d4ea-breakdown">
+		<div class="d4ea-bd-head">${who ? `<strong>${foundry.utils.escapeHTML(who)}:</strong> ` : ""}${foundry.utils.escapeHTML(summary)}</div>
+		${section(L("sectionBonus"), "bonus", bonuses)}
+		${section(L("sectionSituational"), "situational", items.filter((i) => i.kind === "situational"))}
+		${section(L("sectionPenalty"), "penalty", items.filter((i) => i.kind === "penalty"))}
+	</div>`;
 }
 
 export function onRenderChatMessage(message, html) {
 	if (!setting("readableRolls") || !message.rolls?.length) return;
-	const rollEls = html.querySelectorAll(".dice-roll");
-	rollEls.forEach((rollEl, i) => {
+	html.querySelectorAll(".dice-roll").forEach((rollEl, i) => {
 		const expression = rollEl.querySelector(".dice-tooltip.dice-formula");
-		if (!expression || expression.dataset.d4eaDone) return;
-		expression.dataset.d4eaDone = "1";
-		relabel(expression, rollEl);
-		const mods = message.rolls[i]?.options?.d4eaMods;
-		if (mods?.length) {
-			const extra = mods.map((m) => `<span class="d4ea-roll-mod ${m.value < 0 ? "penalty" : "bonus"}">${foundry.utils.escapeHTML(m.label)} <b>${m.value > 0 ? "+" : ""}${m.value}</b></span>`).join(" + ");
-			expression.insertAdjacentHTML("beforeend", ` + ${extra}`);
-		}
+		if (!expression || rollEl.querySelector(".d4ea-breakdown")) return;
+		const data = collect(rollEl, expression, message.rolls[i]);
+		if (!data.items.length) return;
+		expression.style.display = "none";
+		expression.insertAdjacentHTML("afterend", renderBreakdown(data));
 	});
 }
