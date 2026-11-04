@@ -8,6 +8,7 @@
       "enableCover": { "Name": "Cobertura automática", "Hint": "Calcula cobertura e cobertura superior (linhas de canto a canto) e marca na janela de ataque. Ataques de área não são automatizados." },
       "warnNotNearest": { "Name": "Avisar quando o alvo não é o inimigo mais próximo", "Hint": "Para Presa do Caçador e Maldição do Bruxo." },
       "coverPreview": { "Name": "Linhas de prévia da cobertura", "Hint": "Enquanto você mira um token, desenha as linhas de cobertura a partir do seu token. Só você vê." },
+      "preloadIndexes": { "Name": "Pré-carregar índices dos compêndios", "Hint": "Carrega os índices dos compêndios em segundo plano quando o jogo abre, para a primeira ficha aberta não travar alguns segundos." },
       "debug": { "Name": "Log de depuração", "Hint": "Escreve mensagens de diagnóstico no console do navegador." }
     },
     "Keybindings": {

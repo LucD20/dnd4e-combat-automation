@@ -10,6 +10,7 @@ import * as defeat from "./features/defeat.mjs";
 import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
+import { preloadCompendiumIndexes } from "./preload.mjs";
 
 Hooks.once("init", () => {
 	registerSettings();
@@ -27,6 +28,7 @@ Hooks.once("ready", () => {
 		return;
 	}
 	registerSocket();
+	preloadCompendiumIndexes().catch((err) => console.warn(`${MODULE_ID} | preload`, err));
 	log("ready");
 });
 

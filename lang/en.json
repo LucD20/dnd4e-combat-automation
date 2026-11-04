@@ -8,6 +8,7 @@
       "enableCover": { "Name": "Automatic cover", "Hint": "Compute cover and superior cover (corner-to-corner lines) and tick them in the attack dialog. Area attacks are not automated." },
       "warnNotNearest": { "Name": "Warn when the target isn't the nearest enemy", "Hint": "For Hunter's Quarry and Warlock's Curse." },
       "coverPreview": { "Name": "Cover preview lines", "Hint": "While you target a token, draw the cover lines from your token. Only you see them." },
+      "preloadIndexes": { "Name": "Preload compendium indexes", "Hint": "Load compendium indexes in the background when the game starts, so the first character sheet you open doesn't stall for a few seconds." },
       "debug": { "Name": "Debug logging", "Hint": "Write diagnostic messages to the browser console." }
     },
     "Keybindings": {

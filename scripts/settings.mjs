@@ -26,6 +26,14 @@ export function registerSettings() {
 		default: true,
 		onChange: (value) => (value ? drawPreview() : clearPreview()),
 	});
+	game.settings.register(MODULE_ID, "preloadIndexes", {
+		name: "DND4EAUTO.Settings.preloadIndexes.Name",
+		hint: "DND4EAUTO.Settings.preloadIndexes.Hint",
+		scope: "client",
+		config: true,
+		type: Boolean,
+		default: true,
+	});
 	game.settings.register(MODULE_ID, "debug", {
 		name: "DND4EAUTO.Settings.debug.Name",
 		hint: "DND4EAUTO.Settings.debug.Hint",
