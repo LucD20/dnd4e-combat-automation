@@ -4,12 +4,18 @@ import { spend, kindForActionType, combatantForActor, getState, setChargePending
 import { ActionPanel } from "./panel.mjs";
 import { renderTrackerPips } from "./tracker-pips.mjs";
 import { integrateCombatDock, refreshDock } from "./dock.mjs";
+import { consumePendingOpportunity } from "../reactions/opportunity.mjs";
 
 /** dnd4e.usePower: spend the power's action. */
 export async function onUsePower(item) {
 	if (!setting("actionTracker")) return;
 	const combatant = combatantForActor(item.actor);
 	if (!combatant || !combatant.combat?.started || !canModify(combatant)) return;
+	// A basic attack started from an opportunity-attack card spends the opportunity action.
+	if (consumePendingOpportunity(item.actor)) {
+		await spend(combatant, "opportunity", { source: item.name });
+		return;
+	}
 	const kind = kindForActionType(item.system?.actionType);
 	if (!kind) return;
 

@@ -15,6 +15,7 @@ import { registerGameLanguage } from "./language.mjs";
 import { registerBadgeHooks } from "./badges.mjs";
 import { registerActionTracker, onUsePower as spendPowerAction } from "./actions/hooks.mjs";
 import { ActionPanel } from "./actions/panel.mjs";
+import * as opportunity from "./reactions/opportunity.mjs";
 
 Hooks.once("init", () => {
 	// Must run in "init": Foundry loads translations right after this hook.
@@ -23,6 +24,7 @@ Hooks.once("init", () => {
 	registerPreviewHooks();
 	registerBadgeHooks();
 	registerActionTracker();
+	opportunity.registerOpportunityHooks();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
@@ -47,6 +49,7 @@ Hooks.on("dnd4e.usePower", async (item) => {
 	if (!actor) return;
 	try {
 		await spendPowerAction(item);
+		opportunity.onUsePower(item);
 		for (const feature of [quarry, curse, rage]) {
 			if (await feature.onUsePower(item, actor)) break;
 		}

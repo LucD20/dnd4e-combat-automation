@@ -17,6 +17,7 @@ export function registerSettings() {
 	world("enableCover");
 	world("warnNotNearest");
 	world("actionTracker");
+	world("opportunityAttacks");
 
 	const client = (key, def = true, onChange = undefined) => game.settings.register(MODULE_ID, key, {
 		name: `DND4EAUTO.Settings.${key}.Name`,

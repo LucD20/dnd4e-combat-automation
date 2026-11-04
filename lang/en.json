@@ -61,6 +61,10 @@
       "dockPips": {
         "Name": "Action pips on Combat Tracker Dock",
         "Hint": "Show the action pips on each portrait of the Combat Tracker Dock module, if it is active."
+      },
+      "opportunityAttacks": {
+        "Name": "Opportunity attack prompts",
+        "Hint": "When an enemy leaves a square adjacent to a creature without shifting, or makes a ranged/area attack next to it, whisper a chat card to that creature's controller with a button for the opportunity attack."
       }
     },
     "Keybindings": {
@@ -172,6 +176,16 @@
         "aidAnother": "<strong>{name}</strong> aids another.",
         "ready": "<strong>{name}</strong> readies an action."
       }
+    },
+    "Opportunity": {
+      "Title": "Opportunity attack",
+      "ReasonMove": "<strong>{provoker}</strong> moved away from <strong>{threat}</strong> without shifting.",
+      "ReasonRanged": "<strong>{provoker}</strong> made a ranged attack next to <strong>{threat}</strong>.",
+      "ReasonArea": "<strong>{provoker}</strong> made an area attack next to <strong>{threat}</strong>.",
+      "Button": "{threat}: attack {provoker}",
+      "Note": "Ignore if it was forced movement (push, pull, slide) or the creature can't act.",
+      "NotOwner": "You don't control this creature.",
+      "NoBasic": "{name} has no melee basic attack."
     }
   }
 }

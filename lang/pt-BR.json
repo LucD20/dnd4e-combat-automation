@@ -61,6 +61,10 @@
       "dockPips": {
         "Name": "Marcadores de ação no Combat Tracker Dock",
         "Hint": "Mostra os marcadores de ação em cada retrato do módulo Combat Tracker Dock, se ele estiver ativo."
+      },
+      "opportunityAttacks": {
+        "Name": "Avisos de ataque de oportunidade",
+        "Hint": "Quando um inimigo sai de um quadrado adjacente a uma criatura sem ajustar, ou faz um ataque à distância/de área ao lado dela, envia um cartão privado no chat a quem controla essa criatura, com um botão para o ataque de oportunidade."
       }
     },
     "Keybindings": {
@@ -172,6 +176,16 @@
         "aidAnother": "<strong>{name}</strong> presta ajuda.",
         "ready": "<strong>{name}</strong> prepara uma ação."
       }
+    },
+    "Opportunity": {
+      "Title": "Ataque de oportunidade",
+      "ReasonMove": "<strong>{provoker}</strong> se afastou de <strong>{threat}</strong> sem ajustar.",
+      "ReasonRanged": "<strong>{provoker}</strong> fez um ataque à distância ao lado de <strong>{threat}</strong>.",
+      "ReasonArea": "<strong>{provoker}</strong> fez um ataque de área ao lado de <strong>{threat}</strong>.",
+      "Button": "{threat}: atacar {provoker}",
+      "Note": "Ignore se foi movimento forçado (empurrar, puxar, conduzir) ou se a criatura não pode agir.",
+      "NotOwner": "Você não controla esta criatura.",
+      "NoBasic": "{name} não tem ataque básico corpo a corpo."
     }
   }
 }

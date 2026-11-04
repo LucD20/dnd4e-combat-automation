@@ -3,7 +3,7 @@
 Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a burocracia de combate do D&D 4e.
 *(English below.)*
 
-## O que faz (v0.2)
+## O que faz (v0.3)
 
 | Recurso | Como funciona |
 |---|---|
@@ -15,6 +15,7 @@ Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a
 | **Prévia de cobertura** | Ao mirar num token, aparecem as linhas: verde = livre, vermelho = parede, laranja = criatura. Só você vê. Desligue em *Configurações do módulo* ou por um atalho de teclado (sem tecla padrão). |
 | **Selos nos tokens** | Presa (verde), Maldição (roxo) e Marca (vermelho) aparecem como um selo grande no canto superior direito do token, com o retrato de quem marcou. Marcas aplicadas pelo próprio sistema também ganham selo. |
 | **Rastreador de Ações** | Controla as ações Padrão, Movimento, Mínima, Imediata e de Oportunidade. Usar um poder gasta a ação dele, com as trocas da regra (padrão → movimento/mínima, movimento → mínima). Ponto de Ação dá uma ação padrão extra. Zera no início do turno de cada um. Se a ação já foi gasta, só avisa. Aparece como marcadores no Combat Tracker, nos retratos do **Combat Tracker Dock** (se estiver ativo) e num painel flutuante, com as ações básicas: Andar, Ajustar, Correr, Levantar, Investida, Defesa Total, Retomar o Fôlego, Prestar Ajuda, Preparar e Ponto de Ação. Clicar num marcador liga/desliga manualmente. |
+| **Ataques de oportunidade** | Quando um inimigo sai de um quadrado adjacente sem **ajustar** ou **teletransportar** (ação de movimento do token), ou faz um ataque à distância/de área ao lado de alguém, quem controla a criatura ameaçada recebe um cartão privado no chat com o botão **"atacar"**. O botão mira o alvo e rola o Ataque Básico Corpo a Corpo no modo oportunidade, gastando a ação de oportunidade. Não avisa criaturas atordoadas, pasmas, inconscientes etc., nem quem já usou a ação de oportunidade no turno. |
 | **Idioma do jogo 4e** | Em *Configurações do módulo → Idioma do jogo 4e*, cada usuário escolhe o idioma do sistema dnd4e (atributos, perícias, condições, rótulos da ficha) e deste módulo, independente da interface do Foundry. Ex.: Foundry em inglês, conteúdo 4e em português. |
 
 Tudo funciona em **português e inglês**. Os poderes são reconhecidos pelo identificador do compêndio (`ranger-hunters-quarry`, `warlock-warlocks-curse`, …) ou pelo nome em PT/EN.
@@ -26,6 +27,7 @@ Os jogadores podem aplicar efeitos em tokens de monstros: o módulo pede ao mest
 - A cobertura de **ataques de área** não é automatizada, porque a origem é o quadrado da área e o módulo não sabe onde ela foi colocada. Ataques contíguos são calculados a partir do atacante.
 - Num crítico, o dano extra é maximizado (regra do Rules Compendium).
 - Só funciona em grade quadrada.
+- Movimento forçado (empurrar, puxar, conduzir) feito arrastando o token também gera o aviso de oportunidade; basta ignorar o cartão.
 
 ### Macro: marcar alvos manualmente
 Selecione quem marca, mire nos alvos e execute:
