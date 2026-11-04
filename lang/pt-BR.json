@@ -226,6 +226,42 @@
     }
   },
   "EFFECT": {
-    "statusBloodied": "Sangrando"
+    "statusBloodied": "Sangrando",
+    "statusDazed": "Pasmo",
+    "statusStunned": "Atordoado",
+    "statusHelpless": "Indefeso",
+    "statusRestrained": "Contido",
+    "statusSlowed": "Lento",
+    "statusCharging": "Em Investida",
+    "statusRunning": "Correndo",
+    "statusSqueezing": "Espremido",
+    "statusCover": "Cobertura",
+    "statusCoverSup": "Cobertura Superior",
+    "statusGrantingCA": "Concedendo Vantagem de Combate"
+  },
+  "DND4E": {
+    "ConDazed": "Pasmo",
+    "ConStunned": "Atordoado",
+    "ConHelpless": "Indefeso",
+    "ConRestrained": "Contido",
+    "ConSlowed": "Lento",
+    "CommonAttackRestrained": "Contido",
+    "CommonAttackSqueez": "Espremido",
+    "SecondWind": "Retomar o Fôlego",
+    "Movement": {
+      "Shift": "Ajustar"
+    },
+    "TOKEN": {
+      "MOVEMENT": {
+        "ACTIONS": {
+          "shift": {
+            "label": "Ajustar"
+          },
+          "charge": {
+            "label": "Investida"
+          }
+        }
+      }
+    }
   }
 }
