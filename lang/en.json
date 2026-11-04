@@ -57,6 +57,10 @@
       "tokenBadges": {
         "Name": "Quarry/curse/mark badges on tokens",
         "Hint": "Show a large coloured badge with the source's portrait on the top-right of marked tokens."
+      },
+      "dockPips": {
+        "Name": "Action pips on Combat Tracker Dock",
+        "Hint": "Show the action pips on each portrait of the Combat Tracker Dock module, if it is active."
       }
     },
     "Keybindings": {

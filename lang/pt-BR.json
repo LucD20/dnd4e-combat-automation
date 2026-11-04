@@ -57,6 +57,10 @@
       "tokenBadges": {
         "Name": "Selos de presa/maldição/marca nos tokens",
         "Hint": "Mostra um selo grande e colorido com o retrato de quem marcou no canto superior direito do token."
+      },
+      "dockPips": {
+        "Name": "Marcadores de ação no Combat Tracker Dock",
+        "Hint": "Mostra os marcadores de ação em cada retrato do módulo Combat Tracker Dock, se ele estiver ativo."
       }
     },
     "Keybindings": {

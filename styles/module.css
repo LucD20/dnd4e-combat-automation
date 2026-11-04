@@ -87,3 +87,23 @@
 .d4ea-action-panel .d4ea-basic { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .d4ea-action-panel .d4ea-basic button { font-size: 0.85em; padding: 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .d4ea-action-panel .d4ea-empty { text-align: center; opacity: 0.75; }
+
+/* Combat Tracker Dock portraits */
+.combatant-portrait .d4ea-dock-pips {
+	position: absolute;
+	top: 2px;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	gap: 1px;
+	z-index: 5;
+	pointer-events: auto;
+}
+.combatant-portrait .d4ea-dock-pips .d4ea-pip {
+	width: calc(var(--combatant-portrait-size, 100px) * 0.17);
+	height: calc(var(--combatant-portrait-size, 100px) * 0.17);
+	font-size: calc(var(--combatant-portrait-size, 100px) * 0.08);
+	box-shadow: 0 0 2px #000;
+	cursor: pointer;
+}
