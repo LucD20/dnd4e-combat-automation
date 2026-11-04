@@ -185,7 +185,8 @@
       "Button": "{threat}: atacar {provoker}",
       "Note": "Ignore se foi movimento forçado (empurrar, puxar, conduzir) ou se a criatura não pode agir.",
       "NotOwner": "Você não controla esta criatura.",
-      "NoBasic": "{name} não tem ataque básico corpo a corpo."
+      "NoBasic": "{name} não tem ataque básico corpo a corpo.",
+      "Used": "Ação de oportunidade já usada"
     }
   }
 }

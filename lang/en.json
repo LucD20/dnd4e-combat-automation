@@ -185,7 +185,8 @@
       "Button": "{threat}: attack {provoker}",
       "Note": "Ignore if it was forced movement (push, pull, slide) or the creature can't act.",
       "NotOwner": "You don't control this creature.",
-      "NoBasic": "{name} has no melee basic attack."
+      "NoBasic": "{name} has no melee basic attack.",
+      "Used": "Opportunity action already used"
     }
   }
 }

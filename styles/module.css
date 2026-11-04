@@ -108,7 +108,38 @@
 	cursor: pointer;
 }
 
-/* Opportunity attack chat card */
+/* Opportunity attack chat card (explicit colours so chat themes like Fox's 4e Aesthetics don't wash it out) */
+.chat-message .d4ea-oa-card h3,
 .d4ea-oa-card h3 { margin: 0 0 0.25rem; font-size: 1.05em; color: #b71c1c; border-bottom: 1px solid currentColor; }
-.d4ea-oa-card button { margin: 0.25rem 0; }
-.d4ea-oa-card .d4ea-oa-note { font-size: 0.8em; opacity: 0.7; margin: 0; }
+.chat-message .d4ea-oa-card .d4ea-oa-note,
+.d4ea-oa-card .d4ea-oa-note { font-size: 0.8em; opacity: 0.75; margin: 0; }
+.chat-message .d4ea-oa-card button.d4ea-oa-attack,
+.d4ea-oa-card button.d4ea-oa-attack {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.4em;
+	width: 100%;
+	margin: 0.35rem 0;
+	padding: 0.35rem 0.5rem;
+	background: #9a1b1b;
+	color: #fff;
+	border: 1px solid #5c0f0f;
+	border-radius: 4px;
+	font-weight: bold;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+	opacity: 1;
+	cursor: pointer;
+}
+.chat-message .d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled),
+.d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled) { background: #c62828; box-shadow: 0 0 6px #ff5252; }
+.chat-message .d4ea-oa-card button.d4ea-oa-attack i,
+.d4ea-oa-card button.d4ea-oa-attack i { color: #fff; }
+.chat-message .d4ea-oa-card button.d4ea-oa-attack:disabled,
+.d4ea-oa-card button.d4ea-oa-attack:disabled {
+	background: #5f5f5f;
+	border-color: #3d3d3d;
+	color: #e0e0e0;
+	font-weight: normal;
+	cursor: not-allowed;
+}

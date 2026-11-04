@@ -170,15 +170,42 @@ async function onAttackButton(ev) {
 	if (!power) return ui.notifications.warn(F("Opportunity.NoBasic", { name: actor.name }));
 	if (provokerDoc?.object) provokerDoc.object.setTarget(true, { releaseOthers: true });
 	pendingOpportunity.set(actor.uuid, Date.now());
-	btn.disabled = true;
 	if (typeof actor.usePower === "function") await actor.usePower(power, { configureDialog: true, fastForward: false, variance: { isOpp: true } });
 	else await power.roll({ variance: { isOpp: true } });
+}
+
+/**
+ * The button follows the creature's opportunity action: disabled while it's spent (or the creature
+ * can't act), enabled again if the GM/player turns the Opportunity pip back on.
+ */
+function syncButton(btn) {
+	const scene = game.scenes.get(btn.dataset.threatScene);
+	const threatDoc = scene?.tokens.get(btn.dataset.threat);
+	const token = threatDoc?.object;
+	btn.dataset.label ??= btn.innerHTML;
+	const available = !token || canTakeOpportunity(token);
+	btn.disabled = !available;
+	btn.classList.toggle("spent", !available);
+	btn.innerHTML = available ? btn.dataset.label : `<i class="fa-solid fa-ban"></i> ${L("Opportunity.Used")}`;
+}
+
+export function syncOpportunityButtons() {
+	document.querySelectorAll(".d4ea-oa-attack").forEach(syncButton);
 }
 
 export function registerOpportunityHooks() {
 	Hooks.on("moveToken", onMoveToken);
 	Hooks.on("renderChatMessageHTML", (message, html) => {
 		if (!message.flags?.[MODULE_ID]?.opportunity) return;
-		html.querySelectorAll(".d4ea-oa-attack").forEach((b) => b.addEventListener("click", onAttackButton));
+		html.querySelectorAll(".d4ea-oa-attack").forEach((b) => {
+			b.addEventListener("click", onAttackButton);
+			syncButton(b);
+		});
 	});
+	const resync = () => setTimeout(syncOpportunityButtons, 50);
+	Hooks.on("updateCombatant", resync);
+	Hooks.on("combatTurnChange", resync);
+	Hooks.on("updateCombat", resync);
+	Hooks.on("createActiveEffect", resync);
+	Hooks.on("deleteActiveEffect", resync);
 }
