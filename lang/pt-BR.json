@@ -1,0 +1,77 @@
+{
+  "DND4EAUTO": {
+    "Settings": {
+      "enableQuarry": { "Name": "Automatizar Presa do Caçador", "Hint": "Usar Presa do Caçador marca o inimigo visível mais próximo (ou seu alvo) e oferece o dano extra na janela de dano, uma vez por turno." },
+      "enableCurse": { "Name": "Automatizar Maldição do Bruxo", "Hint": "Usar Maldição do Bruxo amaldiçoa o inimigo visível mais próximo (ou seu alvo) e oferece o dano extra na janela de dano, uma vez por turno. Bruxos do Pacto Estelar recebem Destino do Vácuo quando um inimigo amaldiçoado cai." },
+      "enableRage": { "Name": "Automatizar fúrias do Bárbaro", "Hint": "Usar um poder de fúria coloca o bárbaro nessa fúria até o fim do encontro (encerrando a anterior) e oferece os bônus de dano que dependem da fúria." },
+      "enableMarks": { "Name": "Automatizar marcas", "Hint": "Poderes como Marca Indireta aplicam a marca nos alvos atingidos. As marcas usam a condição de marca do sistema, então o -2 é aplicado pelo próprio dnd4e." },
+      "enableCover": { "Name": "Cobertura automática", "Hint": "Calcula cobertura e cobertura superior (linhas de canto a canto) e marca na janela de ataque. Ataques de área não são automatizados." },
+      "warnNotNearest": { "Name": "Avisar quando o alvo não é o inimigo mais próximo", "Hint": "Para Presa do Caçador e Maldição do Bruxo." },
+      "coverPreview": { "Name": "Linhas de prévia da cobertura", "Hint": "Enquanto você mira um token, desenha as linhas de cobertura a partir do seu token. Só você vê." },
+      "debug": { "Name": "Log de depuração", "Hint": "Escreve mensagens de diagnóstico no console do navegador." }
+    },
+    "Keybindings": {
+      "toggleCoverPreview": "Ligar/desligar prévia de cobertura"
+    },
+    "Warn": {
+      "NoGM": "Nenhum mestre conectado, então o efeito em {name} não pode ser aplicado.",
+      "OneTarget": "{power}: mire em apenas uma criatura (ou em nenhuma, para escolher o inimigo mais próximo).",
+      "NotNearest": "{power}: {target} não é o inimigo visível mais próximo (o mais próximo está a {distance} quadrados). Aplicado mesmo assim.",
+      "NoEnemyVisible": "{power}: nenhum inimigo visível encontrado.",
+      "NoSourceToken": "Coloque e selecione seu token na cena primeiro.",
+      "AlreadyCursed": "{target} já está sob uma Maldição do Bruxo.",
+      "NoAllyInRange": "Marca Indireta: nenhum aliado a até 5 quadrados para ser quem marca."
+    },
+    "Info": {
+      "AlreadyQuarry": "{target} já é sua presa."
+    },
+    "Dialog": {
+      "ChooseNearestTitle": "{power}: escolha o inimigo",
+      "ChooseNearestHint": "Estes inimigos estão empatados como os mais próximos. Qual deles?",
+      "ChooseMarkerTitle": "{power}: quem marca o alvo?",
+      "ChooseMarkerHint": "Escolha um aliado a até 5 quadrados de você."
+    },
+    "Effect": {
+      "QuarryName": "Presa de {source}",
+      "QuarryDesc": "Presa do Caçador de {source}. Dura até o fim do encontro, até esta criatura ser derrotada ou até uma nova presa ser designada.",
+      "CurseName": "Amaldiçoado por {source}",
+      "CurseDesc": "Maldição do Bruxo de {source}. Dura até o fim do encontro ou até esta criatura chegar a 0 pontos de vida.",
+      "MarkName": "Marcado por {source}",
+      "MarkDesc": "Marcado por {source} ({power}): -2 nas jogadas de ataque que não incluam {source}.",
+      "RageName": "Fúria: {power}",
+      "FateName": "Destino do Vácuo (+{bonus})",
+      "FateDesc": "+bônus em uma jogada de d20 durante seu próximo turno. Perdido se não for usado."
+    },
+    "Chat": {
+      "QuarryDesignated": "<strong>{source}</strong> designa <strong>{target}</strong> como sua presa.",
+      "CursePlaced": "<strong>{source}</strong> lança a Maldição do Bruxo em <strong>{target}</strong>.",
+      "Marked": "<strong>{targets}</strong> marcado(s) por <strong>{marker}</strong>.",
+      "RageStart": "<strong>{actor}</strong> entra em <strong>{power}</strong>!",
+      "RageManual": "O benefício contínuo desta fúria ainda não é automatizado; aplique manualmente.",
+      "FateOfTheVoid": "<strong>{target}</strong> caiu sob a maldição de {actor}: Destino do Vácuo, +{bonus} em uma jogada de d20 durante seu próximo turno."
+    },
+    "Damage": {
+      "Legend": "Dano extra (automação 4e)",
+      "Quarry": "Presa do Caçador +{formula}",
+      "QuarryTarget": "Contra sua presa {target}.",
+      "QuarryUsed": "Já causado desde o início do seu turno.",
+      "Curse": "Maldição do Bruxo +{formula}",
+      "CurseTarget": "Contra o amaldiçoado {target}.",
+      "CurseUsed": "Já causado neste turno.",
+      "BloodhuntRage": "Fúria da Caçada de Sangue +{formula}",
+      "BloodhuntActive": "Você ou o alvo está sangrando.",
+      "BloodhuntInactive": "Nem você nem o alvo está sangrando.",
+      "RagingBonus": "{power} (em fúria) +{formula}",
+      "RagingBonusHint": "Dano extra porque você está em fúria."
+    },
+    "Cover": {
+      "Label": "Cobertura",
+      "MeleeLabel": "Corpo a corpo/contíguo",
+      "RangedLabel": "À distância",
+      "None": "nenhuma",
+      "Cover": "cobertura (-2)",
+      "Superior": "superior (-5)",
+      "NoLoE": "Sem linha de efeito?"
+    }
+  }
+}

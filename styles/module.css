@@ -1,0 +1,49 @@
+/* Damage dialog extras */
+.roll-dialogue .d4ea-extras,
+.d4ea-extras {
+	margin: 0.5rem 0;
+	padding: 0.25rem 0.5rem 0.5rem;
+	border: 1px solid var(--color-border, #7a7971);
+	border-radius: 4px;
+}
+.d4ea-extras legend {
+	font-weight: bold;
+	padding: 0 0.25rem;
+}
+.d4ea-extra {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	column-gap: 0.4rem;
+	cursor: pointer;
+}
+.d4ea-extra small {
+	grid-column: 2;
+	opacity: 0.75;
+	font-size: 0.85em;
+}
+
+/* Token choice dialog */
+.d4ea-choices {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	justify-content: center;
+}
+.d4ea-choice {
+	margin: 0;
+	text-align: center;
+	width: 72px;
+}
+.d4ea-choice img {
+	width: 64px;
+	height: 64px;
+	object-fit: contain;
+	border: none;
+}
+.d4ea-choice figcaption {
+	font-size: 0.8em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

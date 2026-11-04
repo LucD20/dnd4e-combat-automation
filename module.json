@@ -1,0 +1,48 @@
+{
+  "id": "dnd4e-combat-automation",
+  "title": "D&D 4e Combat Automation",
+  "description": "Automates common D&D 4e combat bookkeeping for the dnd4e system: Hunter's Quarry, Warlock's Curse, Barbarian rages, marks and cover (with a line preview).",
+  "version": "0.1.0",
+  "authors": [
+    {
+      "name": "Lucas"
+    }
+  ],
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14.368"
+  },
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd4e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "0.9.3"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/main.mjs"
+  ],
+  "styles": [
+    "styles/module.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ],
+  "socket": true,
+  "url": "",
+  "manifest": "",
+  "download": ""
+}

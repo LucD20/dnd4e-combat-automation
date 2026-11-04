@@ -1,0 +1,50 @@
+# D&D 4e Combat Automation
+
+Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a burocracia de combate do D&D 4e.
+*(English below.)*
+
+## O que faz (v0.1)
+
+| Recurso | Como funciona |
+|---|---|
+| **Presa do Caçador** | Ao usar o poder, o inimigo visível mais próximo (ou o token que você mirou) recebe um ícone com a arte do seu token. Na janela de dano aparece **"Presa do Caçador +1d6"** ligado (d8 com *Lethal Hunter*; 2d/3d nos níveis 11/21). Desligue com um clique. Depois de usar, o toggle vem desligado até o início do seu próximo turno. Só uma presa por vez. Termina no fim do encontro ou quando a presa cai a 0 PV. |
+| **Maldição do Bruxo** | Igual à Presa: inimigo mais próximo, ícone no token, **"Maldição do Bruxo +1d6"** uma vez por turno, não amaldiçoa quem já está amaldiçoado. **Pacto Estelar:** quando um amaldiçoado cai, o bruxo recebe *Destino do Vácuo (+N)* e uma mensagem privada. |
+| **Fúria do Bárbaro** | Usar um poder com a palavra-chave Fúria coloca o efeito "Fúria: …" no bárbaro até o fim do encontro (e encerra a fúria anterior). **Fúria da Caçada de Sangue:** toggle +mod. de CON em ataques corpo a corpo, ligado quando você ou o alvo está sangrando. **Golpe Insistente:** +1d6 em fúria. |
+| **Marcas** | **Marca Indireta** (Bardo): ao acertar, você escolhe o aliado a até 5 quadrados e o alvo fica marcado por ele até o fim do seu próximo turno. A marca usa a condição de marca do próprio sistema, então o −2 por ignorar a marca já é aplicado na rolagem de ataque do monstro. |
+| **Cobertura** | Na janela de ataque, Cobertura (−2) / Cobertura Superior (−5) são marcadas sozinhas. Usa a regra de canto a canto: paredes bloqueiam sempre; inimigos do atacante bloqueiam só ataques à distância. |
+| **Prévia de cobertura** | Ao mirar num token, aparecem as linhas: verde = livre, vermelho = parede, laranja = criatura. Só você vê. Desligue em *Configurações do módulo* ou por um atalho de teclado (sem tecla padrão). |
+
+Tudo funciona em **português e inglês**. Os poderes são reconhecidos pelo identificador do compêndio (`ranger-hunters-quarry`, `warlock-warlocks-curse`, …) ou pelo nome em PT/EN.
+
+Os jogadores podem aplicar efeitos em tokens de monstros: o módulo pede ao mestre conectado para criar o efeito. **É preciso um mestre logado.**
+
+### Limitações conhecidas
+- Os toggles aparecem na janela de dano. Se a rolagem for "rápida" (fast-forward, sem janela), o dano extra não é somado.
+- A cobertura de **ataques de área** não é automatizada, porque a origem é o quadrado da área e o módulo não sabe onde ela foi colocada. Ataques contíguos são calculados a partir do atacante.
+- Num crítico, o dano extra é maximizado (regra do Rules Compendium).
+- Só funciona em grade quadrada.
+
+### Macro: marcar alvos manualmente
+Selecione quem marca, mire nos alvos e execute:
+```js
+const marker = canvas.tokens.controlled[0]?.actor;
+game.modules.get("dnd4e-combat-automation").api.applyMark({ marker, targets: [...game.user.targets] });
+```
+
+### Instalação (Molten / Foundry)
+Depois que houver um release no GitHub, em *Instalar Módulo* cole a URL do manifest:
+`https://github.com/<usuario>/<repo>/releases/latest/download/module.json`
+
+Ative o módulo no mundo. A opção do sistema **"Automação dinâmica"** (dnd4e) deve estar ligada para o −2 de marca funcionar.
+
+---
+
+## English
+
+Automates D&D 4e combat bookkeeping for the dnd4e system on Foundry V14:
+- **Hunter's Quarry** and **Warlock's Curse**: tag the nearest visible enemy (or your target) with your token art. The damage dialog gets a toggle for the extra damage, once per turn. The tag ends at the end of the encounter or when the creature drops to 0 HP. Star Pact warlocks get Fate of the Void.
+- **Barbarian rages**: a rage effect until the end of the encounter. Bloodhunt Rage and Pressing Strike bonuses appear as damage toggles.
+- **Marks**: Misdirected Mark marks hit targets on behalf of a chosen ally. Marks use the system's mark status, so the system applies the −2 itself. `api.applyMark()` is available for macros.
+- **Cover**: automatic cover/superior cover in the attack dialog (corner-to-corner lines; walls always block, enemy creatures block ranged attacks only), plus a client-side line preview while targeting.
+
+Limitations: damage toggles need the damage dialog (no fast-forward); area attacks don't get automatic cover; square grids only.
