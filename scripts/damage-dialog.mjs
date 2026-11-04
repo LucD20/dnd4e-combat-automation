@@ -5,6 +5,7 @@ import * as curse from "./features/curse.mjs";
 import * as rage from "./features/rage.mjs";
 import * as furiousAssault from "./features/furious-assault.mjs";
 import * as onHit from "./features/on-hit.mjs";
+import * as conditional from "./features/conditional.mjs";
 
 /*
  * The dnd4e damage dialog doesn't receive the power being rolled, so we remember it from the
@@ -22,7 +23,7 @@ export function onRollDamage(item) {
 /** Collect the extras that apply to this roll. */
 function collectExtras(ctx) {
 	const extras = [];
-	for (const fn of [quarry.damageExtra, curse.damageExtra, furiousAssault.damageExtra, onHit.damageExtra]) {
+	for (const fn of [quarry.damageExtra, curse.damageExtra, furiousAssault.damageExtra, onHit.damageExtra, conditional.damageExtra]) {
 		const e = fn(ctx);
 		if (e) extras.push(e);
 	}

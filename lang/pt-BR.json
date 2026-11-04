@@ -299,7 +299,16 @@
       "fixed": "Bônus fixo",
       "sectionBonus": "Bônus",
       "sectionSituational": "Situacional",
-      "sectionPenalty": "Penalidades"
+      "sectionPenalty": "Penalidades",
+      "effectBonus": "Efeitos ativos",
+      "effectBonusTyped": "Efeitos ({type})",
+      "bonusType": {
+        "untyped": "sem tipo",
+        "feat": "talento",
+        "item": "item",
+        "power": "poder",
+        "race": "racial"
+      }
     },
     "Conditional": {
       "FoxArmed": "{name}: o próximo ataque básico ganha +{bonus} (Astúcia da Raposa).",
@@ -307,7 +316,9 @@
       "Rerolling": "{power}: rolando o ataque de novo contra os mesmos alvos. Use o segundo resultado.",
       "DireName": "{power}: aproximar-se causa {formula}",
       "DireDesc": "Na primeira vez que esta criatura se aproximar de {source} no próximo turno dela, sofre {formula} de dano.",
-      "DireFlavor": "{power}: {target} se aproximou"
+      "DireFlavor": "{power}: {target} se aproximou",
+      "WrathArmed": "{name}: +1 de bônus racial no próximo ataque ({power}); se acertar, +{cha} de dano.",
+      "WrathHint": "Cólera Infernal: o ataque acertou"
     }
   },
   "EFFECT": {

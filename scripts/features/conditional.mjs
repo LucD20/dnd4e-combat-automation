@@ -5,7 +5,7 @@ import { rollDamageCard } from "../damage-apply.mjs";
 
 /*
  * Conditional damage and roll riders:
- *   Infernal Wrath   using it rolls "1d6 + Int or Cha mod" fire damage (2d6/3d6 at 11/21) against the target
+ *   Infernal Wrath   (PHB) +1 racial bonus to your next attack roll; if it hits, +Cha damage
  *   Dire Radiance    on hit, the first time the target moves closer to you on its next turn it takes
  *                    1d6 + Con (or Cha) damage (2d6 at 21st)
  *   Elven Accuracy   using it offers to roll your last attack again against the same targets
@@ -20,6 +20,8 @@ const FOXS_CUNNING = { ids: ["ranger-01-foxs-cunning"], names: /fox'?s cunning|a
 
 const lastAttacks = new Map(); // actor uuid -> { itemUuid, targets: [token uuid], time }
 const foxPending = new Map(); // actor uuid -> { bonus, time }
+const wrathPending = new Map(); // actor uuid -> { cha, time, label }: +1 to the next attack
+const wrathDamage = new Map(); // actor uuid -> { cha, itemUuid, time, label }: that attack hit, +Cha damage
 const toConsume = new Set(); // modifier keys applied in the current attack roll
 
 /* -------------------------------------------- */
@@ -29,9 +31,10 @@ const toConsume = new Set(); // modifier keys applied in the current attack roll
 export async function onUsePower(item, actor) {
 	if (!setting("conditionalRiders")) return false;
 	if (matches(item, INFERNAL_WRATH)) {
-		const n = tierDice(actor);
-		const mod = Math.max(abilityMod(actor, "int"), abilityMod(actor, "cha"));
-		await rollDamageCard({ actor, formula: `${n}d6 + ${mod}`, type: "fire", flavor: item.name, targets: Array.from(game.user.targets) });
+		const cha = Math.max(0, abilityMod(actor, "cha"));
+		wrathPending.set(actor.uuid, { cha, time: Date.now(), label: item.name });
+		wrathDamage.delete(actor.uuid);
+		ui.notifications.info(F("Conditional.WrathArmed", { name: actor.name, power: item.name, cha }));
 		return true;
 	}
 	if (matches(item, ELVEN_ACCURACY)) {
@@ -58,11 +61,23 @@ export function conditionalModifiers(item, attacker) {
 	const actor = attacker.actor;
 	const fox = foxPending.get(actor.uuid);
 	if (fox && Date.now() - fox.time < 5 * 60 * 1000 && item?.system?.attack?.isBasic && fox.bonus) {
-		mods.push({ key: "foxsCunning", label: fox.label, value: fox.bonus, consume: () => foxPending.delete(actor.uuid) });
+		mods.push({ key: "foxsCunning", label: fox.label, value: fox.bonus, type: "power", consume: () => foxPending.delete(actor.uuid) });
+	}
+	const wrath = wrathPending.get(actor.uuid);
+	if (wrath && Date.now() - wrath.time < 60 * 60 * 1000) {
+		mods.push({
+			key: "infernalWrath", label: wrath.label, value: 1, type: "race",
+			consume: (targetData) => {
+				wrathPending.delete(actor.uuid);
+				if (targetData?.targetHit?.length && wrath.cha) wrathDamage.set(actor.uuid, { cha: wrath.cha, itemUuid: item?.uuid, time: Date.now(), label: wrath.label });
+			},
+		});
 	}
 	const fate = effectsOfKind(actor, KIND.FATE_OF_THE_VOID)[0];
 	const stacks = fate?.flags?.[MODULE_ID]?.stacks;
-	if (stacks) mods.push({ key: `fate-${fate.id}`, label: fate.name, value: stacks, consume: () => deleteEffects(actor, [fate.id]) });
+	// The effect is named "Fate of the Void (+2)": the chip shows the value itself
+	const fateLabel = (fate?.name ?? "").replace(/\s*\(\s*[+−-]?\d+\s*\)\s*$/, "");
+	if (stacks) mods.push({ key: `fate-${fate.id}`, label: fateLabel, value: stacks, consume: () => deleteEffects(actor, [fate.id]) });
 	return mods;
 }
 
@@ -72,7 +87,7 @@ export function markApplied(mods) {
 
 /** After the attack: use up one-shot bonuses and remember the attack for Elven Accuracy. */
 export async function onAttackRolled(itemData, targetData, actor) {
-	for (const m of toConsume) await m.consume();
+	for (const m of toConsume) await m.consume(targetData);
 	toConsume.clear();
 	if (!actor) return;
 	lastAttacks.set(actor.uuid, {
@@ -81,6 +96,23 @@ export async function onAttackRolled(itemData, targetData, actor) {
 		time: Date.now(),
 	});
 	await applyDireRadiance(itemData, targetData, actor);
+}
+
+/** Infernal Wrath: the attack it boosted hit -> +Cha damage on that power's damage roll. */
+export function damageExtra({ actor, item }) {
+	if (!setting("conditionalRiders") || !actor) return null;
+	const wrath = wrathDamage.get(actor.uuid);
+	if (!wrath || Date.now() - wrath.time > 10 * 60 * 1000) return null;
+	if (wrath.itemUuid && item?.uuid && wrath.itemUuid !== item.uuid) return null;
+	return {
+		id: "infernalWrath",
+		label: `${wrath.label} +${wrath.cha}`,
+		hint: L("Conditional.WrathHint"),
+		formula: String(wrath.cha),
+		checked: true,
+		requiresHit: true,
+		onApplied: () => wrathDamage.delete(actor.uuid),
+	};
 }
 
 /* -------------------------------------------- */
@@ -144,20 +176,25 @@ function distanceAt(x, y, w, h, other) {
 
 /** moveToken (active GM): a creature under Dire Radiance moved closer to the warlock on its own turn. */
 export async function onMoveToken(tokenDoc, movement) {
-	if (!setting("conditionalRiders") || !game.users.activeGM?.isSelf || !game.combat?.started) return;
+	if (!setting("conditionalRiders") || !game.users.activeGM?.isSelf) return;
 	const actor = tokenDoc.actor;
 	const effects = effectsOfKind(actor, "direRadiance");
 	if (!effects.length) return;
-	if (game.combat.combatant?.tokenId !== tokenDoc.id) return; // only on its own turn
+	// "on its next turn": the effect lasts until the end of the target's turn; skip only moves made
+	// during the warlock's own turn (e.g. forced movement from their powers)
+	const current = game.combat?.started ? game.combat.combatant : null;
 	const origin = movement?.origin;
-	if (!origin) return;
+	const dest = movement?.destination ?? tokenDoc;
+	if (!origin) return log("dire radiance: movement without origin", tokenDoc.name);
 	for (const effect of effects) {
 		const flags = effect.flags[MODULE_ID];
 		const warlock = fromUuidSync(flags.source);
 		const warlockToken = tokenForActor(warlock);
-		if (!warlockToken) continue;
+		if (!warlockToken) { log("dire radiance: warlock token not on the scene"); continue; }
+		if (current && current.actor === warlock) { log("dire radiance: moved during the warlock's turn"); continue; }
 		const before = distanceAt(origin.x, origin.y, tokenDoc.width, tokenDoc.height, warlockToken);
-		const after = distanceAt(tokenDoc.x, tokenDoc.y, tokenDoc.width, tokenDoc.height, warlockToken);
+		const after = distanceAt(dest.x ?? tokenDoc.x, dest.y ?? tokenDoc.y, tokenDoc.width, tokenDoc.height, warlockToken);
+		log("dire radiance: distance", tokenDoc.name, before, "->", after);
 		if (after >= before) continue;
 		await deleteEffects(actor, [effect.id]); // only the first time
 		await rollDamageCard({ actor: warlock, formula: flags.formula, type: "radiant", flavor: F("Conditional.DireFlavor", { power: flags.power, target: tokenDoc.name }), targets: [tokenDoc.object] });

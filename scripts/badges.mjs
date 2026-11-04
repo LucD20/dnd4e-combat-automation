@@ -3,8 +3,8 @@ import { setting } from "./utils.mjs";
 
 /*
  * Big, coloured badges on a token for quarry / curse / mark: the portrait of whoever applied it
- * inside a ring in the kind's colour, stacked down the token's top-right corner. The small
- * status icon on the left is kept as well.
+ * inside a ring in the kind's colour, stacked down the token's top-right corner. While badges are
+ * on, the effect's usual status icon on the left is hidden (showIcon: NEVER) so each mark shows once.
  */
 
 export const BADGE_KINDS = {
@@ -101,7 +101,32 @@ export async function refreshBadges(token) {
 	}
 }
 
+function hasBadge(effectData) {
+	const kind = effectData.flags?.[MODULE_ID]?.kind;
+	const statuses = effectData.statuses instanceof Set ? effectData.statuses : new Set(effectData.statuses ?? []);
+	return !!BADGE_KINDS[kind] || statuses.has("mark");
+}
+
+const NEVER = () => CONST.ACTIVE_EFFECT_SHOW_ICON?.NEVER ?? 0;
+
+/** Existing quarry/curse/mark effects on the scene: hide their left-side icon too (active GM). */
+async function hideExistingIcons() {
+	if (!setting("tokenBadges") || !game.users.activeGM?.isSelf || !canvas.ready) return;
+	const seen = new Set();
+	for (const token of canvas.tokens.placeables) {
+		const actor = token.actor;
+		if (!actor || seen.has(actor)) continue;
+		seen.add(actor);
+		const updates = actor.effects.filter((e) => hasBadge(e) && e.showIcon !== NEVER()).map((e) => ({ _id: e.id, showIcon: NEVER() }));
+		if (updates.length) await actor.updateEmbeddedDocuments("ActiveEffect", updates).catch(() => {});
+	}
+}
+
 export function registerBadgeHooks() {
+	Hooks.on("preCreateActiveEffect", (effect, data) => {
+		if (setting("tokenBadges") && hasBadge(effect)) effect.updateSource({ showIcon: NEVER() });
+	});
+	Hooks.on("canvasReady", () => hideExistingIcons());
 	Hooks.on("refreshToken", (token) => {
 		refreshBadges(token);
 	});

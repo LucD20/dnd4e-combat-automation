@@ -166,10 +166,11 @@ export function onPreAttackRoll(item, attacker, target, config) {
 	if (!bonuses?.untyped) return;
 	const off = disabledMods.get(targetKey(target)) ?? new Set();
 	const mods = attackModifiers(item, attacker, target).filter((m) => !off.has(m.key));
-	for (const m of mods) bonuses.untyped.push(String(m.value));
+	// Typed bonuses (racial, power...) don't stack with others of the same type: the system keeps the highest
+	for (const m of mods) (bonuses[m.type ?? "untyped"] ??= []).push(String(m.value));
 	markApplied(mods);
 	// Remember them on the roll so the chat card can show them
-	config.targetOptions.d4eaMods = mods.map((m) => ({ label: m.label, value: m.value }));
+	config.targetOptions.d4eaMods = mods.map((m) => ({ label: m.label, value: m.value, type: m.type ?? "untyped" }));
 	config.targetOptions.d4eaInfo = { actor: attacker?.name ?? "", power: item?.name ?? "", ability: item?.system?.attack?.ability ?? "" };
 	if (mods.length) console.log(`${MODULE_ID} | attack modifiers ${attacker?.name} -> ${target?.name ?? "-"}:`, mods.map((m) => `${m.label} ${m.value > 0 ? "+" : ""}${m.value}`).join(", "));
 }

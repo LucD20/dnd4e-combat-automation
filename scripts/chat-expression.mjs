@@ -50,6 +50,8 @@ const fmt = (v) => (v > 0 ? `+${v}` : v < 0 ? `−${Math.abs(v)}` : "+0");
 function collect(rollEl, expression, roll) {
 	const info = roll?.options?.d4eaInfo;
 	const extras = roll?.options?.d4eaExtras ?? [];
+	const ownMods = (roll?.options?.d4eaMods ?? []).map((m) => ({ ...m, type: m.type ?? "untyped" }));
+	const handled = new Set();
 	const items = [];
 	for (const span of expression.querySelectorAll(".roll-expression")) {
 		if (span.querySelector(".roll-expression")) continue; // only leaf parts
@@ -69,6 +71,11 @@ function collect(rollEl, expression, roll) {
 			continue;
 		}
 		const variable = varMatch[1];
+		const effectType = variable.match(/^(\w+)EffectBonus$/)?.[1];
+		if (effectType && Number.isFinite(numeric)) {
+			items.push(...effectBonusItems(effectType, numeric, ownMods, handled));
+			continue;
+		}
 		const label = labelFor(variable, info);
 		if (Number.isFinite(numeric)) {
 			items.push({ label, value: numeric, kind: numeric < 0 ? "penalty" : (isSituational(variable) ? "situational" : "bonus") });
@@ -76,10 +83,32 @@ function collect(rollEl, expression, roll) {
 			items.push({ label, text: valueText.replace(/\[[^\]]*\]/g, ""), value: null, kind: isDice(valueText) ? "damageDice" : "bonus" });
 		}
 	}
-	for (const m of roll?.options?.d4eaMods ?? []) {
-		items.push({ label: m.label, value: m.value, kind: m.value < 0 ? "penalty" : "situational" });
+	for (const m of ownMods) {
+		if (!handled.has(m)) items.push({ label: m.label, value: m.value, kind: m.value < 0 ? "penalty" : "situational" });
 	}
 	return { items, info };
+}
+
+const kindOf = (v) => (v < 0 ? "penalty" : "situational");
+
+/**
+ * "@untypedEffectBonus" / "@raceEffectBonus"... is the total of one bonus type, from active effects
+ * plus the module's own modifiers. Show the module's modifiers by name and the rest as "Effects".
+ */
+function effectBonusItems(type, total, ownMods, handled) {
+	const mine = ownMods.filter((m) => m.type === type);
+	mine.forEach((m) => handled.add(m));
+	const effectsLabel = type === "untyped" ? L("effectBonus") : L("effectBonusTyped", { type: L(`bonusType.${type}`) });
+	if (type === "untyped") {
+		const out = mine.map((m) => ({ label: m.label, value: m.value, kind: kindOf(m.value) }));
+		const rest = total - mine.reduce((a, m) => a + m.value, 0);
+		if (rest) out.push({ label: effectsLabel, value: rest, kind: kindOf(rest) });
+		return out;
+	}
+	// Typed bonuses don't stack: only the highest counts
+	const best = mine.reduce((b, m) => (!b || m.value > b.value ? m : b), null);
+	if (best && best.value >= total) return [{ label: best.label, value: total, kind: kindOf(total) }];
+	return total ? [{ label: effectsLabel, value: total, kind: kindOf(total) }] : [];
 }
 
 function renderBreakdown({ items, info }) {
