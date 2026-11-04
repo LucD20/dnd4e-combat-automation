@@ -33,7 +33,7 @@ game.modules.get("dnd4e-combat-automation").api.applyMark({ marker, targets: [..
 
 ### Instalação (Molten / Foundry)
 Depois que houver um release no GitHub, em *Instalar Módulo* cole a URL do manifest:
-`https://github.com/<usuario>/<repo>/releases/latest/download/module.json`
+`https://github.com/LucD20/dnd4e-combat-automation/releases/latest/download/module.json`
 
 Ative o módulo no mundo. A opção do sistema **"Automação dinâmica"** (dnd4e) deve estar ligada para o −2 de marca funcionar.
 
