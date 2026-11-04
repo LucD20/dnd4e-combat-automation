@@ -17,6 +17,7 @@ import { registerActionTracker, onUsePower as spendPowerAction } from "./actions
 import { ActionPanel } from "./actions/panel.mjs";
 import * as opportunity from "./reactions/opportunity.mjs";
 import * as triggers from "./reactions/triggers.mjs";
+import * as damageApply from "./damage-apply.mjs";
 
 Hooks.once("init", () => {
 	// Must run in "init": Foundry loads translations right after this hook.
@@ -65,6 +66,7 @@ Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 	try {
 		const actor = actorFromSpeaker(speaker);
 		if (actor) await mark.onAttackRolled(itemData, targetData, actor);
+		damageApply.onAttackRolledForDamage(itemData, targetData, speaker);
 		await triggers.onAttackRolled(itemData, targetData, speaker);
 	} catch (err) {
 		console.error(`${MODULE_ID} | rollAttack`, err);
@@ -93,4 +95,20 @@ Hooks.on("dnd4e.evaluateCommonAttackBonuses", (item, attacker, target, config) =
 /* Quarry/curse end when the creature drops to 0 HP. */
 Hooks.on("updateActor", (actor, changes) => {
 	defeat.onUpdateActor(actor, changes).catch((err) => console.error(`${MODULE_ID} | updateActor`, err));
+});
+
+/* Damage cards: apply to the attack's targets, selected tokens, or retarget. */
+Hooks.on("preCreateChatMessage", (message, data, options, userId) => {
+	try {
+		damageApply.onPreCreateChatMessage(message, data, options, userId);
+	} catch (err) {
+		console.error(`${MODULE_ID} | damage targets`, err);
+	}
+});
+Hooks.on("renderChatMessageHTML", (message, html) => {
+	try {
+		damageApply.onRenderChatMessage(message, html);
+	} catch (err) {
+		console.error(`${MODULE_ID} | damage buttons`, err);
+	}
 });

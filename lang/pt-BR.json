@@ -73,6 +73,10 @@
       "reactionPrompts": {
         "Name": "Avisos de poderes com gatilho",
         "Hint": "Oferece poderes com Gatilho (Precisão Élfica, Astúcia da Raposa, Assalto Furioso, Investida Célere, Cólera Infernal e qualquer poder, inclusive de monstros, com gatilho parecido) num cartão privado no chat quando o gatilho acontece."
+      },
+      "damageTargets": {
+        "Name": "Aplicar dano nos alvos do ataque",
+        "Hint": "Os cartões de dano ganham botões para aplicar o dano nos alvos do ataque original (cliques de jogadores são aplicados pelo mestre), nos tokens selecionados, e um botão para trocar o alvo."
       }
     },
     "Keybindings": {
@@ -207,6 +211,21 @@
       "ReasonMeleeAttacked": "<strong>{enemy}</strong> faz um ataque corpo a corpo contra <strong>{actor}</strong>.",
       "ReasonAttacked": "<strong>{enemy}</strong> ataca <strong>{actor}</strong>.",
       "ReasonDrop": "<strong>{actor}</strong> derrubou <strong>{target}</strong> a 0 pontos de vida."
+    },
+    "DamageApply": {
+      "Damage": "Dano",
+      "Half": "Metade",
+      "Selected": "Selecionados",
+      "None": "sem alvos",
+      "Retarget": "Trocar para os alvos atuais",
+      "RetargetHint": "Substitui os alvos deste cartão pelos tokens que você está mirando agora.",
+      "TargetsHint": "Alvos do ataque original",
+      "NoTargets": "Este cartão não tem alvos. Mire os tokens e use Trocar alvo.",
+      "NoSelection": "Selecione pelo menos um token.",
+      "NoCurrentTargets": "Mire pelo menos um token primeiro."
     }
+  },
+  "EFFECT": {
+    "statusBloodied": "Sangrando"
   }
 }

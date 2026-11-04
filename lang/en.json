@@ -73,6 +73,10 @@
       "reactionPrompts": {
         "Name": "Triggered power prompts",
         "Hint": "Offer powers with a Trigger (Elven Accuracy, Fox's Cunning, Furious Assault, Swift Charge, Infernal Wrath, and any power or monster power with a similar trigger) as a whispered chat card when the trigger happens."
+      },
+      "damageTargets": {
+        "Name": "Apply damage to the attack's targets",
+        "Hint": "Damage cards get buttons that apply damage to the targets of the original attack (players' clicks are applied by the GM), to the selected tokens, and a Retarget button."
       }
     },
     "Keybindings": {
@@ -207,6 +211,18 @@
       "ReasonMeleeAttacked": "<strong>{enemy}</strong> makes a melee attack against <strong>{actor}</strong>.",
       "ReasonAttacked": "<strong>{enemy}</strong> attacks <strong>{actor}</strong>.",
       "ReasonDrop": "<strong>{actor}</strong> dropped <strong>{target}</strong> to 0 hit points."
+    },
+    "DamageApply": {
+      "Damage": "Damage",
+      "Half": "Half",
+      "Selected": "Selected",
+      "None": "no targets",
+      "Retarget": "Retarget to my current targets",
+      "RetargetHint": "Replace this card's targets with the tokens you are targeting now.",
+      "TargetsHint": "Targets of the original attack",
+      "NoTargets": "This card has no targets. Target tokens and use Retarget.",
+      "NoSelection": "Select at least one token.",
+      "NoCurrentTargets": "Target at least one token first."
     }
   }
 }

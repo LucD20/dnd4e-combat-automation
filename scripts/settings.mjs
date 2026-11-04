@@ -20,6 +20,7 @@ export function registerSettings() {
 	world("opportunityAttacks");
 	world("autoMoveActions");
 	world("reactionPrompts");
+	world("damageTargets");
 
 	const client = (key, def = true, onChange = undefined) => game.settings.register(MODULE_ID, key, {
 		name: `DND4EAUTO.Settings.${key}.Name`,

@@ -60,7 +60,7 @@ export function registerGameLanguage() {
 		];
 		for (const path of paths) {
 			const json = await loadJson(path);
-			foundry.utils.mergeObject(this.translations, json, { inplace: true });
+			foundry.utils.mergeObject(this.translations, foundry.utils.expandObject(json), { inplace: true });
 		}
 		console.log(`${MODULE_ID} | 4e game language set to ${chosen} (Foundry interface: ${this.lang})`);
 	};
