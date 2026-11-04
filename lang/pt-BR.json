@@ -97,6 +97,10 @@
       "readableRolls": {
         "Name": "Rolagens legíveis no chat",
         "Hint": "Troca as variáveis da rolagem no chat (@wepAttack, @powerMod...) por nomes e valores, e mostra os modificadores automáticos do módulo."
+      },
+      "conditionalRiders": {
+        "Name": "Dano condicional e bônus de rolagem",
+        "Hint": "Cólera Infernal rola o dano de fogo; Radiância Atroz causa o dano extra quando o alvo se aproxima; Precisão Élfica rola de novo o último ataque; Astúcia da Raposa e Destino do Vácuo somam o bônus no próximo ataque."
       }
     },
     "Keybindings": {
@@ -296,6 +300,14 @@
       "sectionBonus": "Bônus",
       "sectionSituational": "Situacional",
       "sectionPenalty": "Penalidades"
+    },
+    "Conditional": {
+      "FoxArmed": "{name}: o próximo ataque básico ganha +{bonus} (Astúcia da Raposa).",
+      "NoLastAttack": "{name} não tem um ataque recente para rolar de novo.",
+      "Rerolling": "{power}: rolando o ataque de novo contra os mesmos alvos. Use o segundo resultado.",
+      "DireName": "{power}: aproximar-se causa {formula}",
+      "DireDesc": "Na primeira vez que esta criatura se aproximar de {source} no próximo turno dela, sofre {formula} de dano.",
+      "DireFlavor": "{power}: {target} se aproximou"
     }
   },
   "EFFECT": {

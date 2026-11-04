@@ -106,7 +106,12 @@ export function onRenderChatMessage(message, html) {
 		if (!expression || rollEl.querySelector(".d4ea-breakdown")) return;
 		const data = collect(rollEl, expression, message.rolls[i]);
 		if (!data.items.length) return;
-		expression.style.display = "none";
-		expression.insertAdjacentHTML("afterend", renderBreakdown(data));
+		// Keep it inside the expression line, which is only shown when the roll is expanded
+		const original = document.createElement("span");
+		original.className = "d4ea-original-expression";
+		original.hidden = true;
+		while (expression.firstChild) original.append(expression.firstChild);
+		expression.append(original);
+		expression.insertAdjacentHTML("beforeend", renderBreakdown(data));
 	});
 }

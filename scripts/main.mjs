@@ -10,6 +10,7 @@ import * as defeat from "./features/defeat.mjs";
 import * as furiousAssault from "./features/furious-assault.mjs";
 import * as onHit from "./features/on-hit.mjs";
 import * as tempHp from "./features/temp-hp.mjs";
+import * as conditional from "./features/conditional.mjs";
 import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
@@ -35,6 +36,7 @@ Hooks.once("init", () => {
 	triggers.registerTriggerHooks();
 	tempHp.registerTempHpHooks();
 	registerSheetModHooks();
+	conditional.registerConditionalHooks();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
@@ -60,7 +62,7 @@ Hooks.on("dnd4e.usePower", async (item) => {
 	try {
 		await spendPowerAction(item);
 		opportunity.onUsePower(item);
-		for (const feature of [quarry, curse, rage, furiousAssault]) {
+		for (const feature of [quarry, curse, rage, furiousAssault, conditional]) {
 			if (await feature.onUsePower(item, actor)) break;
 		}
 	} catch (err) {
@@ -79,6 +81,7 @@ Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 		if (actor) await mark.onAttackRolled(itemData, targetData, actor);
 		if (actor) await onHit.onAttackRolled(itemData, targetData, actor);
 		await triggers.onAttackRolled(itemData, targetData, speaker);
+		await conditional.onAttackRolled(itemData, targetData, actor);
 	} catch (err) {
 		console.error(`${MODULE_ID} | rollAttack`, err);
 	}

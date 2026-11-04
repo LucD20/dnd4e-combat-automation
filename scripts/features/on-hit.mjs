@@ -1,6 +1,7 @@
 import { MODULE_ID, MATCHERS } from "../constants.mjs";
 import { F, L, matches, actorHas, abilityMod, setting, log, tokenForActor, gridDistance, areAllies, areEnemies, isRangedPower } from "../utils.mjs";
 import { buildEffect, createEffects } from "../effects.mjs";
+import { conditionalModifiers, markApplied } from "./conditional.mjs";
 
 /*
  * Power riders applied automatically to the targets a power hits, plus attack-roll modifiers:
@@ -145,6 +146,7 @@ export function attackModifiers(item, attacker, target) {
 		}
 	}
 	if (setting("primeShot") && primeShotApplies(item, attacker, target)) mods.push({ key: "primeShot", label: L("OnHit.PrimeShot"), value: 1 });
+	mods.push(...conditionalModifiers(item, attacker));
 	return mods;
 }
 
@@ -165,6 +167,7 @@ export function onPreAttackRoll(item, attacker, target, config) {
 	const off = disabledMods.get(targetKey(target)) ?? new Set();
 	const mods = attackModifiers(item, attacker, target).filter((m) => !off.has(m.key));
 	for (const m of mods) bonuses.untyped.push(String(m.value));
+	markApplied(mods);
 	// Remember them on the roll so the chat card can show them
 	config.targetOptions.d4eaMods = mods.map((m) => ({ label: m.label, value: m.value }));
 	config.targetOptions.d4eaInfo = { actor: attacker?.name ?? "", power: item?.name ?? "", ability: item?.system?.attack?.ability ?? "" };

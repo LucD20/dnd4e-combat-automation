@@ -97,6 +97,10 @@
       "readableRolls": {
         "Name": "Readable roll breakdowns in chat",
         "Hint": "Replace the roll variables in chat (@wepAttack, @powerMod...) with labels and values, and show the module's automatic modifiers."
+      },
+      "conditionalRiders": {
+        "Name": "Conditional damage and roll riders",
+        "Hint": "Infernal Wrath rolls its fire damage; Dire Radiance deals its extra damage when the target moves closer; Elven Accuracy rerolls your last attack; Fox's Cunning and Fate of the Void add their bonus to the next attack."
       }
     },
     "Keybindings": {
@@ -296,6 +300,14 @@
       "sectionBonus": "Bonuses",
       "sectionSituational": "Situational",
       "sectionPenalty": "Penalties"
+    },
+    "Conditional": {
+      "FoxArmed": "{name}: the next basic attack gets +{bonus} (Fox's Cunning).",
+      "NoLastAttack": "{name} has no recent attack to reroll.",
+      "Rerolling": "{power}: rolling the attack again against the same targets. Use the second roll.",
+      "DireName": "{power}: moving closer deals {formula}",
+      "DireDesc": "The first time this creature moves closer to {source} on its next turn, it takes {formula} damage.",
+      "DireFlavor": "{power}: {target} moved closer"
     }
   }
 }

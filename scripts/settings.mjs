@@ -24,6 +24,7 @@ export function registerSettings() {
 	world("powerRiders");
 	world("primeShot");
 	world("tempHpFeatures");
+	world("conditionalRiders");
 
 	const client = (key, def = true, onChange = undefined) => game.settings.register(MODULE_ID, key, {
 		name: `DND4EAUTO.Settings.${key}.Name`,

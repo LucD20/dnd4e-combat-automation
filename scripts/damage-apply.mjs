@@ -31,6 +31,7 @@ export function onPreCreateChatMessage(message, data, options, userId) {
 	if (!setting("damageTargets") || userId !== game.user.id) return;
 	const roll = damageRoll(message);
 	if (!roll) return;
+	if (message.getFlag(MODULE_ID, FLAG)?.length) return; // targets already chosen (module damage cards)
 	const actor = actorFromSpeaker(message.speaker);
 	const last = actor ? lastAttack.get(actor.uuid) : null;
 	let targets;
@@ -111,9 +112,15 @@ export async function handleRetargetSocket(payload) {
 
 export function onRenderChatMessage(message, html) {
 	if (!setting("damageTargets") || !damageRoll(message)) return;
-	const original = html.querySelector(".chatDamageButtons");
-	if (!original || original.style.display === "none") return;
-	original.style.display = "none";
+	let original = html.querySelector(".chatDamageButtons");
+	if (original?.style.display === "none") return;
+	if (original) original.style.display = "none";
+	else {
+		// Damage rolled by this module (plain roll, no system buttons): anchor after the roll
+		if (!message.getFlag(MODULE_ID, FLAG)) return;
+		original = html.querySelector(".dice-roll");
+		if (!original) return;
+	}
 
 	const targets = storedTargets(message);
 	const names = targets.map((t) => foundry.utils.escapeHTML(t.name)).join(", ") || `<em>${L("DamageApply.None")}</em>`;
@@ -146,4 +153,27 @@ export function onRenderChatMessage(message, html) {
 	label.addEventListener("mouseenter", (ev) => targets.forEach((t) => t.object?._onHoverIn?.(ev, { hoverOutOthers: false })));
 	label.addEventListener("mouseleave", (ev) => targets.forEach((t) => t.object?._onHoverOut?.(ev)));
 	original.after(box);
+}
+
+/**
+ * Roll damage from the module (Infernal Wrath, Dire Radiance...) as a chat card with the usual
+ * Damage / Half / Selected / Retarget buttons, aimed at `targets`.
+ * @param {object} opts
+ * @param {Actor} opts.actor
+ * @param {string} opts.formula   e.g. "1d6 + 3"
+ * @param {string} opts.type      damage type, e.g. "fire"
+ * @param {string} opts.flavor
+ * @param {Token[]} opts.targets
+ */
+export async function rollDamageCard({ actor, formula, type, flavor, targets = [] }) {
+	const typed = type ? formula.split("+").map((p) => `${p.trim()}[${type}]`).join(" + ") : formula;
+	const roll = await new Roll(typed, actor?.getRollData?.() ?? {}).evaluate();
+	roll.options.hitTypeDamage = true;
+	roll.options.hitType = "normal";
+	roll.options.d4eaInfo = { actor: actor?.name ?? "", power: flavor ?? "", damage: true };
+	return roll.toMessage({
+		speaker: ChatMessage.getSpeaker({ actor }),
+		flavor,
+		flags: { [MODULE_ID]: { [FLAG]: targets.map((t) => t.document?.uuid ?? t.uuid).filter(Boolean) } },
+	});
 }
