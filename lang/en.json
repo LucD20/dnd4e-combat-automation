@@ -89,6 +89,10 @@
       "tempHpFeatures": {
         "Name": "Temporary HP features",
         "Hint": "Rageblood Vigor (automatic when your attack drops an enemy) and Virtue of Valor (card for the bard when an ally within 5 squares bloodies or drops an enemy)."
+      },
+      "sheetModHighlights": {
+        "Name": "Highlight modified defences on sheets",
+        "Hint": "Colour defences changed by temporary effects (red = penalty, green = bonus) and list the effects in their tooltip."
       }
     },
     "Keybindings": {
@@ -252,7 +256,8 @@
       "StirringHeal": "<strong>{actor}</strong> regains {heal} hit points (Stirring Shout).",
       "PrimeShot": "Prime Shot +1",
       "GreatCleave": "Great Cleave +{count} (adjacent enemies)",
-      "GreatCleaveHint": "+1 damage for each enemy adjacent to you."
+      "GreatCleaveHint": "+1 damage for each enemy adjacent to you.",
+      "AutoModsLegend": "Automatic modifiers (4e automation)"
     },
     "TempHp": {
       "Rageblood": "<strong>{actor}</strong> gains {amount} temporary hit points (Rageblood Vigor, {target} dropped).",

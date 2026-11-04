@@ -3,7 +3,7 @@
 Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a burocracia de combate do D&D 4e.
 *(English below.)*
 
-## O que faz (v0.5)
+## O que faz (v0.5.1)
 
 | Recurso | Como funciona |
 |---|---|
@@ -22,6 +22,7 @@ Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a
 | **Efeitos ao acertar** | Zombaria Malévola (−2 nos ataques do alvo), Palavra Pavorosa (−1 em Vontade, ou 1 + INT com Pacto Estelar), Maldição do Sonho Obscuro (efeito até salvar) e Grito Inspirador (aliados que acertarem o alvo recuperam PV = CAR do bardo) são aplicados sozinhos nos alvos atingidos. Grande Trespassar ganha o toggle "+N (inimigos adjacentes)" no dano. |
 | **Tiro Primoroso** | +1 nos ataques à distância quando nenhum aliado está mais perto do alvo. |
 | **PV temporários** | Vigor da Fúria Sangrenta (Grontar, automático ao derrubar um inimigo) e Virtude da Bravura (cartão para o bardo quando um aliado a até 5 quadrados deixa um inimigo sangrando ou o derruba; uma vez por rodada). |
+| **Atributos modificados** | Nas fichas (padrão e do Fox, personagens e monstros), defesas alteradas por efeitos temporários ficam vermelhas (penalidade) ou verdes (bônus), e o tooltip mostra o que está mudando, ex.: "Palavra Pavorosa: −3". A janela de ataque lista os modificadores automáticos de cada alvo (Tiro Primoroso +1, Zombaria Malévola −2…). |
 | **Idioma do jogo 4e** | Em *Configurações do módulo → Idioma do jogo 4e*, cada usuário escolhe o idioma do sistema dnd4e (atributos, perícias, condições, rótulos da ficha) e deste módulo, independente da interface do Foundry. Ex.: Foundry em inglês, conteúdo 4e em português. |
 
 Cartões que dependem do resultado de um ataque esperam a animação do **Dice So Nice** terminar.

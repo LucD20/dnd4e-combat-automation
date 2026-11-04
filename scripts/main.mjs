@@ -14,6 +14,7 @@ import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
 import { preloadCompendiumIndexes } from "./preload.mjs";
+import { registerSheetModHooks } from "./sheet-mods.mjs";
 import { registerGameLanguage } from "./language.mjs";
 import { registerBadgeHooks } from "./badges.mjs";
 import { registerActionTracker, onUsePower as spendPowerAction } from "./actions/hooks.mjs";
@@ -32,6 +33,7 @@ Hooks.once("init", () => {
 	opportunity.registerOpportunityHooks();
 	triggers.registerTriggerHooks();
 	tempHp.registerTempHpHooks();
+	registerSheetModHooks();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
@@ -85,6 +87,7 @@ Hooks.on("dnd4e.rollDamage", (item) => onRollDamage(item));
 Hooks.on("renderRollDialog", (app, element) => {
 	try {
 		onRenderRollDialog(app, element);
+		onHit.onRenderAttackDialog(app, element);
 	} catch (err) {
 		console.error(`${MODULE_ID} | renderRollDialog`, err);
 	}

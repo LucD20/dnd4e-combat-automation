@@ -37,6 +37,7 @@ export function registerSettings() {
 	client("actionPanel");
 	client("actionWarnings");
 	client("dockPips", true, () => import("./actions/dock.mjs").then((m) => m.refreshDock()));
+	client("sheetModHighlights", true);
 	client("tokenBadges", true, () => canvas?.tokens?.placeables.forEach((t) => t.renderFlags?.set({ refresh: true })));
 
 	game.settings.register(MODULE_ID, "coverPreview", {

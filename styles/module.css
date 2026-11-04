@@ -169,3 +169,16 @@
 .d4ea-damage-apply button:hover:not(:disabled) { filter: brightness(1.2) !important; }
 .d4ea-damage-apply button:disabled { background: #888 !important; border-color: #666 !important; cursor: not-allowed !important; }
 .d4ea-damage-apply button i { color: inherit !important; margin-right: 3px !important; }
+
+/* Sheets: defences modified by temporary effects */
+.d4ea-mod-penalty { color: #d32f2f !important; text-shadow: 0 0 1px rgba(211, 47, 47, 0.4) !important; }
+.d4ea-mod-bonus { color: #2e7d32 !important; text-shadow: 0 0 1px rgba(46, 125, 50, 0.4) !important; }
+input.d4ea-mod-penalty, input.d4ea-mod-bonus { font-weight: bold !important; }
+
+/* Attack dialog: automatic modifiers */
+.d4ea-atk-mods { margin: 0.5rem 0 !important; padding: 0.25rem 0.5rem !important; border: 1px solid var(--color-border, #7a7971) !important; border-radius: 4px !important; }
+.d4ea-atk-mods legend { font-weight: bold !important; padding: 0 0.25rem !important; }
+.d4ea-atk-row { margin: 2px 0 !important; }
+.d4ea-atk-mod { display: inline-block !important; padding: 0 6px !important; border-radius: 10px !important; font-size: 0.85em !important; color: #fff !important; }
+.d4ea-atk-mod.bonus { background: #2e7d32 !important; }
+.d4ea-atk-mod.penalty { background: #c62828 !important; }

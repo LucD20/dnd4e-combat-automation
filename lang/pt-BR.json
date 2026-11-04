@@ -89,6 +89,10 @@
       "tempHpFeatures": {
         "Name": "PV temporários de características",
         "Hint": "Vigor da Fúria Sangrenta (automático quando seu ataque derruba um inimigo) e Virtude da Bravura (cartão para o bardo quando um aliado a até 5 quadrados deixa um inimigo sangrando ou o derruba)."
+      },
+      "sheetModHighlights": {
+        "Name": "Destacar defesas modificadas nas fichas",
+        "Hint": "Colore as defesas alteradas por efeitos temporários (vermelho = penalidade, verde = bônus) e lista os efeitos no tooltip."
       }
     },
     "Keybindings": {
@@ -252,7 +256,8 @@
       "StirringHeal": "<strong>{actor}</strong> recupera {heal} pontos de vida (Grito Inspirador).",
       "PrimeShot": "Tiro Primoroso +1",
       "GreatCleave": "Grande Trespassar +{count} (inimigos adjacentes)",
-      "GreatCleaveHint": "+1 de dano para cada inimigo adjacente a você."
+      "GreatCleaveHint": "+1 de dano para cada inimigo adjacente a você.",
+      "AutoModsLegend": "Modificadores automáticos (automação 4e)"
     },
     "TempHp": {
       "Rageblood": "<strong>{actor}</strong> recebe {amount} pontos de vida temporários (Vigor da Fúria Sangrenta, {target} caiu).",
@@ -302,6 +307,11 @@
           }
         }
       }
-    }
+    },
+    "HealingSurgesShort": "Pulsos"
+  },
+  "Fox4e": {
+    "Value": "Valor",
+    "Max": "Max"
   }
 }

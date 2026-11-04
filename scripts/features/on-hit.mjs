@@ -132,24 +132,54 @@ function primeShotApplies(item, attackerToken, target) {
 		&& !t.document.hidden && gridDistance(t, target) < mine);
 }
 
-export function onPreAttackRoll(item, attacker, target, config) {
-	const bonuses = config?.targetOptions?.bonuses;
-	if (!bonuses?.untyped || !attacker?.actor) return;
-	const notes = [];
+/** Attack modifiers the module adds for this attacker/target: [{ label, value }]. */
+export function attackModifiers(item, attacker, target) {
+	const mods = [];
+	if (!attacker?.actor) return mods;
 	// Penalties from module effects on the attacker (e.g. Vicious Mockery)
 	if (setting("powerRiders")) {
 		for (const e of attacker.actor.effects) {
-			const mod = e.flags?.[MODULE_ID]?.attackMod;
+			const mod = Number(e.flags?.[MODULE_ID]?.attackMod);
 			if (!mod || e.disabled) continue;
-			bonuses.untyped.push(String(mod));
-			notes.push(`${e.name} ${mod}`);
+			mods.push({ label: e.name, value: mod });
 		}
 	}
-	if (setting("primeShot") && primeShotApplies(item, attacker, target)) {
-		bonuses.untyped.push("1");
-		notes.push(L("OnHit.PrimeShot"));
-	}
-	if (notes.length) log("attack modifiers", attacker.name, "->", target?.name, notes);
+	if (setting("primeShot") && primeShotApplies(item, attacker, target)) mods.push({ label: L("OnHit.PrimeShot"), value: 1 });
+	return mods;
+}
+
+export function onPreAttackRoll(item, attacker, target, config) {
+	const bonuses = config?.targetOptions?.bonuses;
+	if (!bonuses?.untyped) return;
+	const mods = attackModifiers(item, attacker, target);
+	for (const m of mods) bonuses.untyped.push(String(m.value));
+	if (mods.length) console.log(`${MODULE_ID} | attack modifiers ${attacker?.name} -> ${target?.name ?? "-"}:`, mods.map((m) => `${m.label} ${m.value > 0 ? "+" : ""}${m.value}`).join(", "));
+}
+
+/** Attack dialog: list the automatic modifiers per target so they're visible before rolling. */
+export function onRenderAttackDialog(app, element) {
+	if (!app.dialogData?.isAttackRoll || !app.rollConfig) return;
+	const actor = app.rollConfig.actor;
+	const item = app.rollConfig.item;
+	const attacker = tokenForActor(actor);
+	if (!attacker) return;
+	const targets = Array.from(game.user.targets);
+	const rows = (targets.length ? targets : [null]).map((t) => {
+		const mods = attackModifiers(item, attacker, t);
+		if (!mods.length) return "";
+		const list = mods.map((m) => `<span class="d4ea-atk-mod ${m.value < 0 ? "penalty" : "bonus"}">${foundry.utils.escapeHTML(m.label)} ${m.value > 0 ? "+" : ""}${m.value}</span>`).join(" ");
+		return `<div class="d4ea-atk-row">${t ? `<strong>${foundry.utils.escapeHTML(t.name)}:</strong> ` : ""}${list}</div>`;
+	}).join("");
+	const root = element instanceof HTMLElement ? element : element[0];
+	root.querySelector(".d4ea-atk-mods")?.remove();
+	if (!rows) return;
+	const box = document.createElement("fieldset");
+	box.className = "d4ea-atk-mods";
+	box.innerHTML = `<legend>${L("OnHit.AutoModsLegend")}</legend>${rows}`;
+	const anchor = root.querySelector(".target-detail") ?? root.querySelector("input[name='bonus']")?.closest(".form-group");
+	if (anchor) anchor.after(box);
+	else root.querySelector(".roll-dialogue")?.append(box);
+	app.setPosition?.({ height: "auto" });
 }
 
 /* -------------------------------------------- */
