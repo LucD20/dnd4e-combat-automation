@@ -5,6 +5,7 @@ import { ActionPanel } from "./panel.mjs";
 import { renderTrackerPips } from "./tracker-pips.mjs";
 import { integrateCombatDock, refreshDock } from "./dock.mjs";
 import { consumePendingOpportunity } from "../reactions/opportunity.mjs";
+import { onMoveTokenSpend } from "./movement.mjs";
 
 /** dnd4e.usePower: spend the power's action. */
 export async function onUsePower(item) {
@@ -54,6 +55,9 @@ export function registerActionTracker() {
 	Hooks.on("combatStart", (combat) => {
 		resetAll(combat).catch((e) => console.error(`${MODULE_ID} | combat start`, e));
 		ActionPanel.autoOpen();
+	});
+	Hooks.on("moveToken", (doc, movement, operation, user) => {
+		onMoveTokenSpend(doc, movement, operation, user).catch((e) => console.error(`${MODULE_ID} | movement`, e));
 	});
 	Hooks.on("preUpdateActor", onPreUpdateActor);
 	Hooks.on("updateActor", onUpdateActor);

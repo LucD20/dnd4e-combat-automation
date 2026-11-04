@@ -65,6 +65,14 @@
       "opportunityAttacks": {
         "Name": "Avisos de ataque de oportunidade",
         "Hint": "Quando um inimigo sai de um quadrado adjacente a uma criatura sem ajustar, ou faz um ataque à distância/de área ao lado dela, envia um cartão privado no chat a quem controla essa criatura, com um botão para o ataque de oportunidade."
+      },
+      "autoMoveActions": {
+        "Name": "Mover o token gasta ações de movimento",
+        "Hint": "No turno do combatente, arrastar o token gasta uma ação de movimento (deslocamento por ação; ajuste conta como ação de ajustar; usa a ação padrão quando necessário). Teletransporte, desfazer, investida e tokens de jogadores arrastados pelo mestre são ignorados."
+      },
+      "reactionPrompts": {
+        "Name": "Avisos de poderes com gatilho",
+        "Hint": "Oferece poderes com Gatilho (Precisão Élfica, Astúcia da Raposa, Assalto Furioso, Investida Célere, Cólera Infernal e qualquer poder, inclusive de monstros, com gatilho parecido) num cartão privado no chat quando o gatilho acontece."
       }
     },
     "Keybindings": {
@@ -175,7 +183,8 @@
         "totalDefense": "<strong>{name}</strong> faz Defesa Total (+2 em todas as defesas até o início do próximo turno).",
         "aidAnother": "<strong>{name}</strong> presta ajuda.",
         "ready": "<strong>{name}</strong> prepara uma ação."
-      }
+      },
+      "WarnShiftTooFar": "{name} ajustou {squares} quadrados, mas só pode ajustar {budget}."
     },
     "Opportunity": {
       "Title": "Ataque de oportunidade",
@@ -187,6 +196,17 @@
       "NotOwner": "Você não controla esta criatura.",
       "NoBasic": "{name} não tem ataque básico corpo a corpo.",
       "Used": "Ação de oportunidade já usada"
+    },
+    "Reaction": {
+      "Title": "Reação disponível",
+      "Button": "Usar {power}",
+      "Unavailable": "{power} indisponível",
+      "ReasonSelfMiss": "<strong>{actor}</strong> errou {targets}.",
+      "ReasonHitEnemy": "<strong>{actor}</strong> acertou {targets}.",
+      "ReasonHitYou": "<strong>{enemy}</strong> acertou <strong>{actor}</strong>.",
+      "ReasonMeleeAttacked": "<strong>{enemy}</strong> faz um ataque corpo a corpo contra <strong>{actor}</strong>.",
+      "ReasonAttacked": "<strong>{enemy}</strong> ataca <strong>{actor}</strong>.",
+      "ReasonDrop": "<strong>{actor}</strong> derrubou <strong>{target}</strong> a 0 pontos de vida."
     }
   }
 }

@@ -2,6 +2,7 @@ import { MODULE_ID } from "../constants.mjs";
 import { F, L } from "../utils.mjs";
 import { createEffects } from "../effects.mjs";
 import { spend, setChargePending } from "./state.mjs";
+import { startMovementBlock } from "./movement.mjs";
 
 /*
  * Basic combat actions available from the panel. Each one spends its action and, where the
@@ -26,11 +27,14 @@ function chat(actor, key) {
 }
 
 export const BASIC_ACTIONS = {
-	walk: { kind: "move", icon: "fa-person-walking" },
-	shift: { kind: "move", icon: "fa-shoe-prints" },
+	walk: { kind: "move", icon: "fa-person-walking", run: async (actor, combatant) => startMovementBlock(combatant, "walk") },
+	shift: { kind: "move", icon: "fa-shoe-prints", run: async (actor, combatant) => startMovementBlock(combatant, "shift") },
 	run: {
 		kind: "move", icon: "fa-person-running",
-		run: async (actor) => statusEffect(actor, "running", "startOfUserTurn"),
+		run: async (actor, combatant) => {
+			await statusEffect(actor, "running", "startOfUserTurn");
+			await startMovementBlock(combatant, "run");
+		},
 	},
 	standUp: {
 		kind: "move", icon: "fa-person-arrow-up-from-line",

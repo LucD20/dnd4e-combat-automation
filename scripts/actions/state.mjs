@@ -16,7 +16,7 @@ export const ACTIONS = ["standard", "move", "minor", "immediate", "opportunity"]
 const FLAG = "actions";
 
 export function emptyState() {
-	return { used: { standard: 0, move: 0, minor: 0, immediate: 0, opportunity: 0 }, extra: 0, traded: [], chargePending: false };
+	return { used: { standard: 0, move: 0, minor: 0, immediate: 0, opportunity: 0 }, extra: 0, traded: [], chargePending: false, movement: null };
 }
 
 export function getState(combatant) {
@@ -103,6 +103,8 @@ export async function spend(combatant, kind, { source = "" } = {}) {
 
 	state.used[spent] += 1;
 	if (spent !== kind) state.traded.push(`${spent}>${kind}`);
+	// Any other action ends the current move (a move action is one continuous movement).
+	if (kind !== "move") state.movement = null;
 	await save(combatant, state);
 	if (warning && setting("actionWarnings")) ui.notifications.warn(warning);
 	log("spend", name, kind, "as", spent, source, warning ?? "");

@@ -16,6 +16,7 @@ import { registerBadgeHooks } from "./badges.mjs";
 import { registerActionTracker, onUsePower as spendPowerAction } from "./actions/hooks.mjs";
 import { ActionPanel } from "./actions/panel.mjs";
 import * as opportunity from "./reactions/opportunity.mjs";
+import * as triggers from "./reactions/triggers.mjs";
 
 Hooks.once("init", () => {
 	// Must run in "init": Foundry loads translations right after this hook.
@@ -25,6 +26,7 @@ Hooks.once("init", () => {
 	registerBadgeHooks();
 	registerActionTracker();
 	opportunity.registerOpportunityHooks();
+	triggers.registerTriggerHooks();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
@@ -63,6 +65,7 @@ Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 	try {
 		const actor = actorFromSpeaker(speaker);
 		if (actor) await mark.onAttackRolled(itemData, targetData, actor);
+		await triggers.onAttackRolled(itemData, targetData, speaker);
 	} catch (err) {
 		console.error(`${MODULE_ID} | rollAttack`, err);
 	}

@@ -65,6 +65,14 @@
       "opportunityAttacks": {
         "Name": "Opportunity attack prompts",
         "Hint": "When an enemy leaves a square adjacent to a creature without shifting, or makes a ranged/area attack next to it, whisper a chat card to that creature's controller with a button for the opportunity attack."
+      },
+      "autoMoveActions": {
+        "Name": "Moving a token spends move actions",
+        "Hint": "On a combatant's own turn, dragging its token spends a move action (walk speed per move action, shift speed for shifts; standard actions are traded when needed). Teleports, undo, charges and GM-dragged player tokens are ignored."
+      },
+      "reactionPrompts": {
+        "Name": "Triggered power prompts",
+        "Hint": "Offer powers with a Trigger (Elven Accuracy, Fox's Cunning, Furious Assault, Swift Charge, Infernal Wrath, and any power or monster power with a similar trigger) as a whispered chat card when the trigger happens."
       }
     },
     "Keybindings": {
@@ -175,7 +183,8 @@
         "totalDefense": "<strong>{name}</strong> takes Total Defense (+2 to all defenses until the start of their next turn).",
         "aidAnother": "<strong>{name}</strong> aids another.",
         "ready": "<strong>{name}</strong> readies an action."
-      }
+      },
+      "WarnShiftTooFar": "{name} shifted {squares} squares but can only shift {budget}."
     },
     "Opportunity": {
       "Title": "Opportunity attack",
@@ -187,6 +196,17 @@
       "NotOwner": "You don't control this creature.",
       "NoBasic": "{name} has no melee basic attack.",
       "Used": "Opportunity action already used"
+    },
+    "Reaction": {
+      "Title": "Reaction available",
+      "Button": "Use {power}",
+      "Unavailable": "{power} unavailable",
+      "ReasonSelfMiss": "<strong>{actor}</strong> missed {targets}.",
+      "ReasonHitEnemy": "<strong>{actor}</strong> hit {targets}.",
+      "ReasonHitYou": "<strong>{enemy}</strong> hit <strong>{actor}</strong>.",
+      "ReasonMeleeAttacked": "<strong>{enemy}</strong> makes a melee attack against <strong>{actor}</strong>.",
+      "ReasonAttacked": "<strong>{enemy}</strong> attacks <strong>{actor}</strong>.",
+      "ReasonDrop": "<strong>{actor}</strong> dropped <strong>{target}</strong> to 0 hit points."
     }
   }
 }

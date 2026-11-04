@@ -114,7 +114,9 @@
 .chat-message .d4ea-oa-card .d4ea-oa-note,
 .d4ea-oa-card .d4ea-oa-note { font-size: 0.8em !important; opacity: 0.75 !important; margin: 0 !important; }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack,
-.d4ea-oa-card button.d4ea-oa-attack {
+.d4ea-oa-card button.d4ea-oa-attack,
+.chat-message .d4ea-react-card button.d4ea-react-use,
+.d4ea-react-card button.d4ea-react-use {
 	display: flex !important;
 	align-items: center !important;
 	justify-content: center !important;
@@ -132,14 +134,24 @@
 	cursor: pointer !important;
 }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled),
-.d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled) { background: #c62828 !important; box-shadow: 0 0 6px #ff5252 !important; }
+.d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled),
+.chat-message .d4ea-react-card button.d4ea-react-use:hover:not(:disabled),
+.d4ea-react-card button.d4ea-react-use:hover:not(:disabled) { background: #c62828 !important; box-shadow: 0 0 6px #ff5252 !important; }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack i,
-.d4ea-oa-card button.d4ea-oa-attack i { color: #fff !important; }
+.d4ea-oa-card button.d4ea-oa-attack i,
+.d4ea-react-card button.d4ea-react-use i { color: #fff !important; }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack:disabled,
-.d4ea-oa-card button.d4ea-oa-attack:disabled {
+.d4ea-oa-card button.d4ea-oa-attack:disabled,
+.chat-message .d4ea-react-card button.d4ea-react-use:disabled,
+.d4ea-react-card button.d4ea-react-use:disabled {
 	background: #5f5f5f !important;
 	border-color: #3d3d3d !important;
 	color: #e0e0e0 !important;
 	font-weight: normal !important;
 	cursor: not-allowed !important;
 }
+
+.chat-message .d4ea-react-card h3, .d4ea-react-card h3 { color: #6a1b9a !important; }
+.chat-message .d4ea-react-card button.d4ea-react-use, .d4ea-react-card button.d4ea-react-use { background: #5b2a86 !important; border-color: #3a1857 !important; }
+.chat-message .d4ea-react-card button.d4ea-react-use:hover:not(:disabled), .d4ea-react-card button.d4ea-react-use:hover:not(:disabled) { background: #7b3fb0 !important; box-shadow: 0 0 6px #ce93d8 !important; }
+.chat-message .d4ea-react-card .d4ea-react-trigger, .d4ea-react-card .d4ea-react-trigger { font-size: 0.8em !important; font-style: italic !important; opacity: 0.8 !important; margin: 0 0 0.25rem !important; }
