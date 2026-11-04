@@ -101,9 +101,12 @@ function whisperTargets(actor) {
 async function postCard(threat, provoker, reasonKey) {
 	const key = `${game.combat?.id}:${game.combat?.round}:${game.combat?.turn}:${threat.id}:${provoker.id}`;
 	const now = Date.now();
-	for (const [k, t] of recentCards) if (now - t > 120000) recentCards.delete(k);
-	if (recentCards.has(key)) return;
-	recentCards.set(key, now);
+	for (const [k, entry] of recentCards) if (now - entry.time > 120000) recentCards.delete(k);
+	// Don't repeat a card for the same provocation this turn, unless that card was deleted.
+	const existing = recentCards.get(key);
+	if (existing && (!existing.messageId || game.messages?.has(existing.messageId))) return;
+	const entry = { time: now, messageId: null };
+	recentCards.set(key, entry);
 
 	const content = `
 		<div class="d4ea-oa-card">
@@ -114,12 +117,13 @@ async function postCard(threat, provoker, reasonKey) {
 			</button>
 			<p class="d4ea-oa-note">${L("Opportunity.Note")}</p>
 		</div>`;
-	await ChatMessage.create({
+	const message = await ChatMessage.create({
 		speaker: ChatMessage.getSpeaker({ token: threat.document }),
 		whisper: whisperTargets(threat.actor),
 		content,
 		flags: { [MODULE_ID]: { opportunity: { threat: threat.id, provoker: provoker.id } } },
 	});
+	entry.messageId = message?.id ?? null;
 	log("opportunity card", threat.name, "<-", provoker.name, reasonKey);
 }
 
