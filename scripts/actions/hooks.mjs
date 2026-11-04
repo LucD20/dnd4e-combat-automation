@@ -1,11 +1,12 @@
 import { MODULE_ID } from "../constants.mjs";
-import { setting } from "../utils.mjs";
+import { setting, F } from "../utils.mjs";
 import { spend, kindForActionType, combatantForActor, getState, setChargePending, addExtraAction, onTurnChange, resetAll, isCombatantsTurn, canModify } from "./state.mjs";
 import { ActionPanel } from "./panel.mjs";
 import { renderTrackerPips } from "./tracker-pips.mjs";
 import { integrateCombatDock, refreshDock } from "./dock.mjs";
 import { consumePendingOpportunity } from "../reactions/opportunity.mjs";
 import { onMoveTokenSpend } from "./movement.mjs";
+import { freeShiftFor } from "./free-shift.mjs";
 
 /** dnd4e.usePower: spend the power's action. */
 export async function onUsePower(item) {
@@ -17,6 +18,7 @@ export async function onUsePower(item) {
 		await spend(combatant, "opportunity", { source: item.name });
 		return;
 	}
+	await grantFreeShift(combatant, item);
 	const kind = kindForActionType(item.system?.actionType);
 	if (!kind) return;
 
@@ -27,6 +29,27 @@ export async function onUsePower(item) {
 		return;
 	}
 	await spend(combatant, kind, { source: item.name });
+}
+
+/**
+ * Powers with a built-in shift ("Shift 1 square before or after you attack") get a free shift:
+ * if the user already shifted this turn with a move action and nothing else since, that move
+ * action is refunded; otherwise the next shift of up to N squares this turn is free.
+ */
+async function grantFreeShift(combatant, item) {
+	const squares = freeShiftFor(item);
+	if (!squares || !isCombatantsTurn(combatant)) return;
+	const state = getState(combatant);
+	const block = state.movement;
+	if (block?.mode === "shift" && block.used <= squares && block.spentAs && state.used[block.spentAs] > 0) {
+		state.used[block.spentAs] -= 1;
+		state.movement = null;
+		ui.notifications.info(F("Actions.FreeShiftRefund", { name: combatant.name, power: item.name }));
+	} else {
+		state.freeShift = Math.max(state.freeShift || 0, squares);
+		ui.notifications.info(F("Actions.FreeShiftGranted", { name: combatant.name, power: item.name, squares }));
+	}
+	await combatant.setFlag(MODULE_ID, "actions", state);
 }
 
 /** Spending an Action Point (from the sheet or the panel) grants an extra action this turn. */

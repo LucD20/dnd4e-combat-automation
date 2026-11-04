@@ -7,6 +7,7 @@ import * as curse from "./features/curse.mjs";
 import * as rage from "./features/rage.mjs";
 import * as mark from "./features/mark.mjs";
 import * as defeat from "./features/defeat.mjs";
+import * as furiousAssault from "./features/furious-assault.mjs";
 import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
@@ -53,7 +54,7 @@ Hooks.on("dnd4e.usePower", async (item) => {
 	try {
 		await spendPowerAction(item);
 		opportunity.onUsePower(item);
-		for (const feature of [quarry, curse, rage]) {
+		for (const feature of [quarry, curse, rage, furiousAssault]) {
 			if (await feature.onUsePower(item, actor)) break;
 		}
 	} catch (err) {

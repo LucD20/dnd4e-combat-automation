@@ -62,6 +62,14 @@ export async function onMoveTokenSpend(tokenDoc, movement, operation, user) {
 	let state = getState(combatant);
 	if (state.chargePending) return; // the charge's movement is part of the charge
 
+	// Free shift granted by a power (e.g. Nimble Strike)
+	if (mode === "shift" && (state.freeShift || 0) >= squares) {
+		state.freeShift -= squares;
+		await combatant.setFlag(MODULE_ID, FLAG, state);
+		log("free shift", combatant.name, squares);
+		return;
+	}
+
 	const block = state.movement;
 	const sameMode = block && (block.mode === mode || (block.mode === "run" && mode === "walk"));
 	if (sameMode && block.used + squares <= block.budget) {
@@ -75,15 +83,17 @@ export async function onMoveTokenSpend(tokenDoc, movement, operation, user) {
 	let remaining = squares - (sameMode ? Math.max(0, block.budget - block.used) : 0);
 	const budget = speedFor(combatant.actor, mode);
 	let spentActions = 0;
+	let spentAs = "move";
 	while (remaining > 0) {
-		await spend(combatant, "move", { source: `token movement (${mode})` });
+		const result = await spend(combatant, "move", { source: `token movement (${mode})` });
+		spentAs = result.spent ?? "move";
 		spentActions += 1;
 		remaining -= budget;
 		if (spentActions > 3) break;
 	}
 	state = getState(combatant);
 	const usedInLast = budget + remaining; // remaining is <= 0 here
-	state.movement = { mode, used: Math.max(0, usedInLast), budget };
+	state.movement = { mode, used: Math.max(0, usedInLast), budget, spentAs };
 	await combatant.setFlag(MODULE_ID, FLAG, state);
 	if (mode === "shift" && squares > budget) ui.notifications.warn(F("Actions.WarnShiftTooFar", { name: combatant.name, squares, budget }));
 	log("movement spent", combatant.name, mode, squares, "squares,", spentActions, "action(s)");

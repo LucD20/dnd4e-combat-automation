@@ -93,7 +93,8 @@
       "NoAllyInRange": "Misdirected Mark: no ally within 5 squares to be the marker."
     },
     "Info": {
-      "AlreadyQuarry": "{target} is already your quarry."
+      "AlreadyQuarry": "{target} is already your quarry.",
+      "FuriousAssaultArmed": "{name}: Furious Assault armed, the extra damage will appear in the next damage roll."
     },
     "Dialog": {
       "ChooseNearestTitle": "{power}: choose the enemy",
@@ -132,7 +133,9 @@
       "BloodhuntActive": "You or the target is bloodied.",
       "BloodhuntInactive": "Neither you nor the target is bloodied.",
       "RagingBonus": "{power} (raging) +{formula}",
-      "RagingBonusHint": "Extra damage because you are raging."
+      "RagingBonusHint": "Extra damage because you are raging.",
+      "FuriousAssault": "Furious Assault +{formula}",
+      "FuriousAssaultHint": "Extra damage from Furious Assault (1[W] for weapon attacks, 1d8 otherwise)."
     },
     "Cover": {
       "Label": "Cover",
@@ -188,7 +191,9 @@
         "aidAnother": "<strong>{name}</strong> aids another.",
         "ready": "<strong>{name}</strong> readies an action."
       },
-      "WarnShiftTooFar": "{name} shifted {squares} squares but can only shift {budget}."
+      "WarnShiftTooFar": "{name} shifted {squares} squares but can only shift {budget}.",
+      "FreeShiftRefund": "{power}: {name}'s shift was part of the power, so the move action is refunded.",
+      "FreeShiftGranted": "{power}: {name} can shift {squares} square(s) this turn without spending a move action."
     },
     "Opportunity": {
       "Title": "Opportunity attack",

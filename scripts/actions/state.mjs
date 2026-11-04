@@ -16,7 +16,7 @@ export const ACTIONS = ["standard", "move", "minor", "immediate", "opportunity"]
 const FLAG = "actions";
 
 export function emptyState() {
-	return { used: { standard: 0, move: 0, minor: 0, immediate: 0, opportunity: 0 }, extra: 0, traded: [], chargePending: false, movement: null };
+	return { used: { standard: 0, move: 0, minor: 0, immediate: 0, opportunity: 0 }, extra: 0, traded: [], chargePending: false, movement: null, freeShift: 0 };
 }
 
 export function getState(combatant) {

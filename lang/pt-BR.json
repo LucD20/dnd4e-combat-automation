@@ -93,7 +93,8 @@
       "NoAllyInRange": "Marca Indireta: nenhum aliado a até 5 quadrados para ser quem marca."
     },
     "Info": {
-      "AlreadyQuarry": "{target} já é sua presa."
+      "AlreadyQuarry": "{target} já é sua presa.",
+      "FuriousAssaultArmed": "{name}: Assalto Furioso preparado, o dano extra vai aparecer na próxima rolagem de dano."
     },
     "Dialog": {
       "ChooseNearestTitle": "{power}: escolha o inimigo",
@@ -132,7 +133,9 @@
       "BloodhuntActive": "Você ou o alvo está sangrando.",
       "BloodhuntInactive": "Nem você nem o alvo está sangrando.",
       "RagingBonus": "{power} (em fúria) +{formula}",
-      "RagingBonusHint": "Dano extra porque você está em fúria."
+      "RagingBonusHint": "Dano extra porque você está em fúria.",
+      "FuriousAssault": "Assalto Furioso +{formula}",
+      "FuriousAssaultHint": "Dano extra do Assalto Furioso (1[A] em ataques com arma, 1d8 nos outros)."
     },
     "Cover": {
       "Label": "Cobertura",
@@ -188,7 +191,9 @@
         "aidAnother": "<strong>{name}</strong> presta ajuda.",
         "ready": "<strong>{name}</strong> prepara uma ação."
       },
-      "WarnShiftTooFar": "{name} ajustou {squares} quadrados, mas só pode ajustar {budget}."
+      "WarnShiftTooFar": "{name} ajustou {squares} quadrados, mas só pode ajustar {budget}.",
+      "FreeShiftRefund": "{power}: o ajuste de {name} fazia parte do poder, então a ação de movimento foi devolvida.",
+      "FreeShiftGranted": "{power}: {name} pode ajustar {squares} quadrado(s) neste turno sem gastar a ação de movimento."
     },
     "Opportunity": {
       "Title": "Ataque de oportunidade",

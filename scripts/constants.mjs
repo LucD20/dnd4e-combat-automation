@@ -35,6 +35,10 @@ export const MATCHERS = {
 		ids: ["barbarian-01-bloodhunt-rage"],
 		names: /bloodhunt rage|f[úu]ria da ca[çc]ada de sangue/i,
 	},
+	furiousAssault: {
+		ids: ["half-orc-power-furious-assault", "furious-assault"],
+		names: /furious assault|assalto furioso/i,
+	},
 	lethalHunter: {
 		ids: ["lethal-hunter"],
 		names: /lethal hunter|ca[çc]ador letal/i,
