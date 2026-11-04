@@ -110,36 +110,36 @@
 
 /* Opportunity attack chat card (explicit colours so chat themes like Fox's 4e Aesthetics don't wash it out) */
 .chat-message .d4ea-oa-card h3,
-.d4ea-oa-card h3 { margin: 0 0 0.25rem; font-size: 1.05em; color: #b71c1c; border-bottom: 1px solid currentColor; }
+.d4ea-oa-card h3 { margin: 0 0 0.25rem !important; font-size: 1.05em !important; color: #b71c1c !important; border-bottom: 1px solid currentColor !important; }
 .chat-message .d4ea-oa-card .d4ea-oa-note,
-.d4ea-oa-card .d4ea-oa-note { font-size: 0.8em; opacity: 0.75; margin: 0; }
+.d4ea-oa-card .d4ea-oa-note { font-size: 0.8em !important; opacity: 0.75 !important; margin: 0 !important; }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack,
 .d4ea-oa-card button.d4ea-oa-attack {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.4em;
-	width: 100%;
-	margin: 0.35rem 0;
-	padding: 0.35rem 0.5rem;
-	background: #9a1b1b;
-	color: #fff;
-	border: 1px solid #5c0f0f;
-	border-radius: 4px;
-	font-weight: bold;
-	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
-	opacity: 1;
-	cursor: pointer;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 0.4em !important;
+	width: 100% !important;
+	margin: 0.35rem 0 !important;
+	padding: 0.35rem 0.5rem !important;
+	background: #9a1b1b !important;
+	color: #fff !important;
+	border: 1px solid #5c0f0f !important;
+	border-radius: 4px !important;
+	font-weight: bold !important;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6) !important;
+	opacity: 1 !important;
+	cursor: pointer !important;
 }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled),
-.d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled) { background: #c62828; box-shadow: 0 0 6px #ff5252; }
+.d4ea-oa-card button.d4ea-oa-attack:hover:not(:disabled) { background: #c62828 !important; box-shadow: 0 0 6px #ff5252 !important; }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack i,
-.d4ea-oa-card button.d4ea-oa-attack i { color: #fff; }
+.d4ea-oa-card button.d4ea-oa-attack i { color: #fff !important; }
 .chat-message .d4ea-oa-card button.d4ea-oa-attack:disabled,
 .d4ea-oa-card button.d4ea-oa-attack:disabled {
-	background: #5f5f5f;
-	border-color: #3d3d3d;
-	color: #e0e0e0;
-	font-weight: normal;
-	cursor: not-allowed;
+	background: #5f5f5f !important;
+	border-color: #3d3d3d !important;
+	color: #e0e0e0 !important;
+	font-weight: normal !important;
+	cursor: not-allowed !important;
 }
