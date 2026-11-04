@@ -27,7 +27,8 @@ export async function onUsePower(item, actor) {
 	const effect = buildEffect({
 		kind: KIND.QUARRY,
 		name: F("Effect.QuarryName", { source: actor.name }),
-		img: tokenArt(source, actor),
+		img: `modules/${MODULE_ID}/icons/quarry.svg`,
+		extraFlags: { portrait: tokenArt(source, actor) },
 		source: actor,
 		durationType: "endOfEncounter",
 		description: F("Effect.QuarryDesc", { source: actor.name }),

@@ -16,6 +16,20 @@ export function registerSettings() {
 	world("enableMarks");
 	world("enableCover");
 	world("warnNotNearest");
+	world("actionTracker");
+
+	const client = (key, def = true, onChange = undefined) => game.settings.register(MODULE_ID, key, {
+		name: `DND4EAUTO.Settings.${key}.Name`,
+		hint: `DND4EAUTO.Settings.${key}.Hint`,
+		scope: "client",
+		config: true,
+		type: Boolean,
+		default: def,
+		onChange,
+	});
+	client("actionPanel");
+	client("actionWarnings");
+	client("tokenBadges", true, () => canvas?.tokens?.placeables.forEach((t) => t.renderFlags?.set({ refresh: true })));
 
 	game.settings.register(MODULE_ID, "coverPreview", {
 		name: "DND4EAUTO.Settings.coverPreview.Name",
@@ -41,6 +55,15 @@ export function registerSettings() {
 		config: true,
 		type: Boolean,
 		default: false,
+	});
+
+	game.keybindings.register(MODULE_ID, "toggleActionPanel", {
+		name: "DND4EAUTO.Keybindings.toggleActionPanel",
+		editable: [],
+		onDown: () => {
+			import("./actions/panel.mjs").then((m) => m.ActionPanel.toggle());
+			return true;
+		},
 	});
 
 	game.keybindings.register(MODULE_ID, "toggleCoverPreview", {

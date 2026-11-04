@@ -1,0 +1,94 @@
+import { MODULE_ID } from "../constants.mjs";
+import { F, L } from "../utils.mjs";
+import { createEffects } from "../effects.mjs";
+import { spend, setChargePending } from "./state.mjs";
+
+/*
+ * Basic combat actions available from the panel. Each one spends its action and, where the
+ * system supports it, applies the matching condition/effect.
+ */
+
+async function statusEffect(actor, statusId, durationType) {
+	const Cls = CONFIG.ActiveEffect.documentClass;
+	const base = Cls.fromStatusEffect ? await Cls.fromStatusEffect(statusId) : null;
+	const data = base ? base.toObject() : { name: statusId, statuses: [statusId], img: "icons/svg/aura.svg" };
+	data.origin = actor.uuid;
+	data.system = { ...(data.system ?? {}), durationType };
+	data.flags = { ...(data.flags ?? {}), [MODULE_ID]: { kind: "basicAction", source: actor.uuid } };
+	await createEffects(actor, [data]);
+}
+
+function chat(actor, key) {
+	ChatMessage.create({
+		speaker: ChatMessage.getSpeaker({ actor }),
+		content: `<p>${F(key, { name: actor.name })}</p>`,
+	});
+}
+
+export const BASIC_ACTIONS = {
+	walk: { kind: "move", icon: "fa-person-walking" },
+	shift: { kind: "move", icon: "fa-shoe-prints" },
+	run: {
+		kind: "move", icon: "fa-person-running",
+		run: async (actor) => statusEffect(actor, "running", "startOfUserTurn"),
+	},
+	standUp: {
+		kind: "move", icon: "fa-person-arrow-up-from-line",
+		run: async (actor) => {
+			if (actor.statuses.has("prone")) await actor.toggleStatusEffect("prone", { active: false });
+		},
+	},
+	charge: {
+		kind: "standard", icon: "fa-bolt",
+		run: async (actor, combatant) => {
+			await statusEffect(actor, "charging", "endOfUserCurrent");
+			await setChargePending(combatant, true);
+		},
+	},
+	totalDefense: {
+		kind: "standard", icon: "fa-shield-halved",
+		run: async (actor) => {
+			await createEffects(actor, [{
+				name: L("Actions.Basic.totalDefense"),
+				img: "icons/svg/shield.svg",
+				origin: actor.uuid,
+				system: {
+					durationType: "startOfUserTurn",
+					changes: [{ key: "system.modifiers.defences.untyped", type: "add", value: "2", priority: null }],
+				},
+				flags: { [MODULE_ID]: { kind: "basicAction", source: actor.uuid } },
+			}]);
+		},
+	},
+	secondWind: {
+		kind: "standard", icon: "fa-heart-pulse",
+		run: async (actor) => {
+			if (actor.system.details?.secondwind || actor.system.details?.secondWind) ui.notifications.warn(F("Actions.WarnSecondWindUsed", { name: actor.name }));
+			await actor.secondWind?.(null, { bonus: "" });
+		},
+		noChat: true,
+	},
+	aidAnother: { kind: "standard", icon: "fa-handshake-angle" },
+	ready: { kind: "standard", icon: "fa-hourglass-half" },
+	actionPoint: {
+		kind: null, icon: "fa-star",
+		run: async (actor) => {
+			if ((actor.system.actionpoints?.value ?? 0) < 1) {
+				ui.notifications.warn(F("Actions.WarnNoActionPoint", { name: actor.name }));
+				return false;
+			}
+			// The extra action is granted by the updateActor watcher, which also catches AP spent from the sheet.
+			await actor.actionPoint?.(null, {});
+		},
+		noChat: true,
+	},
+};
+
+export async function useBasicAction(key, combatant) {
+	const def = BASIC_ACTIONS[key];
+	const actor = combatant?.actor;
+	if (!def || !actor) return;
+	if (def.run && (await def.run(actor, combatant)) === false) return;
+	if (def.kind) await spend(combatant, def.kind, { source: key });
+	if (!def.noChat) chat(actor, `Actions.Chat.${key}`);
+}

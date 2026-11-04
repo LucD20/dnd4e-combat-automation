@@ -1,18 +1,67 @@
 {
   "DND4EAUTO": {
     "Settings": {
-      "enableQuarry": { "Name": "Automatizar Presa do Caçador", "Hint": "Usar Presa do Caçador marca o inimigo visível mais próximo (ou seu alvo) e oferece o dano extra na janela de dano, uma vez por turno." },
-      "enableCurse": { "Name": "Automatizar Maldição do Bruxo", "Hint": "Usar Maldição do Bruxo amaldiçoa o inimigo visível mais próximo (ou seu alvo) e oferece o dano extra na janela de dano, uma vez por turno. Bruxos do Pacto Estelar recebem Destino do Vácuo quando um inimigo amaldiçoado cai." },
-      "enableRage": { "Name": "Automatizar fúrias do Bárbaro", "Hint": "Usar um poder de fúria coloca o bárbaro nessa fúria até o fim do encontro (encerrando a anterior) e oferece os bônus de dano que dependem da fúria." },
-      "enableMarks": { "Name": "Automatizar marcas", "Hint": "Poderes como Marca Indireta aplicam a marca nos alvos atingidos. As marcas usam a condição de marca do sistema, então o -2 é aplicado pelo próprio dnd4e." },
-      "enableCover": { "Name": "Cobertura automática", "Hint": "Calcula cobertura e cobertura superior (linhas de canto a canto) e marca na janela de ataque. Ataques de área não são automatizados." },
-      "warnNotNearest": { "Name": "Avisar quando o alvo não é o inimigo mais próximo", "Hint": "Para Presa do Caçador e Maldição do Bruxo." },
-      "coverPreview": { "Name": "Linhas de prévia da cobertura", "Hint": "Enquanto você mira um token, desenha as linhas de cobertura a partir do seu token. Só você vê." },
-      "preloadIndexes": { "Name": "Pré-carregar índices dos compêndios", "Hint": "Carrega os índices dos compêndios em segundo plano quando o jogo abre, para a primeira ficha aberta não travar alguns segundos." },
-      "debug": { "Name": "Log de depuração", "Hint": "Escreve mensagens de diagnóstico no console do navegador." }
+      "enableQuarry": {
+        "Name": "Automatizar Presa do Caçador",
+        "Hint": "Usar Presa do Caçador marca o inimigo visível mais próximo (ou seu alvo) e oferece o dano extra na janela de dano, uma vez por turno."
+      },
+      "enableCurse": {
+        "Name": "Automatizar Maldição do Bruxo",
+        "Hint": "Usar Maldição do Bruxo amaldiçoa o inimigo visível mais próximo (ou seu alvo) e oferece o dano extra na janela de dano, uma vez por turno. Bruxos do Pacto Estelar recebem Destino do Vácuo quando um inimigo amaldiçoado cai."
+      },
+      "enableRage": {
+        "Name": "Automatizar fúrias do Bárbaro",
+        "Hint": "Usar um poder de fúria coloca o bárbaro nessa fúria até o fim do encontro (encerrando a anterior) e oferece os bônus de dano que dependem da fúria."
+      },
+      "enableMarks": {
+        "Name": "Automatizar marcas",
+        "Hint": "Poderes como Marca Indireta aplicam a marca nos alvos atingidos. As marcas usam a condição de marca do sistema, então o -2 é aplicado pelo próprio dnd4e."
+      },
+      "enableCover": {
+        "Name": "Cobertura automática",
+        "Hint": "Calcula cobertura e cobertura superior (linhas de canto a canto) e marca na janela de ataque. Ataques de área não são automatizados."
+      },
+      "warnNotNearest": {
+        "Name": "Avisar quando o alvo não é o inimigo mais próximo",
+        "Hint": "Para Presa do Caçador e Maldição do Bruxo."
+      },
+      "coverPreview": {
+        "Name": "Linhas de prévia da cobertura",
+        "Hint": "Enquanto você mira um token, desenha as linhas de cobertura a partir do seu token. Só você vê."
+      },
+      "preloadIndexes": {
+        "Name": "Pré-carregar índices dos compêndios",
+        "Hint": "Carrega os índices dos compêndios em segundo plano quando o jogo abre, para a primeira ficha aberta não travar alguns segundos."
+      },
+      "debug": {
+        "Name": "Log de depuração",
+        "Hint": "Escreve mensagens de diagnóstico no console do navegador."
+      },
+      "gameLanguage": {
+        "Name": "Idioma do jogo 4e",
+        "Hint": "Idioma do sistema dnd4e (atributos, perícias, condições, rótulos da ficha) e deste módulo, independente do idioma da interface do Foundry. Textos que faltam na tradução ficam no idioma do Foundry. Requer recarregar.",
+        "Foundry": "Igual ao Foundry"
+      },
+      "actionTracker": {
+        "Name": "Rastreador de ações",
+        "Hint": "Controla ações padrão, de movimento, mínimas, imediatas e de oportunidade por turno. Usar um poder gasta a ação dele (com trocas). Mostra marcadores no Combat Tracker."
+      },
+      "actionPanel": {
+        "Name": "Abrir o painel de ações no combate",
+        "Hint": "Abre o painel flutuante de ações automaticamente quando um combate começa."
+      },
+      "actionWarnings": {
+        "Name": "Avisar ações gastas além do limite",
+        "Hint": "Mostra um aviso quando uma ação indisponível é usada (a ação acontece mesmo assim)."
+      },
+      "tokenBadges": {
+        "Name": "Selos de presa/maldição/marca nos tokens",
+        "Hint": "Mostra um selo grande e colorido com o retrato de quem marcou no canto superior direito do token."
+      }
     },
     "Keybindings": {
-      "toggleCoverPreview": "Ligar/desligar prévia de cobertura"
+      "toggleCoverPreview": "Ligar/desligar prévia de cobertura",
+      "toggleActionPanel": "Abrir/fechar painel de ações"
     },
     "Warn": {
       "NoGM": "Nenhum mestre conectado, então o efeito em {name} não pode ser aplicado.",
@@ -73,6 +122,52 @@
       "Cover": "cobertura (-2)",
       "Superior": "superior (-5)",
       "NoLoE": "Sem linha de efeito?"
+    },
+    "Actions": {
+      "standard": "Padrão",
+      "move": "Movimento",
+      "minor": "Mínima",
+      "immediate": "Imediata",
+      "opportunity": "Oportunidade",
+      "free": "Livre",
+      "Available": "disponível",
+      "Spent": "gasta",
+      "PanelTitle": "Rastreador de Ações",
+      "NoCombatant": "Selecione um token que esteja no combate.",
+      "YourTurn": "Turno dele",
+      "NotYourTurn": "Aguardando",
+      "ActionPoints": "Pontos de Ação",
+      "TradeNote": "{from} usada como {to}",
+      "WarnNone": "{name} não tem mais ação {action} neste turno.",
+      "WarnNotYourTurn": "{name}: ações {action} só podem ser feitas no próprio turno.",
+      "WarnImmediateOwnTurn": "{name}: ações imediatas não podem ser feitas no próprio turno.",
+      "WarnImmediateUsed": "{name} já fez uma ação imediata nesta rodada.",
+      "WarnOpportunityOwnTurn": "{name}: ações de oportunidade não podem ser feitas no próprio turno.",
+      "WarnOpportunityUsed": "{name} já fez uma ação de oportunidade neste turno.",
+      "WarnSecondWindUsed": "{name} já usou Retomar o Fôlego neste encontro.",
+      "WarnNoActionPoint": "{name} não tem Pontos de Ação.",
+      "Basic": {
+        "walk": "Andar",
+        "shift": "Ajustar",
+        "run": "Correr",
+        "standUp": "Levantar",
+        "charge": "Investida",
+        "totalDefense": "Defesa Total",
+        "secondWind": "Retomar o Fôlego",
+        "aidAnother": "Prestar Ajuda",
+        "ready": "Preparar",
+        "actionPoint": "Ponto de Ação"
+      },
+      "Chat": {
+        "walk": "<strong>{name}</strong> anda.",
+        "shift": "<strong>{name}</strong> se ajusta.",
+        "run": "<strong>{name}</strong> corre (−5 nos ataques e concede vantagem de combate até o início do próximo turno).",
+        "standUp": "<strong>{name}</strong> se levanta.",
+        "charge": "<strong>{name}</strong> faz uma investida! (+1 no ataque; o ataque básico faz parte da investida.)",
+        "totalDefense": "<strong>{name}</strong> faz Defesa Total (+2 em todas as defesas até o início do próximo turno).",
+        "aidAnother": "<strong>{name}</strong> presta ajuda.",
+        "ready": "<strong>{name}</strong> prepara uma ação."
+      }
     }
   }
 }

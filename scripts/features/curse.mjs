@@ -23,7 +23,8 @@ export async function onUsePower(item, actor) {
 	const effect = buildEffect({
 		kind: KIND.CURSE,
 		name: F("Effect.CurseName", { source: actor.name }),
-		img: tokenArt(source, actor),
+		img: `modules/${MODULE_ID}/icons/curse.svg`,
+		extraFlags: { portrait: tokenArt(source, actor) },
 		source: actor,
 		durationType: "endOfEncounter",
 		description: F("Effect.CurseDesc", { source: actor.name }),

@@ -1,18 +1,67 @@
 {
   "DND4EAUTO": {
     "Settings": {
-      "enableQuarry": { "Name": "Automate Hunter's Quarry", "Hint": "Using Hunter's Quarry tags the nearest visible enemy (or your target) and offers the extra damage in the damage dialog, once per turn." },
-      "enableCurse": { "Name": "Automate Warlock's Curse", "Hint": "Using Warlock's Curse tags the nearest visible enemy (or your target) and offers the extra damage in the damage dialog, once per turn. Star Pact warlocks get Fate of the Void when a cursed enemy drops." },
-      "enableRage": { "Name": "Automate Barbarian rages", "Hint": "Using a rage power puts the barbarian in that rage until the end of the encounter (ending the previous one) and offers rage-dependent damage bonuses." },
-      "enableMarks": { "Name": "Automate marks", "Hint": "Powers like Misdirected Mark apply the mark to hit targets. Marks use the system's mark status, so the -2 penalty is applied by the dnd4e system." },
-      "enableCover": { "Name": "Automatic cover", "Hint": "Compute cover and superior cover (corner-to-corner lines) and tick them in the attack dialog. Area attacks are not automated." },
-      "warnNotNearest": { "Name": "Warn when the target isn't the nearest enemy", "Hint": "For Hunter's Quarry and Warlock's Curse." },
-      "coverPreview": { "Name": "Cover preview lines", "Hint": "While you target a token, draw the cover lines from your token. Only you see them." },
-      "preloadIndexes": { "Name": "Preload compendium indexes", "Hint": "Load compendium indexes in the background when the game starts, so the first character sheet you open doesn't stall for a few seconds." },
-      "debug": { "Name": "Debug logging", "Hint": "Write diagnostic messages to the browser console." }
+      "enableQuarry": {
+        "Name": "Automate Hunter's Quarry",
+        "Hint": "Using Hunter's Quarry tags the nearest visible enemy (or your target) and offers the extra damage in the damage dialog, once per turn."
+      },
+      "enableCurse": {
+        "Name": "Automate Warlock's Curse",
+        "Hint": "Using Warlock's Curse tags the nearest visible enemy (or your target) and offers the extra damage in the damage dialog, once per turn. Star Pact warlocks get Fate of the Void when a cursed enemy drops."
+      },
+      "enableRage": {
+        "Name": "Automate Barbarian rages",
+        "Hint": "Using a rage power puts the barbarian in that rage until the end of the encounter (ending the previous one) and offers rage-dependent damage bonuses."
+      },
+      "enableMarks": {
+        "Name": "Automate marks",
+        "Hint": "Powers like Misdirected Mark apply the mark to hit targets. Marks use the system's mark status, so the -2 penalty is applied by the dnd4e system."
+      },
+      "enableCover": {
+        "Name": "Automatic cover",
+        "Hint": "Compute cover and superior cover (corner-to-corner lines) and tick them in the attack dialog. Area attacks are not automated."
+      },
+      "warnNotNearest": {
+        "Name": "Warn when the target isn't the nearest enemy",
+        "Hint": "For Hunter's Quarry and Warlock's Curse."
+      },
+      "coverPreview": {
+        "Name": "Cover preview lines",
+        "Hint": "While you target a token, draw the cover lines from your token. Only you see them."
+      },
+      "preloadIndexes": {
+        "Name": "Preload compendium indexes",
+        "Hint": "Load compendium indexes in the background when the game starts, so the first character sheet you open doesn't stall for a few seconds."
+      },
+      "debug": {
+        "Name": "Debug logging",
+        "Hint": "Write diagnostic messages to the browser console."
+      },
+      "gameLanguage": {
+        "Name": "4e game language",
+        "Hint": "Language for the dnd4e system (abilities, skills, conditions, sheet labels) and this module, independent of Foundry's interface language. Strings missing from the translation stay in Foundry's language. Requires reload.",
+        "Foundry": "Same as Foundry"
+      },
+      "actionTracker": {
+        "Name": "Action Tracker",
+        "Hint": "Track standard, move, minor, immediate and opportunity actions per turn. Using a power spends its action (with trades). Shows pips in the Combat Tracker."
+      },
+      "actionPanel": {
+        "Name": "Open the action panel in combat",
+        "Hint": "Open the floating action panel automatically when a combat starts."
+      },
+      "actionWarnings": {
+        "Name": "Warn on overspent actions",
+        "Hint": "Show a warning when an action is used that isn't available (the action still goes through)."
+      },
+      "tokenBadges": {
+        "Name": "Quarry/curse/mark badges on tokens",
+        "Hint": "Show a large coloured badge with the source's portrait on the top-right of marked tokens."
+      }
     },
     "Keybindings": {
-      "toggleCoverPreview": "Toggle cover preview"
+      "toggleCoverPreview": "Toggle cover preview",
+      "toggleActionPanel": "Toggle action panel"
     },
     "Warn": {
       "NoGM": "No GM is connected, so the effect on {name} can't be applied.",
@@ -73,6 +122,52 @@
       "Cover": "cover (-2)",
       "Superior": "superior (-5)",
       "NoLoE": "No line of effect?"
+    },
+    "Actions": {
+      "standard": "Standard",
+      "move": "Move",
+      "minor": "Minor",
+      "immediate": "Immediate",
+      "opportunity": "Opportunity",
+      "free": "Free",
+      "Available": "available",
+      "Spent": "spent",
+      "PanelTitle": "Action Tracker",
+      "NoCombatant": "Select a token that is in combat.",
+      "YourTurn": "Its turn",
+      "NotYourTurn": "Waiting",
+      "ActionPoints": "Action Points",
+      "TradeNote": "{from} used as {to}",
+      "WarnNone": "{name} has no {action} action left this turn.",
+      "WarnNotYourTurn": "{name}: {action} actions are only taken on your own turn.",
+      "WarnImmediateOwnTurn": "{name}: immediate actions can't be taken on your own turn.",
+      "WarnImmediateUsed": "{name} already took an immediate action this round.",
+      "WarnOpportunityOwnTurn": "{name}: opportunity actions can't be taken on your own turn.",
+      "WarnOpportunityUsed": "{name} already took an opportunity action this turn.",
+      "WarnSecondWindUsed": "{name} already used Second Wind this encounter.",
+      "WarnNoActionPoint": "{name} has no Action Points.",
+      "Basic": {
+        "walk": "Walk",
+        "shift": "Shift",
+        "run": "Run",
+        "standUp": "Stand Up",
+        "charge": "Charge",
+        "totalDefense": "Total Defense",
+        "secondWind": "Second Wind",
+        "aidAnother": "Aid Another",
+        "ready": "Ready",
+        "actionPoint": "Action Point"
+      },
+      "Chat": {
+        "walk": "<strong>{name}</strong> walks.",
+        "shift": "<strong>{name}</strong> shifts.",
+        "run": "<strong>{name}</strong> runs (−5 to attacks, grants combat advantage until the start of their next turn).",
+        "standUp": "<strong>{name}</strong> stands up.",
+        "charge": "<strong>{name}</strong> charges! (+1 to the attack; the basic attack is part of the charge.)",
+        "totalDefense": "<strong>{name}</strong> takes Total Defense (+2 to all defenses until the start of their next turn).",
+        "aidAnother": "<strong>{name}</strong> aids another.",
+        "ready": "<strong>{name}</strong> readies an action."
+      }
     }
   }
 }

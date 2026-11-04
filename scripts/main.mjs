@@ -11,14 +11,23 @@ import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
 import { preloadCompendiumIndexes } from "./preload.mjs";
+import { registerGameLanguage } from "./language.mjs";
+import { registerBadgeHooks } from "./badges.mjs";
+import { registerActionTracker, onUsePower as spendPowerAction } from "./actions/hooks.mjs";
+import { ActionPanel } from "./actions/panel.mjs";
 
 Hooks.once("init", () => {
+	// Must run in "init": Foundry loads translations right after this hook.
+	registerGameLanguage();
 	registerSettings();
 	registerPreviewHooks();
+	registerBadgeHooks();
+	registerActionTracker();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
 		drawCoverPreview: drawPreview,
+		openActionPanel: () => ActionPanel.open(),
 	};
 });
 
@@ -37,6 +46,7 @@ Hooks.on("dnd4e.usePower", async (item) => {
 	const actor = item?.actor;
 	if (!actor) return;
 	try {
+		await spendPowerAction(item);
 		for (const feature of [quarry, curse, rage]) {
 			if (await feature.onUsePower(item, actor)) break;
 		}

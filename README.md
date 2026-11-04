@@ -3,7 +3,7 @@
 Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a burocracia de combate do D&D 4e.
 *(English below.)*
 
-## O que faz (v0.1)
+## O que faz (v0.2)
 
 | Recurso | Como funciona |
 |---|---|
@@ -13,6 +13,9 @@ Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a
 | **Marcas** | **Marca Indireta** (Bardo): ao acertar, você escolhe o aliado a até 5 quadrados e o alvo fica marcado por ele até o fim do seu próximo turno. A marca usa a condição de marca do próprio sistema, então o −2 por ignorar a marca já é aplicado na rolagem de ataque do monstro. |
 | **Cobertura** | Na janela de ataque, Cobertura (−2) / Cobertura Superior (−5) são marcadas sozinhas. Usa a regra de canto a canto: paredes bloqueiam sempre; inimigos do atacante bloqueiam só ataques à distância. |
 | **Prévia de cobertura** | Ao mirar num token, aparecem as linhas: verde = livre, vermelho = parede, laranja = criatura. Só você vê. Desligue em *Configurações do módulo* ou por um atalho de teclado (sem tecla padrão). |
+| **Selos nos tokens** | Presa (verde), Maldição (roxo) e Marca (vermelho) aparecem como um selo grande no canto superior direito do token, com o retrato de quem marcou. Marcas aplicadas pelo próprio sistema também ganham selo. |
+| **Rastreador de Ações** | Controla as ações Padrão, Movimento, Mínima, Imediata e de Oportunidade. Usar um poder gasta a ação dele, com as trocas da regra (padrão → movimento/mínima, movimento → mínima). Ponto de Ação dá uma ação padrão extra. Zera no início do turno de cada um. Se a ação já foi gasta, só avisa. Aparece como marcadores no Combat Tracker e num painel flutuante, com as ações básicas: Andar, Ajustar, Correr, Levantar, Investida, Defesa Total, Retomar o Fôlego, Prestar Ajuda, Preparar e Ponto de Ação. Clicar num marcador liga/desliga manualmente. |
+| **Idioma do jogo 4e** | Em *Configurações do módulo → Idioma do jogo 4e*, cada usuário escolhe o idioma do sistema dnd4e (atributos, perícias, condições, rótulos da ficha) e deste módulo, independente da interface do Foundry. Ex.: Foundry em inglês, conteúdo 4e em português. |
 
 Tudo funciona em **português e inglês**. Os poderes são reconhecidos pelo identificador do compêndio (`ranger-hunters-quarry`, `warlock-warlocks-curse`, …) ou pelo nome em PT/EN.
 

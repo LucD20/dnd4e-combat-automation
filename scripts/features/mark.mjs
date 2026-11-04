@@ -1,4 +1,4 @@
-import { MATCHERS, KIND } from "../constants.mjs";
+import { MATCHERS, KIND, MODULE_ID } from "../constants.mjs";
 import { L, F, matches, tokenForActor, tokenArt, alliesWithin, setting } from "../utils.mjs";
 import { buildEffect, createEffects } from "../effects.mjs";
 import { chooseToken } from "../targeting.mjs";
@@ -23,13 +23,13 @@ export async function applyMark({ marker, targets, source = null, durationType =
 		const effect = buildEffect({
 			kind: KIND.MARK,
 			name: F("Effect.MarkName", { source: marker.name }),
-			img: tokenArt(markerToken, marker),
+			img: `modules/${MODULE_ID}/icons/mark.svg`,
 			source,
 			durationType,
 			statuses: ["mark"],
 			changes: [{ key: "system.marker", type: "override", value: marker.uuid, priority: null }],
 			description: F("Effect.MarkDesc", { source: marker.name, power: powerName }),
-			extraFlags: { marker: marker.uuid },
+			extraFlags: { marker: marker.uuid, portrait: tokenArt(markerToken, marker) },
 		});
 		await createEffects(target.actor, [effect]);
 	}
