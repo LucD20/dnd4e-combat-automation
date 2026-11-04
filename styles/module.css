@@ -182,3 +182,6 @@ input.d4ea-mod-penalty, input.d4ea-mod-bonus { font-weight: bold !important; }
 .d4ea-atk-mod { display: inline-block !important; padding: 0 6px !important; border-radius: 10px !important; font-size: 0.85em !important; color: #fff !important; }
 .d4ea-atk-mod.bonus { background: #2e7d32 !important; }
 .d4ea-atk-mod.penalty { background: #c62828 !important; }
+.d4ea-atk-mod { cursor: pointer !important; }
+.d4ea-atk-mod input { margin: 0 3px 0 0 !important; vertical-align: middle !important; }
+.d4ea-atk-mod.off { background: #777 !important; text-decoration: line-through !important; opacity: 0.8 !important; }

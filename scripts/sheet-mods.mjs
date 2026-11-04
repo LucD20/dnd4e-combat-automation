@@ -51,19 +51,26 @@ export function decorateSheet(app, element) {
 	const mods = defenceModifiers(actor);
 	for (const d of DEFENCES) {
 		for (const box of root.querySelectorAll(`[data-defence="${d}"]`)) {
-			const el = VALUE_SELECTORS.map((s) => box.querySelector(s)).find(Boolean);
-			if (!el) continue;
+			const valueEl = VALUE_SELECTORS.map((s) => box.querySelector(s)).find(Boolean);
+			if (!valueEl) continue;
+			// The tooltip may live on a wrapper (Fox NPC sheets put it on the label around the input)
+			let el = valueEl;
+			if (!valueEl.hasAttribute("data-tooltip")) {
+				const wrapper = valueEl.closest("[data-tooltip]");
+				if (wrapper && box.contains(wrapper)) el = wrapper;
+			}
+			valueEl.classList.remove("d4ea-mod-penalty", "d4ea-mod-bonus");
 			el.classList.remove("d4ea-mod-penalty", "d4ea-mod-bonus");
 			if (el.dataset.d4eaTooltip !== undefined) el.dataset.tooltip = el.dataset.d4eaTooltip;
 			const list = mods[d];
 			if (!list.length) continue;
 			const net = list.reduce((a, m) => a + m.value, 0);
-			el.classList.add(net < 0 ? "d4ea-mod-penalty" : "d4ea-mod-bonus");
+			valueEl.classList.add(net < 0 ? "d4ea-mod-penalty" : "d4ea-mod-bonus");
 			el.dataset.d4eaTooltip ??= el.dataset.tooltip ?? "";
 			const lines = list.map((m) => `${foundry.utils.escapeHTML(m.name)}: ${signed(m.value)}`).join("<br>");
 			el.dataset.tooltip = `${lines}${el.dataset.d4eaTooltip ? `<hr>${el.dataset.d4eaTooltip}` : ""}`;
 			// Fox NPC sheets show an editable input next to a hidden "ruler" with the total
-			if (el.classList.contains("ruler")) box.querySelector("input.number")?.classList.add(net < 0 ? "d4ea-mod-penalty" : "d4ea-mod-bonus");
+			if (valueEl.classList.contains("ruler")) box.querySelector("input.number")?.classList.add(net < 0 ? "d4ea-mod-penalty" : "d4ea-mod-bonus");
 		}
 	}
 }

@@ -72,6 +72,7 @@ Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 	try {
 		const actor = actorFromSpeaker(speaker);
 		damageApply.onAttackRolledForDamage(itemData, targetData, speaker);
+		onHit.clearAttackModChoices();
 		// Everything below depends on hit/miss: wait for Dice So Nice so it doesn't spoil the roll.
 		await waitForDice();
 		if (actor) await mark.onAttackRolled(itemData, targetData, actor);

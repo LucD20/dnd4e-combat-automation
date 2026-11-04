@@ -132,7 +132,7 @@ function primeShotApplies(item, attackerToken, target) {
 		&& !t.document.hidden && gridDistance(t, target) < mine);
 }
 
-/** Attack modifiers the module adds for this attacker/target: [{ label, value }]. */
+/** Attack modifiers the module adds for this attacker/target: [{ key, label, value }]. */
 export function attackModifiers(item, attacker, target) {
 	const mods = [];
 	if (!attacker?.actor) return mods;
@@ -141,33 +141,54 @@ export function attackModifiers(item, attacker, target) {
 		for (const e of attacker.actor.effects) {
 			const mod = Number(e.flags?.[MODULE_ID]?.attackMod);
 			if (!mod || e.disabled) continue;
-			mods.push({ label: e.name, value: mod });
+			mods.push({ key: `effect-${e.id}`, label: e.name, value: mod });
 		}
 	}
-	if (setting("primeShot") && primeShotApplies(item, attacker, target)) mods.push({ label: L("OnHit.PrimeShot"), value: 1 });
+	if (setting("primeShot") && primeShotApplies(item, attacker, target)) mods.push({ key: "primeShot", label: L("OnHit.PrimeShot"), value: 1 });
 	return mods;
+}
+
+/*
+ * Choices made in the attack dialog: target token id (or "none") -> Set of disabled modifier keys.
+ * Set while the dialog is open, read when the attack is rolled, cleared afterwards.
+ */
+const disabledMods = new Map();
+const targetKey = (t) => t?.id ?? "none";
+
+export function clearAttackModChoices() {
+	disabledMods.clear();
 }
 
 export function onPreAttackRoll(item, attacker, target, config) {
 	const bonuses = config?.targetOptions?.bonuses;
 	if (!bonuses?.untyped) return;
-	const mods = attackModifiers(item, attacker, target);
+	const off = disabledMods.get(targetKey(target)) ?? new Set();
+	const mods = attackModifiers(item, attacker, target).filter((m) => !off.has(m.key));
 	for (const m of mods) bonuses.untyped.push(String(m.value));
+	// Remember them on the roll so the chat card can show them
+	config.targetOptions.d4eaMods = mods.map((m) => ({ label: m.label, value: m.value }));
 	if (mods.length) console.log(`${MODULE_ID} | attack modifiers ${attacker?.name} -> ${target?.name ?? "-"}:`, mods.map((m) => `${m.label} ${m.value > 0 ? "+" : ""}${m.value}`).join(", "));
 }
 
-/** Attack dialog: list the automatic modifiers per target so they're visible before rolling. */
+/** Attack dialog: list the automatic modifiers per target, each with a toggle. */
 export function onRenderAttackDialog(app, element) {
 	if (!app.dialogData?.isAttackRoll || !app.rollConfig) return;
 	const actor = app.rollConfig.actor;
 	const item = app.rollConfig.item;
 	const attacker = tokenForActor(actor);
 	if (!attacker) return;
+	if (!app.d4eaModsInit) {
+		clearAttackModChoices();
+		app.d4eaModsInit = true;
+	}
 	const targets = Array.from(game.user.targets);
 	const rows = (targets.length ? targets : [null]).map((t) => {
 		const mods = attackModifiers(item, attacker, t);
 		if (!mods.length) return "";
-		const list = mods.map((m) => `<span class="d4ea-atk-mod ${m.value < 0 ? "penalty" : "bonus"}">${foundry.utils.escapeHTML(m.label)} ${m.value > 0 ? "+" : ""}${m.value}</span>`).join(" ");
+		const off = disabledMods.get(targetKey(t)) ?? new Set();
+		const list = mods.map((m) => `<label class="d4ea-atk-mod ${m.value < 0 ? "penalty" : "bonus"}">
+			<input type="checkbox" data-d4ea-target="${targetKey(t)}" data-d4ea-mod="${m.key}" ${off.has(m.key) ? "" : "checked"}>
+			${foundry.utils.escapeHTML(m.label)} ${m.value > 0 ? "+" : ""}${m.value}</label>`).join(" ");
 		return `<div class="d4ea-atk-row">${t ? `<strong>${foundry.utils.escapeHTML(t.name)}:</strong> ` : ""}${list}</div>`;
 	}).join("");
 	const root = element instanceof HTMLElement ? element : element[0];
@@ -176,6 +197,15 @@ export function onRenderAttackDialog(app, element) {
 	const box = document.createElement("fieldset");
 	box.className = "d4ea-atk-mods";
 	box.innerHTML = `<legend>${L("OnHit.AutoModsLegend")}</legend>${rows}`;
+	box.addEventListener("change", (ev) => {
+		const input = ev.target;
+		if (!input?.dataset?.d4eaMod) return;
+		const key = input.dataset.d4eaTarget;
+		if (!disabledMods.has(key)) disabledMods.set(key, new Set());
+		if (input.checked) disabledMods.get(key).delete(input.dataset.d4eaMod);
+		else disabledMods.get(key).add(input.dataset.d4eaMod);
+		input.closest(".d4ea-atk-mod")?.classList.toggle("off", !input.checked);
+	});
 	const anchor = root.querySelector(".target-detail") ?? root.querySelector("input[name='bonus']")?.closest(".form-group");
 	if (anchor) anchor.after(box);
 	else root.querySelector(".roll-dialogue")?.append(box);
