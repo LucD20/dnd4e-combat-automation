@@ -77,6 +77,18 @@
       "damageTargets": {
         "Name": "Aplicar dano nos alvos do ataque",
         "Hint": "Os cartões de dano ganham botões para aplicar o dano nos alvos do ataque original (cliques de jogadores são aplicados pelo mestre), nos tokens selecionados, e um botão para trocar o alvo."
+      },
+      "powerRiders": {
+        "Name": "Efeitos de poderes ao acertar",
+        "Hint": "Aplica Zombaria Malévola, Palavra Pavorosa, Maldição do Sonho Obscuro e Grito Inspirador nos alvos atingidos (com penalidades de ataque/defesa), cura aliados que acertam um alvo do Grito Inspirador e oferece o dano extra do Grande Trespassar."
+      },
+      "primeShot": {
+        "Name": "Tiro Primoroso",
+        "Hint": "+1 nas jogadas de ataque à distância de quem tem Tiro Primoroso quando nenhum aliado está mais perto do alvo."
+      },
+      "tempHpFeatures": {
+        "Name": "PV temporários de características",
+        "Hint": "Vigor da Fúria Sangrenta (automático quando seu ataque derruba um inimigo) e Virtude da Bravura (cartão para o bardo quando um aliado a até 5 quadrados deixa um inimigo sangrando ou o derruba)."
       }
     },
     "Keybindings": {
@@ -228,6 +240,29 @@
       "NoTargets": "Este cartão não tem alvos. Mire os tokens e use Trocar alvo.",
       "NoSelection": "Selecione pelo menos um token.",
       "NoCurrentTargets": "Mire pelo menos um token primeiro."
+    },
+    "OnHit": {
+      "MockeryName": "{power}: −2 nos ataques",
+      "MockeryDesc": "−2 nas jogadas de ataque até o fim do próximo turno do bardo.",
+      "DreadfulName": "{power}: −{penalty} Vontade",
+      "DreadfulDesc": "−{penalty} em Vontade até o fim do próximo turno do bruxo.",
+      "DarkDreamDesc": "Sob o sonho obscuro (termina com teste de resistência): o bruxo pode conduzi-lo 1 quadrado com uma ação mínima, uma vez por rodada.",
+      "StirringName": "{power} (+{heal} PV para aliados que acertarem)",
+      "StirringDesc": "Até o fim do encontro, um aliado de {source} que acertar esta criatura recupera {heal} pontos de vida.",
+      "StirringHeal": "<strong>{actor}</strong> recupera {heal} pontos de vida (Grito Inspirador).",
+      "PrimeShot": "Tiro Primoroso +1",
+      "GreatCleave": "Grande Trespassar +{count} (inimigos adjacentes)",
+      "GreatCleaveHint": "+1 de dano para cada inimigo adjacente a você."
+    },
+    "TempHp": {
+      "Rageblood": "<strong>{actor}</strong> recebe {amount} pontos de vida temporários (Vigor da Fúria Sangrenta, {target} caiu).",
+      "ValorTitle": "Virtude da Bravura",
+      "ValorDropped": "<strong>{ally}</strong> derrubou <strong>{enemy}</strong>.",
+      "ValorBloodied": "<strong>{ally}</strong> deixou <strong>{enemy}</strong> sangrando.",
+      "ValorButton": "Dar {amount} PV temporários a {ally}",
+      "ValorUsed": "Já usada nesta rodada",
+      "ValorGranted": "<strong>{bard}</strong> dá {amount} pontos de vida temporários a <strong>{ally}</strong> (Virtude da Bravura).",
+      "ValorNotHigher": "{ally} já tem essa quantidade de PV temporários; Virtude da Bravura usada sem efeito."
     }
   },
   "EFFECT": {

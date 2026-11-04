@@ -218,3 +218,26 @@ export function actorFromSpeaker(speaker) {
 	}
 	return game.actors.get(speaker.actor) ?? null;
 }
+
+/**
+ * Wait until Dice So Nice has finished animating the roll that is about to be shown, so cards
+ * that depend on the result (hit/miss) don't spoil it. Resolves at once without Dice So Nice.
+ * The dnd4e hooks fire right before the roll's message is created, so the next completed
+ * animation is that roll's.
+ */
+export function waitForDice(timeout = 12000) {
+	const dsn = game.modules.get("dice-so-nice");
+	if (!dsn?.active || !game.dice3d) return Promise.resolve();
+	if (typeof game.dice3d.isEnabled === "function" && !game.dice3d.isEnabled()) return Promise.resolve();
+	return new Promise((resolve) => {
+		let done = false;
+		const finish = () => {
+			if (done) return;
+			done = true;
+			Hooks.off("diceSoNiceRollComplete", id);
+			resolve();
+		};
+		const id = Hooks.on("diceSoNiceRollComplete", () => setTimeout(finish, 150));
+		setTimeout(finish, timeout);
+	});
+}

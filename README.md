@@ -3,7 +3,7 @@
 Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a burocracia de combate do D&D 4e.
 *(English below.)*
 
-## O que faz (v0.4.3)
+## O que faz (v0.5)
 
 | Recurso | Como funciona |
 |---|---|
@@ -19,7 +19,12 @@ Módulo para **Foundry VTT V14** com o sistema **dnd4e 0.9.3+** que automatiza a
 | **Movimento automático** | No turno do combatente, arrastar o token gasta a ação de movimento: andar até o deslocamento conta como uma ação, passar disso usa outra (trocando a padrão se precisar); ajustar (ação de movimento *Ajustar* do token) é uma ação própria. Outra ação no meio encerra o movimento. Poderes com ajuste embutido (Golpe Lépido, Golpe Insistente…) dão o ajuste de graça: se você ajustou antes do ataque, a ação de movimento é devolvida; se ajustar depois, não é cobrada. Teletransporte, desfazer, investida e tokens de jogador arrastados pelo mestre (movimento forçado) não contam. |
 | **Poderes com gatilho** | Quando o gatilho de um poder acontece, quem o controla recebe um cartão privado (roxo) com o botão **"Usar …"**: Precisão Élfica (errou um ataque), Astúcia da Raposa (inimigo faz ataque corpo a corpo contra você), Assalto Furioso (acertou um inimigo; ao usar, a próxima rolagem de dano já vem com +1[A], ou +1d8 se não for ataque com arma), Investida Célere (derrubou um inimigo), Cólera Infernal (inimigo a até 10 quadrados te acertou). O módulo lê o texto do **Gatilho** (PT/EN), então poderes novos e de monstros com gatilhos parecidos também funcionam. Não oferece poderes já gastos nem reações imediatas no próprio turno ou com a ação imediata já usada. |
 | **Aplicar dano** | Os cartões de dano mostram os alvos do ataque original com os botões **Dano** e **Metade** (dano de acerto vai para quem foi acertado, dano de erro para quem foi errado). Se um jogador clicar em monstros, o mestre aplica automaticamente. Também há **Dano/Metade nos selecionados** (para missclick) e **Trocar para os alvos atuais**. |
+| **Efeitos ao acertar** | Zombaria Malévola (−2 nos ataques do alvo), Palavra Pavorosa (−1 em Vontade, ou 1 + INT com Pacto Estelar), Maldição do Sonho Obscuro (efeito até salvar) e Grito Inspirador (aliados que acertarem o alvo recuperam PV = CAR do bardo) são aplicados sozinhos nos alvos atingidos. Grande Trespassar ganha o toggle "+N (inimigos adjacentes)" no dano. |
+| **Tiro Primoroso** | +1 nos ataques à distância quando nenhum aliado está mais perto do alvo. |
+| **PV temporários** | Vigor da Fúria Sangrenta (Grontar, automático ao derrubar um inimigo) e Virtude da Bravura (cartão para o bardo quando um aliado a até 5 quadrados deixa um inimigo sangrando ou o derruba; uma vez por rodada). |
 | **Idioma do jogo 4e** | Em *Configurações do módulo → Idioma do jogo 4e*, cada usuário escolhe o idioma do sistema dnd4e (atributos, perícias, condições, rótulos da ficha) e deste módulo, independente da interface do Foundry. Ex.: Foundry em inglês, conteúdo 4e em português. |
+
+Cartões que dependem do resultado de um ataque esperam a animação do **Dice So Nice** terminar.
 
 Tudo funciona em **português e inglês**. Os poderes são reconhecidos pelo identificador do compêndio (`ranger-hunters-quarry`, `warlock-warlocks-curse`, …) ou pelo nome em PT/EN.
 

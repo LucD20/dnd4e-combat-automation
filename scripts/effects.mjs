@@ -1,6 +1,7 @@
 import { MODULE_ID, SOCKET, KIND } from "./constants.mjs";
 import { log, F } from "./utils.mjs";
 import { handleDamageSocket, handleRetargetSocket } from "./damage-apply.mjs";
+import { handleTempHpSocket } from "./features/temp-hp.mjs";
 
 /*
  * Creating/deleting effects on actors the player doesn't own (enemy tokens) must go through a GM.
@@ -16,6 +17,7 @@ export function registerSocket() {
 			else if (payload.op === "delete") await doDelete(payload.actorUuid, payload.ids);
 			else if (payload.op === "damage") await handleDamageSocket(payload);
 			else if (payload.op === "retarget") await handleRetargetSocket(payload);
+			else if (payload.op === "tempHp") await handleTempHpSocket(payload);
 		} catch (err) {
 			console.error(`${MODULE_ID} | socket operation failed`, payload, err);
 		}

@@ -77,6 +77,18 @@
       "damageTargets": {
         "Name": "Apply damage to the attack's targets",
         "Hint": "Damage cards get buttons that apply damage to the targets of the original attack (players' clicks are applied by the GM), to the selected tokens, and a Retarget button."
+      },
+      "powerRiders": {
+        "Name": "Power riders on hit",
+        "Hint": "Apply Vicious Mockery, Dreadful Word, Curse of the Dark Dream and Stirring Shout to hit targets (with attack/defense penalties), heal allies who hit a Stirring Shout target, and offer Great Cleave's extra damage."
+      },
+      "primeShot": {
+        "Name": "Prime Shot",
+        "Hint": "+1 to ranged attack rolls for characters with Prime Shot when no ally is nearer to the target."
+      },
+      "tempHpFeatures": {
+        "Name": "Temporary HP features",
+        "Hint": "Rageblood Vigor (automatic when your attack drops an enemy) and Virtue of Valor (card for the bard when an ally within 5 squares bloodies or drops an enemy)."
       }
     },
     "Keybindings": {
@@ -228,6 +240,29 @@
       "NoTargets": "This card has no targets. Target tokens and use Retarget.",
       "NoSelection": "Select at least one token.",
       "NoCurrentTargets": "Target at least one token first."
+    },
+    "OnHit": {
+      "MockeryName": "{power}: −2 to attacks",
+      "MockeryDesc": "−2 penalty to attack rolls until the end of the bard's next turn.",
+      "DreadfulName": "{power}: −{penalty} Will",
+      "DreadfulDesc": "−{penalty} penalty to Will until the end of the warlock's next turn.",
+      "DarkDreamDesc": "Subjected to the dark dream (save ends): the warlock can slide it 1 square as a minor action once per round.",
+      "StirringName": "{power} (+{heal} HP to allies who hit)",
+      "StirringDesc": "Until the end of the encounter, an ally of {source} who hits this creature regains {heal} hit points.",
+      "StirringHeal": "<strong>{actor}</strong> regains {heal} hit points (Stirring Shout).",
+      "PrimeShot": "Prime Shot +1",
+      "GreatCleave": "Great Cleave +{count} (adjacent enemies)",
+      "GreatCleaveHint": "+1 damage for each enemy adjacent to you."
+    },
+    "TempHp": {
+      "Rageblood": "<strong>{actor}</strong> gains {amount} temporary hit points (Rageblood Vigor, {target} dropped).",
+      "ValorTitle": "Virtue of Valor",
+      "ValorDropped": "<strong>{ally}</strong> dropped <strong>{enemy}</strong>.",
+      "ValorBloodied": "<strong>{ally}</strong> bloodied <strong>{enemy}</strong>.",
+      "ValorButton": "Give {ally} {amount} temporary HP",
+      "ValorUsed": "Already used this round",
+      "ValorGranted": "<strong>{bard}</strong> gives <strong>{ally}</strong> {amount} temporary hit points (Virtue of Valor).",
+      "ValorNotHigher": "{ally} already has as many temporary hit points; Virtue of Valor used without effect."
     }
   }
 }

@@ -1,13 +1,15 @@
 import { MODULE_ID } from "./constants.mjs";
 import { registerSettings } from "./settings.mjs";
 import { registerSocket } from "./effects.mjs";
-import { actorFromSpeaker, log } from "./utils.mjs";
+import { actorFromSpeaker, log, waitForDice } from "./utils.mjs";
 import * as quarry from "./features/quarry.mjs";
 import * as curse from "./features/curse.mjs";
 import * as rage from "./features/rage.mjs";
 import * as mark from "./features/mark.mjs";
 import * as defeat from "./features/defeat.mjs";
 import * as furiousAssault from "./features/furious-assault.mjs";
+import * as onHit from "./features/on-hit.mjs";
+import * as tempHp from "./features/temp-hp.mjs";
 import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
@@ -29,6 +31,7 @@ Hooks.once("init", () => {
 	registerActionTracker();
 	opportunity.registerOpportunityHooks();
 	triggers.registerTriggerHooks();
+	tempHp.registerTempHpHooks();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
@@ -66,8 +69,11 @@ Hooks.on("dnd4e.usePower", async (item) => {
 Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 	try {
 		const actor = actorFromSpeaker(speaker);
-		if (actor) await mark.onAttackRolled(itemData, targetData, actor);
 		damageApply.onAttackRolledForDamage(itemData, targetData, speaker);
+		// Everything below depends on hit/miss: wait for Dice So Nice so it doesn't spoil the roll.
+		await waitForDice();
+		if (actor) await mark.onAttackRolled(itemData, targetData, actor);
+		if (actor) await onHit.onAttackRolled(itemData, targetData, actor);
 		await triggers.onAttackRolled(itemData, targetData, speaker);
 	} catch (err) {
 		console.error(`${MODULE_ID} | rollAttack`, err);
@@ -81,6 +87,15 @@ Hooks.on("renderRollDialog", (app, element) => {
 		onRenderRollDialog(app, element);
 	} catch (err) {
 		console.error(`${MODULE_ID} | renderRollDialog`, err);
+	}
+});
+
+/* Attack rolls: Prime Shot and penalties from module effects. */
+Hooks.on("dnd4e.preAttackRoll", (item, attacker, target, config) => {
+	try {
+		onHit.onPreAttackRoll(item, attacker, target, config);
+	} catch (err) {
+		console.error(`${MODULE_ID} | preAttackRoll`, err);
 	}
 });
 

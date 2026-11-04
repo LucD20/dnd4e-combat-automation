@@ -165,7 +165,7 @@ function syncButton(btn) {
 }
 
 export function syncReactionButtons() {
-	document.querySelectorAll(".d4ea-react-use").forEach(syncButton);
+	document.querySelectorAll(".d4ea-react-use[data-actor]").forEach(syncButton);
 }
 
 async function onUseButton(ev) {
