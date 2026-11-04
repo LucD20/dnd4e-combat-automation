@@ -93,6 +93,10 @@
       "sheetModHighlights": {
         "Name": "Highlight modified defences on sheets",
         "Hint": "Colour defences changed by temporary effects (red = penalty, green = bonus) and list the effects in their tooltip."
+      },
+      "readableRolls": {
+        "Name": "Readable roll breakdowns in chat",
+        "Hint": "Replace the roll variables in chat (@wepAttack, @powerMod...) with labels and values, and show the module's automatic modifiers."
       }
     },
     "Keybindings": {
@@ -268,6 +272,25 @@
       "ValorUsed": "Already used this round",
       "ValorGranted": "<strong>{bard}</strong> gives <strong>{ally}</strong> {amount} temporary hit points (Virtue of Valor).",
       "ValorNotHigher": "{ally} already has as many temporary hit points; Virtue of Valor used without effect."
+    },
+    "RollVars": {
+      "wepAttack": "Weapon",
+      "impAttack": "Implement",
+      "powerMod": "Ability",
+      "lvhalf": "½ Level",
+      "bonus": "Situational bonus",
+      "powBase": "Power damage",
+      "powMax": "Power damage (max)",
+      "wepDamage": "Weapon",
+      "impDamage": "Implement",
+      "wepCritBonus": "Weapon crit",
+      "impCritBonus": "Implement crit",
+      "highCrit": "High Crit",
+      "versatile": "Versatile",
+      "extraDamage": "Extra damage",
+      "bonusDamage": "Damage bonus",
+      "ammo": "Ammunition",
+      "wep2ndryDamage": "Weapon secondary damage"
     }
   }
 }

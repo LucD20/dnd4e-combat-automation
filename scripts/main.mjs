@@ -22,6 +22,7 @@ import { ActionPanel } from "./actions/panel.mjs";
 import * as opportunity from "./reactions/opportunity.mjs";
 import * as triggers from "./reactions/triggers.mjs";
 import * as damageApply from "./damage-apply.mjs";
+import * as chatExpression from "./chat-expression.mjs";
 
 Hooks.once("init", () => {
 	// Must run in "init": Foundry loads translations right after this hook.
@@ -128,6 +129,7 @@ Hooks.on("preCreateChatMessage", (message, data, options, userId) => {
 Hooks.on("renderChatMessageHTML", (message, html) => {
 	try {
 		damageApply.onRenderChatMessage(message, html);
+		chatExpression.onRenderChatMessage(message, html);
 	} catch (err) {
 		console.error(`${MODULE_ID} | damage buttons`, err);
 	}

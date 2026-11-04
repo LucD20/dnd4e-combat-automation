@@ -93,6 +93,10 @@
       "sheetModHighlights": {
         "Name": "Destacar defesas modificadas nas fichas",
         "Hint": "Colore as defesas alteradas por efeitos temporários (vermelho = penalidade, verde = bônus) e lista os efeitos no tooltip."
+      },
+      "readableRolls": {
+        "Name": "Rolagens legíveis no chat",
+        "Hint": "Troca as variáveis da rolagem no chat (@wepAttack, @powerMod...) por nomes e valores, e mostra os modificadores automáticos do módulo."
       }
     },
     "Keybindings": {
@@ -268,6 +272,25 @@
       "ValorUsed": "Já usada nesta rodada",
       "ValorGranted": "<strong>{bard}</strong> dá {amount} pontos de vida temporários a <strong>{ally}</strong> (Virtude da Bravura).",
       "ValorNotHigher": "{ally} já tem essa quantidade de PV temporários; Virtude da Bravura usada sem efeito."
+    },
+    "RollVars": {
+      "wepAttack": "Arma",
+      "impAttack": "Implemento",
+      "powerMod": "Atributo",
+      "lvhalf": "½ Nível",
+      "bonus": "Bônus situacional",
+      "powBase": "Dano do poder",
+      "powMax": "Dano do poder (máximo)",
+      "wepDamage": "Arma",
+      "impDamage": "Implemento",
+      "wepCritBonus": "Crítico da arma",
+      "impCritBonus": "Crítico do implemento",
+      "highCrit": "Crítico Alto",
+      "versatile": "Versátil",
+      "extraDamage": "Dano extra",
+      "bonusDamage": "Bônus de dano",
+      "ammo": "Munição",
+      "wep2ndryDamage": "Dano secundário da arma"
     }
   },
   "EFFECT": {
@@ -275,22 +298,23 @@
     "statusDazed": "Pasmo",
     "statusStunned": "Atordoado",
     "statusHelpless": "Indefeso",
-    "statusRestrained": "Contido",
+    "statusRestrained": "Impedido",
     "statusSlowed": "Lento",
     "statusCharging": "Em Investida",
     "statusRunning": "Correndo",
     "statusSqueezing": "Espremido",
     "statusCover": "Cobertura",
     "statusCoverSup": "Cobertura Superior",
-    "statusGrantingCA": "Concedendo Vantagem de Combate"
+    "statusGrantingCA": "Concedendo Vantagem de Combate",
+    "statusProne": "Derrubado"
   },
   "DND4E": {
     "ConDazed": "Pasmo",
     "ConStunned": "Atordoado",
     "ConHelpless": "Indefeso",
-    "ConRestrained": "Contido",
+    "ConRestrained": "Impedido",
     "ConSlowed": "Lento",
-    "CommonAttackRestrained": "Contido",
+    "CommonAttackRestrained": "Impedido",
     "CommonAttackSqueez": "Espremido",
     "SecondWind": "Retomar o Fôlego",
     "Movement": {
@@ -308,7 +332,11 @@
         }
       }
     },
-    "HealingSurgesShort": "Pulsos"
+    "HealingSurgesShort": "Pulsos",
+    "CommonAttackProne": "Derrubado",
+    "ConProne": "Derrubado",
+    "CommonAttackLongRange": "Longo alcance",
+    "WeaponRangeLong": "Longo alcance"
   },
   "Fox4e": {
     "Value": "Valor",

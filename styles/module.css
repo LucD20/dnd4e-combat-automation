@@ -185,3 +185,8 @@ input.d4ea-mod-penalty, input.d4ea-mod-bonus { font-weight: bold !important; }
 .d4ea-atk-mod { cursor: pointer !important; }
 .d4ea-atk-mod input { margin: 0 3px 0 0 !important; vertical-align: middle !important; }
 .d4ea-atk-mod.off { background: #777 !important; text-decoration: line-through !important; opacity: 0.8 !important; }
+
+/* Chat: readable roll breakdown */
+.d4ea-roll-var b, .d4ea-roll-mod b { font-weight: bold; }
+.d4ea-roll-mod.bonus { color: #2e7d32 !important; }
+.d4ea-roll-mod.penalty { color: #c62828 !important; }
