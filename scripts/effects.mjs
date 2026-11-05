@@ -11,6 +11,8 @@ import { handleTempHpSocket } from "./features/temp-hp.mjs";
 
 export function registerSocket() {
 	game.socket.on(SOCKET, async (payload) => {
+		// For a specific user (loaded lazily to keep this module's imports small)
+		if (payload.op === "pickShift") return (await import("./movement/forced.mjs")).handlePickShiftSocket(payload);
 		if (!game.users.activeGM?.isSelf) return;
 		try {
 			if (payload.op === "create") await doCreate(payload.actorUuid, payload.effects);
@@ -18,6 +20,7 @@ export function registerSocket() {
 			else if (payload.op === "damage") await handleDamageSocket(payload);
 			else if (payload.op === "retarget") await handleRetargetSocket(payload);
 			else if (payload.op === "tempHp") await handleTempHpSocket(payload);
+			else if (payload.op === "move") await (await import("./movement/picker.mjs")).handleMoveSocket(payload);
 		} catch (err) {
 			console.error(`${MODULE_ID} | socket operation failed`, payload, err);
 		}

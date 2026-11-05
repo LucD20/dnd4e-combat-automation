@@ -8,9 +8,21 @@ import { consumePendingOpportunity } from "../reactions/opportunity.mjs";
 import { onMoveTokenSpend } from "./movement.mjs";
 import { freeShiftFor } from "./free-shift.mjs";
 
+const pendingFree = new Map(); // actor uuid -> timestamp: the next power is used as a free action
+
+/** The actor's next power use is part of something else (e.g. Blunder's follow-up attack): don't spend. */
+export function markFreeUse(actor) {
+	pendingFree.set(actor.uuid, Date.now());
+}
+
 /** dnd4e.usePower: spend the power's action. */
 export async function onUsePower(item) {
 	if (!setting("actionTracker")) return;
+	const freeAt = pendingFree.get(item.actor?.uuid);
+	if (freeAt) {
+		pendingFree.delete(item.actor.uuid);
+		if (Date.now() - freeAt < 60000) return;
+	}
 	const combatant = combatantForActor(item.actor);
 	if (!combatant || !combatant.combat?.started || !canModify(combatant)) return;
 	// A basic attack started from an opportunity-attack card spends the opportunity action.

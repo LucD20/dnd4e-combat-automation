@@ -25,6 +25,7 @@ export function registerSettings() {
 	world("primeShot");
 	world("tempHpFeatures");
 	world("conditionalRiders");
+	world("clickMovement");
 
 	const client = (key, def = true, onChange = undefined) => game.settings.register(MODULE_ID, key, {
 		name: `DND4EAUTO.Settings.${key}.Name`,

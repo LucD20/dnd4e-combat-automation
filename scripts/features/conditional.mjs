@@ -23,6 +23,14 @@ const foxPending = new Map(); // actor uuid -> { bonus, time }
 const wrathPending = new Map(); // actor uuid -> { cha, time, label }: +1 to the next attack
 const wrathDamage = new Map(); // actor uuid -> { cha, itemUuid, time, label }: that attack hit, +Cha damage
 const toConsume = new Set(); // modifier keys applied in the current attack roll
+const pendingMods = new Map(); // actor uuid -> [{ key, label, value, type, time }]: one-shot bonuses for the next attack
+
+/** A one-shot bonus for the actor's next attack roll (e.g. Blunder's +2 on the follow-up basic attack). */
+export function addPendingAttackMod(actor, mod) {
+	const list = (pendingMods.get(actor.uuid) ?? []).filter((m) => m.key !== mod.key);
+	list.push({ ...mod, time: Date.now() });
+	pendingMods.set(actor.uuid, list);
+}
 
 /* -------------------------------------------- */
 /*  Power use                                     */
@@ -62,6 +70,12 @@ export function conditionalModifiers(item, attacker) {
 	const fox = foxPending.get(actor.uuid);
 	if (fox && Date.now() - fox.time < 5 * 60 * 1000 && item?.system?.attack?.isBasic && fox.bonus) {
 		mods.push({ key: "foxsCunning", label: fox.label, value: fox.bonus, type: "power", consume: () => foxPending.delete(actor.uuid) });
+	}
+	for (const m of pendingMods.get(actor.uuid) ?? []) {
+		if (Date.now() - m.time > 5 * 60 * 1000) continue;
+		mods.push({ key: `pending-${m.key}`, label: m.label, value: m.value, type: m.type, consume: () => {
+			pendingMods.set(actor.uuid, (pendingMods.get(actor.uuid) ?? []).filter((x) => x !== m));
+		} });
 	}
 	const wrath = wrathPending.get(actor.uuid);
 	if (wrath && Date.now() - wrath.time < 60 * 60 * 1000) {

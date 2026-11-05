@@ -128,8 +128,9 @@ async function postCard(threat, provoker, reasonKey) {
 }
 
 /** moveToken hook (active GM only, to avoid duplicate cards). */
-export function onMoveToken(tokenDoc, movement) {
+export function onMoveToken(tokenDoc, movement, operation) {
 	if (!setting("opportunityAttacks") || !game.users.activeGM?.isSelf) return;
+	if (operation?.[MODULE_ID]?.forced) return; // forced movement never provokes
 	if (!game.combat?.started || !canvas.grid || canvas.grid.type !== CONST.GRID_TYPES.SQUARE) return;
 	if (tokenDoc.parent !== canvas.scene) return;
 	if (["undo", "config"].includes(movement?.method)) return;
@@ -155,7 +156,7 @@ export function onUsePower(item) {
 	}
 }
 
-function meleeBasicAttack(actor) {
+export function meleeBasicAttack(actor) {
 	const powers = actor.items.filter((i) => i.type === "power");
 	return powers.find((i) => i.system.identifier === "melee-basic-attack")
 		?? powers.find((i) => i.system.attack?.isBasic && ["melee", "weapon", "touch", "reach"].includes(i.system.rangeType) && i.system.weaponType !== "ranged")

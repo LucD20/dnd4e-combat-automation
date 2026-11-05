@@ -195,3 +195,60 @@ input.d4ea-mod-penalty, input.d4ea-mod-bonus { font-weight: bold !important; }
 .d4ea-breakdown .bonus h5, .d4ea-breakdown .bonus b { color: #1565c0 !important; }
 .d4ea-breakdown .situational h5, .d4ea-breakdown .situational b { color: #2e7d32 !important; }
 .d4ea-breakdown .penalty h5, .d4ea-breakdown .penalty b { color: #c62828 !important; }
+
+/* ---------------------------------------------------------------- */
+/*  Click-to-move bar (above the hotbar, between left UI and chat)    */
+/* ---------------------------------------------------------------- */
+.d4ea-move-bar {
+	position: fixed;
+	z-index: 70;
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 44px;
+	padding: 6px 8px 6px 12px;
+	border-radius: 8px;
+	border: 2px solid #1e88e5;
+	background: rgba(15, 18, 24, 0.92);
+	color: #f2f2f2;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55);
+	pointer-events: auto;
+	font-size: 13px;
+	line-height: 1.25;
+}
+.d4ea-move-bar.push, .d4ea-move-bar.pull, .d4ea-move-bar.slide { border-color: #ef6c00; }
+.d4ea-move-bar .d4ea-move-icon { flex: 0 0 auto; font-size: 18px; width: 22px; text-align: center; color: #64b5f6; }
+.d4ea-move-bar.push .d4ea-move-icon, .d4ea-move-bar.pull .d4ea-move-icon, .d4ea-move-bar.slide .d4ea-move-icon { color: #ffb74d; }
+.d4ea-move-bar .d4ea-move-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.d4ea-move-bar .d4ea-move-text > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.d4ea-move-bar .d4ea-move-power { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: #bbb; }
+.d4ea-move-bar .d4ea-move-what { font-weight: bold; }
+.d4ea-move-bar .d4ea-move-hint { font-size: 11px; color: #aaa; }
+.d4ea-move-bar .d4ea-move-count { flex: 0 0 auto; min-width: 34px; text-align: center; font-weight: bold; font-variant-numeric: tabular-nums; }
+.d4ea-move-bar button {
+	flex: 0 0 auto;
+	width: auto;
+	height: 30px;
+	margin: 0;
+	padding: 0 12px;
+	white-space: nowrap;
+	color: #f2f2f2 !important;
+	background: #37474f !important;
+	border: 1px solid #78909c !important;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.d4ea-move-bar button:hover { background: #455a64 !important; }
+
+/* Chat cards: forced movement for later, follow-up attacks, minor-action slides */
+.d4ea-move-card button {
+	display: block;
+	width: 100%;
+	margin: 4px 0 0;
+	color: #fff !important;
+	background: #ef6c00 !important;
+	border: 1px solid #b53d00 !important;
+}
+.d4ea-move-card button:disabled { opacity: 0.55; cursor: default; }
+.d4ea-move-card.d4ea-followup-card button { background: #c62828 !important; border-color: #8e0000 !important; }

@@ -3,6 +3,8 @@ import { F, L } from "../utils.mjs";
 import { createEffects } from "../effects.mjs";
 import { spend, setChargePending } from "./state.mjs";
 import { startMovementBlock } from "./movement.mjs";
+import { pickMovement } from "../movement/picker.mjs";
+import { setting, tokenForActor } from "../utils.mjs";
 
 /*
  * Basic combat actions available from the panel. Each one spends its action and, where the
@@ -28,7 +30,17 @@ function chat(actor, key) {
 
 export const BASIC_ACTIONS = {
 	walk: { kind: "move", icon: "fa-person-walking", run: async (actor, combatant) => startMovementBlock(combatant, "walk") },
-	shift: { kind: "move", icon: "fa-shoe-prints", run: async (actor, combatant) => startMovementBlock(combatant, "shift") },
+	shift: {
+		kind: "move", icon: "fa-shoe-prints",
+		run: async (actor, combatant) => startMovementBlock(combatant, "shift"),
+		// Then choose the square on the map (the move continues the block started above, no second action)
+		after: (actor) => {
+			const token = tokenForActor(actor);
+			if (!token || !setting("clickMovement")) return;
+			const squares = Number(actor.system?.movement?.shift?.value) || 1;
+			pickMovement({ token, mode: "shift", squares, power: L("Actions.Basic.shift"), moveOptions: { countMovement: true } });
+		},
+	},
 	run: {
 		kind: "move", icon: "fa-person-running",
 		run: async (actor, combatant) => {
@@ -95,4 +107,5 @@ export async function useBasicAction(key, combatant) {
 	if (def.run && (await def.run(actor, combatant)) === false) return;
 	if (def.kind) await spend(combatant, def.kind, { source: key });
 	if (!def.noChat) chat(actor, `Actions.Chat.${key}`);
+	def.after?.(actor, combatant);
 }

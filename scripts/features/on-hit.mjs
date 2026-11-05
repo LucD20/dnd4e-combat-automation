@@ -44,6 +44,7 @@ export const RIDERS = [
 			name: item.name,
 			durationType: "saveEnd",
 			description: L("OnHit.DarkDreamDesc"),
+			extraFlags: { minorSlide: 1 }, // "you can slide the target 1 square as a minor action once per round"
 		}),
 	},
 	{

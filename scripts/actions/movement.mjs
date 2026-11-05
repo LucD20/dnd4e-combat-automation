@@ -47,7 +47,10 @@ export async function startMovementBlock(combatant, mode) {
 export async function onMoveTokenSpend(tokenDoc, movement, operation, user) {
 	if (!setting("actionTracker") || !setting("autoMoveActions")) return;
 	if (user?.id !== game.user.id) return; // the user who moved does the bookkeeping
-	if (!["dragging", "keyboard", "paste"].includes(movement?.method)) return;
+	const flags = operation?.[MODULE_ID] ?? {};
+	if (flags.forced) return; // pushed, pulled, slid, or a shift granted by someone else's power
+	// Moves chosen on the map with the module's square picker count like a drag
+	if (!["dragging", "keyboard", "paste"].includes(movement?.method) && !flags.countMovement) return;
 	const combatant = tokenDoc.combatant;
 	if (!combatant?.combat?.started || !isCombatantsTurn(combatant) || !canModify(combatant)) return;
 	// A GM dragging a player's token is usually forced movement (push/pull/slide).

@@ -11,6 +11,7 @@ import * as furiousAssault from "./features/furious-assault.mjs";
 import * as onHit from "./features/on-hit.mjs";
 import * as tempHp from "./features/temp-hp.mjs";
 import * as conditional from "./features/conditional.mjs";
+import * as forcedMove from "./movement/forced.mjs";
 import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
@@ -37,6 +38,7 @@ Hooks.once("init", () => {
 	tempHp.registerTempHpHooks();
 	registerSheetModHooks();
 	conditional.registerConditionalHooks();
+	forcedMove.registerMovementHooks();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
@@ -65,6 +67,7 @@ Hooks.on("dnd4e.usePower", async (item) => {
 		for (const feature of [quarry, curse, rage, furiousAssault, conditional]) {
 			if (await feature.onUsePower(item, actor)) break;
 		}
+		await forcedMove.onUsePower(item, actor);
 	} catch (err) {
 		console.error(`${MODULE_ID} | usePower`, err);
 	}
@@ -82,6 +85,7 @@ Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 		if (actor) await onHit.onAttackRolled(itemData, targetData, actor);
 		await triggers.onAttackRolled(itemData, targetData, speaker);
 		await conditional.onAttackRolled(itemData, targetData, actor);
+		await forcedMove.onAttackRolled(itemData, targetData, actor);
 	} catch (err) {
 		console.error(`${MODULE_ID} | rollAttack`, err);
 	}
@@ -133,6 +137,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
 	try {
 		damageApply.onRenderChatMessage(message, html);
 		chatExpression.onRenderChatMessage(message, html);
+		forcedMove.onRenderChatMessage(message, html);
 	} catch (err) {
 		console.error(`${MODULE_ID} | damage buttons`, err);
 	}

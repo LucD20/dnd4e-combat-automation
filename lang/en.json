@@ -101,6 +101,10 @@
       "conditionalRiders": {
         "Name": "Conditional damage and roll riders",
         "Hint": "Infernal Wrath rolls its fire damage; Dire Radiance deals its extra damage when the target moves closer; Elven Accuracy rerolls your last attack; Fox's Cunning and Fate of the Void add their bonus to the next attack."
+      },
+      "clickMovement": {
+        "Name": "Click-to-move squares",
+        "Hint": "Highlight the squares for shifts and push / pull / slide, then click to move. Hit riders open automatically after the roll; skipping leaves a button in chat."
       }
     },
     "Keybindings": {
@@ -319,6 +323,34 @@
       "DireFlavor": "{power}: {target} moved closer",
       "WrathArmed": "{name}: +1 racial bonus to the next attack ({power}); if it hits, +{cha} damage.",
       "WrathHint": "Infernal Wrath: the attack hit"
+    },
+    "Move": {
+      "Bar": {
+        "shift": "Shift {name}: up to {squares} square(s)",
+        "push": "Push {name}: up to {squares} square(s)",
+        "pull": "Pull {name}: up to {squares} square(s)",
+        "slide": "Slide {name}: up to {squares} square(s)"
+      },
+      "Hint": "Click a highlighted square · Esc or right click skips",
+      "Skip": "Skip",
+      "Count": "{steps}/{squares}",
+      "NoSquares": "{name} has no square to move to.",
+      "TokenGone": "The token is no longer on the scene.",
+      "Button": {
+        "shift": "Shift {name} {squares}",
+        "push": "Push {name} {squares}",
+        "pull": "Pull {name} {squares}",
+        "slide": "Slide {name} {squares}"
+      },
+      "Done": {
+        "shift": "{name} shifted.",
+        "push": "{name} was pushed.",
+        "pull": "{name} was pulled.",
+        "slide": "{name} was slid."
+      },
+      "FollowUp": "you or an ally adjacent to {target} can make a melee basic attack against it as a free action (+{bonus}).",
+      "FollowUpButton": "{name} attacks (+{bonus})",
+      "MinorSlide": "Slide {name} {squares} (minor action)"
     }
   }
 }

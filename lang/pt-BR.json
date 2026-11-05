@@ -101,6 +101,10 @@
       "conditionalRiders": {
         "Name": "Dano condicional e bônus de rolagem",
         "Hint": "Cólera Infernal rola o dano de fogo; Radiância Atroz causa o dano extra quando o alvo se aproxima; Precisão Élfica rola de novo o último ataque; Astúcia da Raposa e Destino do Vácuo somam o bônus no próximo ataque."
+      },
+      "clickMovement": {
+        "Name": "Movimento por quadrados",
+        "Hint": "Destaca os quadrados para ajustar e empurrar / puxar / conduzir; clique para mover. Ao acertar, abre sozinho depois da rolagem; se pular, fica um botão no chat."
       }
     },
     "Keybindings": {
@@ -319,6 +323,34 @@
       "DireFlavor": "{power}: {target} se aproximou",
       "WrathArmed": "{name}: +1 de bônus racial no próximo ataque ({power}); se acertar, +{cha} de dano.",
       "WrathHint": "Cólera Infernal: o ataque acertou"
+    },
+    "Move": {
+      "Bar": {
+        "shift": "Ajustar {name}: até {squares} quadrado(s)",
+        "push": "Empurrar {name}: até {squares} quadrado(s)",
+        "pull": "Puxar {name}: até {squares} quadrado(s)",
+        "slide": "Conduzir {name}: até {squares} quadrado(s)"
+      },
+      "Hint": "Clique num quadrado destacado · Esc ou botão direito pula",
+      "Skip": "Pular",
+      "Count": "{steps}/{squares}",
+      "NoSquares": "{name} não tem quadrado para onde ir.",
+      "TokenGone": "O token não está mais na cena.",
+      "Button": {
+        "shift": "Ajustar {name} {squares}",
+        "push": "Empurrar {name} {squares}",
+        "pull": "Puxar {name} {squares}",
+        "slide": "Conduzir {name} {squares}"
+      },
+      "Done": {
+        "shift": "{name} ajustou.",
+        "push": "{name} foi empurrado.",
+        "pull": "{name} foi puxado.",
+        "slide": "{name} foi conduzido."
+      },
+      "FollowUp": "você ou um aliado adjacente a {target} pode fazer um ataque básico corpo a corpo contra ele como ação livre (+{bonus}).",
+      "FollowUpButton": "{name} ataca (+{bonus})",
+      "MinorSlide": "Conduzir {name} {squares} (ação mínima)"
     }
   },
   "EFFECT": {
