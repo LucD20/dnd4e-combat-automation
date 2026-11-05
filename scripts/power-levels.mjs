@@ -11,8 +11,7 @@ import { freeShiftFor } from "./actions/free-shift.mjs";
  *
  * Automation: powers the module handles are listed below; any other power is judged from its text
  * (attack + damage only -> gold; clauses the module/system reads -> bronze/silver; otherwise grey).
- * Translation: guessed from the language of the text (English -> grey, Portuguese -> bronze); whether a
- * translation is official can't be guessed, so the GM marks it.
+ * Translation: Portuguese text -> gold (official), "*marked*" errata -> silver, English -> grey.
  * The GM can override either symbol by clicking it; overrides are stored per power for the whole world.
  */
 
@@ -137,16 +136,26 @@ export function languageOf(text) {
 	return "mixed";
 }
 
-/** Translation level guessed from the language of the name and the rules text. */
+/**
+ * Translation level guessed from the text the players read (name and description):
+ *   Portuguese -> gold (the table's powers are typed in from the official PT-BR books),
+ *   Portuguese with "*text*" -> silver (an errata the official translation doesn't have, marked by the GM),
+ *   English -> grey.
+ * The system's own detail fields (often still in English from the compendium) don't count; they are
+ * only used when the description is empty.
+ */
 export function guessTranslation(item) {
 	const sys = item?.system ?? {};
-	const parts = [sys.description?.value, sys.hit?.detail, sys.miss?.detail, sys.effect?.detail, sys.trigger]
-		.map(languageOf).filter(Boolean);
 	const name = languageOf(item?.name) ?? (/[ãõçáéíóúâêô]/i.test(item?.name ?? "") ? "pt" : null);
-	const all = new Set([...parts, ...(name ? [name] : [])]);
-	if (!all.size) return 0;
-	if (all.has("pt") || all.has("mixed")) return 1; // some Portuguese: unofficial unless the GM marks it official
-	return 0;
+	let text = languageOf(sys.description?.value);
+	if (!text) {
+		const parts = new Set([sys.hit?.detail, sys.miss?.detail, sys.effect?.detail].map(languageOf).filter(Boolean));
+		text = parts.has("pt") || parts.has("mixed") ? "pt" : (parts.has("en") ? "en" : null);
+	}
+	const portuguese = [name, text].some((l) => l === "pt" || l === "mixed");
+	if (!portuguese) return 0;
+	const marked = [item?.name, sys.description?.value, sys.description?.chat, sys.trigger].some((t) => /\*[^*\s][^*]*\*/.test(plain(t)));
+	return marked ? 2 : 3;
 }
 
 /* -------------------------------------------- */

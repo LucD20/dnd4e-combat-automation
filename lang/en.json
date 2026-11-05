@@ -388,7 +388,7 @@
       "autoDesc3": "Automated (or needs no automation).",
       "trDesc0": "No translation.",
       "trDesc1": "Unofficial translation.",
-      "trDesc2": "Partly unofficial translation.",
+      "trDesc2": "Partly unofficial translation (passages marked with *asterisks*).",
       "trDesc3": "Official translation.",
       "Manual": "Set by the GM",
       "Guessed": "Estimated by the module",

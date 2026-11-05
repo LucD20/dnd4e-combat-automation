@@ -388,7 +388,7 @@
       "autoDesc3": "Automatizado (ou não precisa de automação).",
       "trDesc0": "Não existe tradução.",
       "trDesc1": "Tradução não oficial.",
-      "trDesc2": "Tradução parcialmente não oficial.",
+      "trDesc2": "Tradução parcialmente não oficial (trechos marcados com *asteriscos*).",
       "trDesc3": "Tradução oficial.",
       "Manual": "Definido pelo mestre",
       "Guessed": "Estimado pelo módulo",
