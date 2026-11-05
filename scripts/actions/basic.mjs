@@ -4,6 +4,7 @@ import { createEffects } from "../effects.mjs";
 import { spend, setChargePending } from "./state.mjs";
 import { startMovementBlock } from "./movement.mjs";
 import { pickMovement } from "../movement/picker.mjs";
+import { runCharge } from "../movement/charge.mjs";
 import { setting, tokenForActor } from "../utils.mjs";
 
 /*
@@ -57,8 +58,22 @@ export const BASIC_ACTIONS = {
 	charge: {
 		kind: "standard", icon: "fa-bolt",
 		run: async (actor, combatant) => {
-			await statusEffect(actor, "charging", "endOfUserCurrent");
-			await setChargePending(combatant, true);
+			if (!setting("clickMovement") || !tokenForActor(actor)) {
+				await statusEffect(actor, "charging", "endOfUserCurrent");
+				await setChargePending(combatant, true);
+				return;
+			}
+			// Charge line: choose the attack, the target and the end square (nearest square to attack from);
+			// the action is spent and the attack opened once the move is done. Cancelled -> nothing spent.
+			const done = await runCharge(actor, {
+				beforeAttack: async () => {
+					await statusEffect(actor, "charging", "endOfUserCurrent");
+					await spend(combatant, "standard", { source: "charge" });
+					await setChargePending(combatant, true);
+					chat(actor, "Actions.Chat.charge");
+				},
+			});
+			return done ? "handled" : false;
 		},
 	},
 	totalDefense: {
@@ -104,7 +119,9 @@ export async function useBasicAction(key, combatant) {
 	const def = BASIC_ACTIONS[key];
 	const actor = combatant?.actor;
 	if (!def || !actor) return;
-	if (def.run && (await def.run(actor, combatant)) === false) return;
+	const outcome = def.run ? await def.run(actor, combatant) : undefined;
+	if (outcome === false) return;
+	if (outcome === "handled") return; // the action did its own bookkeeping
 	if (def.kind) await spend(combatant, def.kind, { source: key });
 	if (!def.noChat) chat(actor, `Actions.Chat.${key}`);
 	def.after?.(actor, combatant);

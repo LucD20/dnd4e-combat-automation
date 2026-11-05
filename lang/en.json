@@ -329,7 +329,8 @@
         "shift": "Shift {name}: up to {squares} square(s)",
         "push": "Push {name}: up to {squares} square(s)",
         "pull": "Pull {name}: up to {squares} square(s)",
-        "slide": "Slide {name}: up to {squares} square(s)"
+        "slide": "Slide {name}: up to {squares} square(s)",
+        "charge": "Charge {target}: up to {squares} squares"
       },
       "Hint": "Click a highlighted square · Esc or right click skips",
       "Skip": "Skip",
@@ -350,7 +351,25 @@
       },
       "FollowUp": "you or an ally adjacent to {target} can make a melee basic attack against it as a free action (+{bonus}).",
       "FollowUpButton": "{name} attacks (+{bonus})",
-      "MinorSlide": "Slide {name} {squares} (minor action)"
+      "MinorSlide": "Slide {name} {squares} (minor action)",
+      "Step": "Step by step",
+      "StepHint": "Click one stretch at a time and confirm (Shift+click adds a single stretch in either mode)",
+      "HintStep": "Click squares one at a time · Enter confirms · right click / Backspace undoes · Esc skips",
+      "HintCharge": "Click the end square of the charge · Esc or right click cancels",
+      "Confirm": "Confirm"
+    },
+    "Charge": {
+      "ChooseAttack": "Charge attack",
+      "ChooseAttackHint": "Which attack does {name} make at the end of the charge?",
+      "ChooseTarget": "Charge",
+      "ChooseTargetHint": "Choose the enemy to charge.",
+      "NoEnemy": "{name} has no enemy that can be charged from here.",
+      "Reason": {
+        "tooClose": "{name} can't charge {target}: the nearest square to attack from is less than 2 squares away.",
+        "tooFar": "{name} can't charge {target}: the nearest square to attack from is {nearest} squares away (speed {speed}).",
+        "occupied": "{name} can't charge {target}: the nearest square to attack from is occupied.",
+        "blocked": "{name} can't charge {target}: there is no path getting closer every square to the nearest square to attack from."
+      }
     }
   }
 }

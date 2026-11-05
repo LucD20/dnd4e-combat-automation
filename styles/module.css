@@ -252,3 +252,13 @@ input.d4ea-mod-penalty, input.d4ea-mod-bonus { font-weight: bold !important; }
 }
 .d4ea-move-card button:disabled { opacity: 0.55; cursor: default; }
 .d4ea-move-card.d4ea-followup-card button { background: #c62828 !important; border-color: #8e0000 !important; }
+.d4ea-move-bar.charge { border-color: #c62828; }
+.d4ea-move-bar.charge .d4ea-move-icon { color: #ef5350; }
+.d4ea-move-bar button.d4ea-move-step.active { background: #1565c0 !important; border-color: #90caf9 !important; }
+.d4ea-move-bar button.d4ea-move-confirm { background: #2e7d32 !important; border-color: #81c784 !important; }
+.d4ea-move-bar button.d4ea-move-confirm:disabled { opacity: 0.45; cursor: default; }
+.d4ea-move-bar button[hidden] { display: none; }
+.d4ea-move-bar button span { margin-left: 5px; }
+.d4ea-move-bar.compact button { padding: 0 9px; }
+.d4ea-move-bar.compact button span { display: none; }
+.d4ea-move-bar.compact .d4ea-move-hint { display: none; }

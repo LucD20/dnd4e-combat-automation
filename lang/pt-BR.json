@@ -329,7 +329,8 @@
         "shift": "Ajustar {name}: até {squares} quadrado(s)",
         "push": "Empurrar {name}: até {squares} quadrado(s)",
         "pull": "Puxar {name}: até {squares} quadrado(s)",
-        "slide": "Conduzir {name}: até {squares} quadrado(s)"
+        "slide": "Conduzir {name}: até {squares} quadrado(s)",
+        "charge": "Investida em {target}: até {squares} quadrados"
       },
       "Hint": "Clique num quadrado destacado · Esc ou botão direito pula",
       "Skip": "Pular",
@@ -350,7 +351,25 @@
       },
       "FollowUp": "você ou um aliado adjacente a {target} pode fazer um ataque básico corpo a corpo contra ele como ação livre (+{bonus}).",
       "FollowUpButton": "{name} ataca (+{bonus})",
-      "MinorSlide": "Conduzir {name} {squares} (ação mínima)"
+      "MinorSlide": "Conduzir {name} {squares} (ação mínima)",
+      "Step": "Passo a passo",
+      "StepHint": "Clique um trecho de cada vez e confirme (Shift+clique adiciona um trecho em qualquer modo)",
+      "HintStep": "Clique os quadrados um de cada vez · Enter confirma · botão direito / Backspace desfaz · Esc pula",
+      "HintCharge": "Clique no quadrado final da investida · Esc ou botão direito cancela",
+      "Confirm": "Confirmar"
+    },
+    "Charge": {
+      "ChooseAttack": "Ataque da investida",
+      "ChooseAttackHint": "Qual ataque {name} faz no fim da investida?",
+      "ChooseTarget": "Investida",
+      "ChooseTargetHint": "Escolha o inimigo da investida.",
+      "NoEnemy": "{name} não tem inimigo para investir daqui.",
+      "Reason": {
+        "tooClose": "{name} não pode fazer investida em {target}: o quadrado mais próximo para atacar fica a menos de 2 quadrados.",
+        "tooFar": "{name} não pode fazer investida em {target}: o quadrado mais próximo para atacar fica a {nearest} quadrados (deslocamento {speed}).",
+        "occupied": "{name} não pode fazer investida em {target}: o quadrado mais próximo para atacar está ocupado.",
+        "blocked": "{name} não pode fazer investida em {target}: não há caminho que se aproxime a cada quadrado até o quadrado mais próximo para atacar."
+      }
     }
   },
   "EFFECT": {

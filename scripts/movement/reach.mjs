@@ -85,12 +85,14 @@ function insideScene(p, w, h) {
  * @param {number} opts.squares        Maximum number of squares
  * @param {Token} [opts.source]        The creature pushing/pulling (required for push/pull)
  * @param {Token[]} [opts.others]      Creatures on the map (defaults to the canvas tokens)
- * @returns {Map<string, {pos, steps, path: {i,j}[]}>}  Reachable destinations (path excludes the start)
+ * @param {{i,j}} [opts.from]          Start from this square instead of the token's (step-by-step moves)
+ * @param {boolean} [opts.includePass] Also return squares the mover can cross but not stop on (canStop: false)
+ * @returns {Map<string, {pos, steps, path: {i,j}[], canStop}>}  Reachable destinations (path excludes the start)
  */
-export function reachable(token, { mode, squares, source = null, others = null }) {
+export function reachable(token, { mode, squares, source = null, others = null, from = null, includePass = false }) {
 	const doc = token.document;
 	const { w, h } = sizeOf(doc);
-	const start = offsetOf(doc);
+	const start = from ?? offsetOf(doc);
 	const sourceRect = source ? tokenRect(source) : null;
 	const creatures = (others ?? canvas.tokens.placeables)
 		.filter((t) => t !== token && t !== source && t.actor && !t.document.hidden && !isDefeated(t))
@@ -118,14 +120,58 @@ export function reachable(token, { mode, squares, source = null, others = null }
 				if (mode === "push" && sourceRect && dist(p) <= dist(node.pos)) continue;
 				if (mode === "pull" && sourceRect && dist(p) >= dist(node.pos)) continue;
 				if (wallBetween(node.pos, p, w, h)) continue;
-				const entry = { pos: p, steps: step, path: [...node.path, p] };
+				const entry = { pos: p, steps: step, path: [...node.path, p], canStop: !blockedStop(r) };
 				seen.set(k, entry);
 				next.push(entry);
-				if (!blockedStop(r)) result.set(k, entry);
+				if (entry.canStop || includePass) result.set(k, entry);
 			}
 		}
 		frontier = next;
 		if (!frontier.length) break;
 	}
 	return result;
+}
+
+/** Is a square (for a mover of size w×h) taken by another living creature? */
+export function occupied(token, p, ignore = []) {
+	const { w, h } = sizeOf(token.document);
+	const r = rectAt(p, w, h);
+	return canvas.tokens.placeables.some((t) => t !== token && !ignore.includes(t) && t.actor && !t.document.hidden && !isDefeated(t) && overlaps(r, tokenRect(t)));
+}
+
+/**
+ * Charge: move at least 2 squares, every square closer to the target, and end on the nearest square
+ * from which the attack can be made. If that square is occupied, the charge can't be made.
+ * Several squares at the same (nearest) distance are all valid choices.
+ * @returns {{ destinations: Map, reason: string|null, nearest: number }}
+ *   reason: null | "tooClose" | "tooFar" | "occupied" | "blocked"
+ */
+export function chargeDestinations(token, target, { speed, reach = 1 }) {
+	const { w, h } = sizeOf(token.document);
+	const start = offsetOf(token.document);
+	const tr = tokenRect(target);
+	const candidates = [];
+	for (let i = tr.i0 - reach - h + 1; i <= tr.i1 + reach; i++) {
+		for (let j = tr.j0 - reach - w + 1; j <= tr.j1 + reach; j++) {
+			const p = { i, j };
+			const d = rectDistance(rectAt(p, w, h), tr);
+			if (d < 1 || d > reach || !insideScene(p, w, h)) continue;
+			candidates.push({ pos: p, dist: Math.max(Math.abs(i - start.i), Math.abs(j - start.j)) });
+		}
+	}
+	const empty = { destinations: new Map(), nearest: Infinity };
+	if (!candidates.length) return { ...empty, reason: "blocked" };
+	const nearest = Math.min(...candidates.map((c) => c.dist));
+	if (nearest < 2) return { ...empty, nearest, reason: "tooClose" };
+	if (nearest > speed) return { ...empty, nearest, reason: "tooFar" };
+	const ties = candidates.filter((c) => c.dist === nearest);
+	const free = ties.filter((c) => !occupied(token, c.pos, [target]));
+	if (!free.length) return { ...empty, nearest, reason: "occupied" };
+	const paths = reachable(token, { mode: "pull", squares: speed, source: target });
+	const destinations = new Map();
+	for (const c of free) {
+		const entry = paths.get(key(c.pos));
+		if (entry && entry.steps >= 2) destinations.set(key(c.pos), entry);
+	}
+	return { destinations, nearest, reason: destinations.size ? null : "blocked" };
 }

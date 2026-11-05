@@ -12,6 +12,7 @@ import * as onHit from "./features/on-hit.mjs";
 import * as tempHp from "./features/temp-hp.mjs";
 import * as conditional from "./features/conditional.mjs";
 import * as forcedMove from "./movement/forced.mjs";
+import * as charge from "./movement/charge.mjs";
 import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
@@ -68,6 +69,7 @@ Hooks.on("dnd4e.usePower", async (item) => {
 			if (await feature.onUsePower(item, actor)) break;
 		}
 		await forcedMove.onUsePower(item, actor);
+		await charge.onUsePower(item, actor);
 	} catch (err) {
 		console.error(`${MODULE_ID} | usePower`, err);
 	}
