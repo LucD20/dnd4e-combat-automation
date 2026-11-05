@@ -324,9 +324,7 @@
       "Rerolling": "{power}: rolling the attack again against the same targets. Use the second roll.",
       "DireName": "{power}: moving closer deals {formula}",
       "DireDesc": "The first time this creature moves closer to {source} on its next turn, it takes {formula} damage.",
-      "DireFlavor": "{power}: {target} moved closer",
-      "WrathArmed": "{name}: +1 racial bonus to the next attack ({power}); if it hits, +{cha} damage.",
-      "WrathHint": "Infernal Wrath: the attack hit"
+      "DireFlavor": "{power}: {target} moved closer"
     },
     "Move": {
       "Bar": {

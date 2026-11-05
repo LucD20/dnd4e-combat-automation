@@ -7,10 +7,12 @@ import { conditionalModifiers, markApplied } from "./conditional.mjs";
  * Power riders applied automatically to the targets a power hits, plus attack-roll modifiers:
  *   Vicious Mockery     -2 to the target's attack rolls until the end of your next turn
  *   Dreadful Word       -1 Will (Star Pact: 1 + Int) until the end of your next turn
- *   Curse of the Dark Dream  "subjected to the dark dream" (save ends), as a reminder
+ *   Curse of the Dark Dream  "subjected to the dark dream" (save ends), as a reminder (Effect: hit or miss)
  *   Stirring Shout      until the end of the encounter, an ally who hits the target regains HP = your Cha
+ *                       (Effect: hit or miss)
  *   Prime Shot          +1 to ranged attacks when no ally is nearer to the target than you
  *   Great Cleave        +1 damage per enemy adjacent to you (damage dialog toggle)
+ * Riders with `effect: true` come from an "Effect:" line and reach every target, hit or missed.
  */
 
 export const RIDERS = [
@@ -39,6 +41,7 @@ export const RIDERS = [
 	},
 	{
 		key: "darkDream",
+		effect: true,
 		matcher: { ids: ["warlock-01-curse-of-the-dark-dream"], names: /curse of the dark dream|maldi[çc][ãa]o do sonho obscuro/i },
 		build: (actor, item) => ({
 			name: item.name,
@@ -49,6 +52,7 @@ export const RIDERS = [
 	},
 	{
 		key: "stirringShout",
+		effect: true,
 		matcher: { ids: ["bard-01-stirring-shout"], names: /stirring shout|grito inspirador/i },
 		build: (actor, item) => {
 			const heal = Math.max(0, abilityMod(actor, "cha"));
@@ -66,15 +70,16 @@ function riderFor(itemData) {
 	return RIDERS.find((r) => matches(itemData, r.matcher));
 }
 
-/** Apply the matching rider to every hit target, then handle Stirring Shout heals for the attacker. */
+/** Apply the matching rider to every hit target (every target for "Effect:" riders), then handle Stirring Shout heals. */
 export async function onAttackRolled(itemData, targetData, actor) {
 	const hit = targetData?.targetHit ?? [];
-	if (setting("powerRiders") && hit.length) {
-		const rider = riderFor(itemData);
+	const rider = setting("powerRiders") ? riderFor(itemData) : null;
+	const reached = rider?.effect ? (targetData?.targets ?? hit) : hit;
+	if (rider && reached.length) {
 		const item = itemData?.uuid ? fromUuidSync(itemData.uuid) : null;
-		if (rider && item) {
+		if (item) {
 			const def = rider.build(actor, item);
-			for (const target of hit) {
+			for (const target of reached) {
 				if (!target.actor) continue;
 				const effect = buildEffect({
 					kind: `rider-${rider.key}`,
@@ -88,7 +93,7 @@ export async function onAttackRolled(itemData, targetData, actor) {
 				});
 				await createEffects(target.actor, [effect]);
 			}
-			log("rider", rider.key, hit.map((t) => t.name));
+			log("rider", rider.key, reached.map((t) => t.name));
 		}
 	}
 	await stirringShoutHeal(actor, hit);

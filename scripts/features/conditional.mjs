@@ -5,7 +5,7 @@ import { rollDamageCard } from "../damage-apply.mjs";
 
 /*
  * Conditional damage and roll riders:
- *   Infernal Wrath   (PHB) +1 racial bonus to your next attack roll; if it hits, +Cha damage
+ *   Infernal Wrath   (errata) the triggering enemy takes 1d6 + Int or Cha mod fire damage (2d6/3d6 at 11/21)
  *   Dire Radiance    on hit, the first time the target moves closer to you on its next turn it takes
  *                    1d6 + Con (or Cha) damage (2d6 at 21st)
  *   Elven Accuracy   using it offers to roll your last attack again against the same targets
@@ -20,8 +20,6 @@ const FOXS_CUNNING = { ids: ["ranger-01-foxs-cunning"], names: /fox'?s cunning|a
 
 const lastAttacks = new Map(); // actor uuid -> { itemUuid, targets: [token uuid], time }
 const foxPending = new Map(); // actor uuid -> { bonus, time }
-const wrathPending = new Map(); // actor uuid -> { cha, time, label }: +1 to the next attack
-const wrathDamage = new Map(); // actor uuid -> { cha, itemUuid, time, label }: that attack hit, +Cha damage
 const toConsume = new Set(); // modifier keys applied in the current attack roll
 const pendingMods = new Map(); // actor uuid -> [{ key, label, value, type, time }]: one-shot bonuses for the next attack
 
@@ -39,10 +37,9 @@ export function addPendingAttackMod(actor, mod) {
 export async function onUsePower(item, actor) {
 	if (!setting("conditionalRiders")) return false;
 	if (matches(item, INFERNAL_WRATH)) {
-		const cha = Math.max(0, abilityMod(actor, "cha"));
-		wrathPending.set(actor.uuid, { cha, time: Date.now(), label: item.name });
-		wrathDamage.delete(actor.uuid);
-		ui.notifications.info(F("Conditional.WrathArmed", { name: actor.name, power: item.name, cha }));
+		const n = tierDice(actor);
+		const mod = Math.max(abilityMod(actor, "int"), abilityMod(actor, "cha"));
+		await rollDamageCard({ actor, formula: `${n}d6 + ${mod}`, type: "fire", flavor: item.name, targets: Array.from(game.user.targets) });
 		return true;
 	}
 	if (matches(item, ELVEN_ACCURACY)) {
@@ -77,16 +74,6 @@ export function conditionalModifiers(item, attacker) {
 			pendingMods.set(actor.uuid, (pendingMods.get(actor.uuid) ?? []).filter((x) => x !== m));
 		} });
 	}
-	const wrath = wrathPending.get(actor.uuid);
-	if (wrath && Date.now() - wrath.time < 60 * 60 * 1000) {
-		mods.push({
-			key: "infernalWrath", label: wrath.label, value: 1, type: "race",
-			consume: (targetData) => {
-				wrathPending.delete(actor.uuid);
-				if (targetData?.targetHit?.length && wrath.cha) wrathDamage.set(actor.uuid, { cha: wrath.cha, itemUuid: item?.uuid, time: Date.now(), label: wrath.label });
-			},
-		});
-	}
 	const fate = effectsOfKind(actor, KIND.FATE_OF_THE_VOID)[0];
 	const stacks = fate?.flags?.[MODULE_ID]?.stacks;
 	// The effect is named "Fate of the Void (+2)": the chip shows the value itself
@@ -110,23 +97,6 @@ export async function onAttackRolled(itemData, targetData, actor) {
 		time: Date.now(),
 	});
 	await applyDireRadiance(itemData, targetData, actor);
-}
-
-/** Infernal Wrath: the attack it boosted hit -> +Cha damage on that power's damage roll. */
-export function damageExtra({ actor, item }) {
-	if (!setting("conditionalRiders") || !actor) return null;
-	const wrath = wrathDamage.get(actor.uuid);
-	if (!wrath || Date.now() - wrath.time > 10 * 60 * 1000) return null;
-	if (wrath.itemUuid && item?.uuid && wrath.itemUuid !== item.uuid) return null;
-	return {
-		id: "infernalWrath",
-		label: `${wrath.label} +${wrath.cha}`,
-		hint: L("Conditional.WrathHint"),
-		formula: String(wrath.cha),
-		checked: true,
-		requiresHit: true,
-		onApplied: () => wrathDamage.delete(actor.uuid),
-	};
 }
 
 /* -------------------------------------------- */
