@@ -13,6 +13,7 @@ import * as tempHp from "./features/temp-hp.mjs";
 import * as conditional from "./features/conditional.mjs";
 import * as forcedMove from "./movement/forced.mjs";
 import * as charge from "./movement/charge.mjs";
+import * as powerBadges from "./power-badges.mjs";
 import { onRollDamage, onRenderRollDialog } from "./damage-dialog.mjs";
 import { onEvaluateCommonAttackBonuses, computeCover } from "./cover.mjs";
 import { registerPreviewHooks, drawPreview } from "./cover-preview.mjs";
@@ -140,6 +141,7 @@ Hooks.on("renderChatMessageHTML", (message, html) => {
 		damageApply.onRenderChatMessage(message, html);
 		chatExpression.onRenderChatMessage(message, html);
 		forcedMove.onRenderChatMessage(message, html);
+		powerBadges.decorateChatCard(message, html);
 	} catch (err) {
 		console.error(`${MODULE_ID} | damage buttons`, err);
 	}

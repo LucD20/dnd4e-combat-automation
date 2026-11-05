@@ -41,6 +41,14 @@ export function registerSettings() {
 	client("dockPips", true, () => import("./actions/dock.mjs").then((m) => m.refreshDock()));
 	client("sheetModHighlights", true);
 	client("readableRolls", true);
+	client("powerLevels", true, () => import("./power-badges.mjs").then((m) => m.refreshAll()));
+	game.settings.register(MODULE_ID, "powerLevels-overrides", {
+		scope: "world",
+		config: false,
+		type: Object,
+		default: {},
+		onChange: () => import("./power-badges.mjs").then((m) => m.refreshAll()),
+	});
 	client("tokenBadges", true, () => canvas?.tokens?.placeables.forEach((t) => t.renderFlags?.set({ refresh: true })));
 
 	game.settings.register(MODULE_ID, "coverPreview", {

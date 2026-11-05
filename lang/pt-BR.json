@@ -105,6 +105,10 @@
       "clickMovement": {
         "Name": "Movimento por quadrados",
         "Hint": "Destaca os quadrados para ajustar e empurrar / puxar / conduzir; clique para mover. Ao acertar, abre sozinho depois da rolagem; se pular, fica um botão no chat."
+      },
+      "powerLevels": {
+        "Name": "Símbolos de automação e tradução",
+        "Hint": "Mostra o nível de automação (◆) e de tradução (■) ao lado do nome dos poderes, nas fichas e nos cartões do chat. O mestre pode clicar num símbolo para mudar."
       }
     },
     "Keybindings": {
@@ -370,6 +374,27 @@
         "occupied": "{name} não pode fazer investida em {target}: o quadrado mais próximo para atacar está ocupado.",
         "blocked": "{name} não pode fazer investida em {target}: não há caminho que se aproxime a cada quadrado até o quadrado mais próximo para atacar."
       }
+    },
+    "Levels": {
+      "auto": "Automação",
+      "tr": "Tradução",
+      "Name0": "Cinza",
+      "Name1": "Bronze",
+      "Name2": "Prata",
+      "Name3": "Dourado",
+      "autoDesc0": "Não automatizado.",
+      "autoDesc1": "Pouco automatizado.",
+      "autoDesc2": "Moderadamente automatizado.",
+      "autoDesc3": "Automatizado (ou não precisa de automação).",
+      "trDesc0": "Não existe tradução.",
+      "trDesc1": "Tradução não oficial.",
+      "trDesc2": "Tradução parcialmente não oficial.",
+      "trDesc3": "Tradução oficial.",
+      "Manual": "Definido pelo mestre",
+      "Guessed": "Estimado pelo módulo",
+      "GMHint": "Clique para mudar",
+      "UseGuess": "Estimativa do módulo",
+      "ChooseHint": "Escolha o nível de {power}. Vale para todas as cópias deste poder no mundo."
     }
   },
   "EFFECT": {

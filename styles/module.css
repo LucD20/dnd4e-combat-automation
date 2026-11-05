@@ -262,3 +262,39 @@ input.d4ea-mod-penalty, input.d4ea-mod-bonus { font-weight: bold !important; }
 .d4ea-move-bar.compact button { padding: 0 9px; }
 .d4ea-move-bar.compact button span { display: none; }
 .d4ea-move-bar.compact .d4ea-move-hint { display: none; }
+
+/* ---------------------------------------------------------------- */
+/*  Automation (diamond) and translation (square) symbols on powers   */
+/* ---------------------------------------------------------------- */
+.d4ea-levels {
+	display: inline-flex !important;
+	align-items: center;
+	gap: 5px;
+	margin-left: 6px;
+	vertical-align: middle;
+	flex: 0 0 auto;
+	line-height: 1;
+}
+.d4ea-lvl {
+	display: inline-block !important;
+	flex: 0 0 auto;
+	box-sizing: border-box;
+	width: 9px;
+	height: 9px;
+	border: 1px solid rgba(0, 0, 0, 0.65);
+	box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+	cursor: help;
+}
+.d4ea-lvl.auto { transform: rotate(45deg); border-radius: 1px; margin: 0 1px; }
+.d4ea-lvl.tr { border-radius: 2px; }
+.d4ea-lvl.lvl-grey   { background: linear-gradient(135deg, #c9c9c9, #7b7b7b 60%, #5e5e5e); }
+.d4ea-lvl.lvl-bronze { background: linear-gradient(135deg, #f0b27a, #b0702c 55%, #6e3f12); }
+.d4ea-lvl.lvl-silver { background: linear-gradient(135deg, #ffffff, #c3ccd4 50%, #7d8b96); }
+.d4ea-lvl.lvl-gold   { background: linear-gradient(135deg, #fff3a0, #e0b000 50%, #8f6a00); }
+.chat-card .card-header h3 .d4ea-levels { margin-left: 8px; }
+.chat-card .card-header h3 .d4ea-lvl { width: 10px; height: 10px; }
+/* Level dialog buttons */
+button .d4ea-btn-grey { color: #7b7b7b; }
+button .d4ea-btn-bronze { color: #b0702c; }
+button .d4ea-btn-silver { color: #9aa6b0; }
+button .d4ea-btn-gold { color: #e0b000; }

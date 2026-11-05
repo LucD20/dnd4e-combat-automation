@@ -105,6 +105,10 @@
       "clickMovement": {
         "Name": "Click-to-move squares",
         "Hint": "Highlight the squares for shifts and push / pull / slide, then click to move. Hit riders open automatically after the roll; skipping leaves a button in chat."
+      },
+      "powerLevels": {
+        "Name": "Automation and translation symbols",
+        "Hint": "Show the ◆ automation and ■ translation level next to power names in sheets and chat cards. The GM can click a symbol to set it."
       }
     },
     "Keybindings": {
@@ -370,6 +374,27 @@
         "occupied": "{name} can't charge {target}: the nearest square to attack from is occupied.",
         "blocked": "{name} can't charge {target}: there is no path getting closer every square to the nearest square to attack from."
       }
+    },
+    "Levels": {
+      "auto": "Automation",
+      "tr": "Translation",
+      "Name0": "Grey",
+      "Name1": "Bronze",
+      "Name2": "Silver",
+      "Name3": "Gold",
+      "autoDesc0": "Not automated.",
+      "autoDesc1": "A little automated.",
+      "autoDesc2": "Moderately automated.",
+      "autoDesc3": "Automated (or needs no automation).",
+      "trDesc0": "No translation.",
+      "trDesc1": "Unofficial translation.",
+      "trDesc2": "Partly unofficial translation.",
+      "trDesc3": "Official translation.",
+      "Manual": "Set by the GM",
+      "Guessed": "Estimated by the module",
+      "GMHint": "Click to change",
+      "UseGuess": "Module's estimate",
+      "ChooseHint": "Choose the level for {power}. It applies to every copy of this power in the world."
     }
   }
 }

@@ -1,3 +1,4 @@
+import { decorateActorSheet } from "./power-badges.mjs";
 import { MODULE_ID } from "./constants.mjs";
 import { setting } from "./utils.mjs";
 
@@ -79,6 +80,7 @@ export function registerSheetModHooks() {
 	Hooks.on("renderApplicationV2", (app, element) => {
 		try {
 			if (app.document instanceof Actor) decorateSheet(app, element);
+			if (app.document instanceof Actor) decorateActorSheet(app, element);
 		} catch (err) {
 			console.error(`${MODULE_ID} | sheet highlights`, err);
 		}
