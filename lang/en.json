@@ -277,7 +277,8 @@
       "PrimeShot": "Prime Shot",
       "GreatCleave": "Great Cleave +{count} (adjacent enemies)",
       "GreatCleaveHint": "+1 damage for each enemy adjacent to you.",
-      "AutoModsLegend": "Automatic modifiers (4e automation)"
+      "AutoModsLegend": "Automatic modifiers (4e automation)",
+      "Prone": "<strong>{target}</strong> falls prone ({power})."
     },
     "TempHp": {
       "Rageblood": "<strong>{actor}</strong> gains {amount} temporary hit points (Rageblood Vigor, {target} dropped).",

@@ -5,8 +5,8 @@
  */
 
 const PATTERNS = [
-	/\bshifts?\s+(\d+)\s+squares?/gi,
-	/\bajust(?:a|e|ar|am)\s+(\d+)\s+quadrados?/gi,
+	/\bshifts?\s+(?:up to\s+)?(\d+)\s+squares?/gi,
+	/\bajust(?:a|e|ar|am)\s+(?:at[ée]\s+)?(\d+)\s+quadrados?/gi,
 ];
 const OTHERS = /(target|ally|allies|enemy|creature|alvo|aliad[oa]s?|inimigo|criatura)\s*(can\s*|pode\s*)?$/i;
 
@@ -32,4 +32,20 @@ export function freeShiftFor(item) {
 		}
 	}
 	return best;
+}
+
+/**
+ * When the free shift happens: "before" ("Before the attack, you shift 2 squares"), "after" (an attack
+ * power whose shift is just an Effect/Hit line, like a monster's "Effect: The wolf shifts up to 4 squares"),
+ * or "any" ("before or after you attack", and powers without an attack).
+ */
+export function freeShiftTiming(item) {
+	const sys = item?.system ?? {};
+	const text = [sys.special, sys.effect?.detail, sys.hit?.detail, plain(sys.description?.value)].filter(Boolean).join(" ");
+	// "shift 1 square, then make a basic attack" (Fox's Cunning) is a shift before the attack too
+	const before = /\bbefore\b|\bantes\b|\bshifts?\s+(?:up to\s+)?\d+\s+squares?,?\s+then\b|\bajust\w*\s+(?:at[ée]\s+)?\d+\s+quadrados?\s*(?:e,?\s*)?em seguida/i.test(text);
+	const after = /\bafter\b|\bdepois\b/i.test(text);
+	if (before && after) return "any";
+	if (before) return "before";
+	return sys.attack?.isAttack ? "after" : "any";
 }

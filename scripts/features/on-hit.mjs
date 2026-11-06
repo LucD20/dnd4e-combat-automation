@@ -3,6 +3,7 @@ import { F, L, matches, actorHas, abilityMod, setting, log, tokenForActor, gridD
 import { buildEffect, createEffects } from "../effects.mjs";
 import { conditionalModifiers, markApplied } from "./conditional.mjs";
 import { bloodhuntModifier } from "./class-features.mjs";
+import { proneRiderFor } from "../movement/parse.mjs";
 
 /*
  * Power riders applied automatically to the targets a power hits, plus attack-roll modifiers:
@@ -98,6 +99,44 @@ export async function onAttackRolled(itemData, targetData, actor) {
 		}
 	}
 	await stirringShoutHeal(actor, hit);
+	await applyProneRider(itemData, targetData, actor);
+}
+
+/* -------------------------------------------- */
+/*  "The target falls prone" riders               */
+/* -------------------------------------------- */
+
+// The rider is read by proneRiderFor (movement/parse.mjs); combat advantage per target comes from the attack dialog.
+const combatAdvantage = new Map(); // attacker actor uuid -> Map(target token id -> had combat advantage)
+
+function noteCombatAdvantage(actor, target, had) {
+	if (!combatAdvantage.has(actor.uuid)) combatAdvantage.set(actor.uuid, new Map());
+	combatAdvantage.get(actor.uuid).set(target.id, had);
+}
+
+async function applyProneRider(itemData, targetData, actor) {
+	const ca = combatAdvantage.get(actor?.uuid);
+	combatAdvantage.delete(actor?.uuid);
+	if (!setting("powerRiders")) return;
+	const item = itemData?.uuid ? fromUuidSync(itemData.uuid) : null;
+	const rider = proneRiderFor(item ?? itemData);
+	if (!rider) return;
+	const status = CONFIG.statusEffects?.find((s) => s.id === "prone");
+	const reached = rider.when === "effect" ? (targetData?.targets ?? []) : (targetData?.targetHit ?? []);
+	for (const target of reached) {
+		if (!target.actor || target.actor.statuses?.has("prone")) continue;
+		if (rider.combatAdvantage && !ca?.get(target.id)) continue;
+		await createEffects(target.actor, [{
+			name: game.i18n.localize(status?.name ?? "EFFECT.StatusProne"),
+			img: status?.img ?? "icons/svg/falling.svg",
+			statuses: ["prone"],
+			disabled: false,
+			origin: actor.uuid,
+			flags: { [MODULE_ID]: { kind: "proneRider", source: actor.uuid } },
+		}]);
+		ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p>${F("OnHit.Prone", { target: target.name, power: item?.name ?? itemData?.name ?? "" })}</p>` });
+		log("prone rider", item?.name, target.name, rider.combatAdvantage ? "(combat advantage)" : "");
+	}
 }
 
 /** Stirring Shout: "whenever an ally hits the target, that ally regains hit points equal to your Charisma modifier". */
@@ -171,6 +210,7 @@ export function clearAttackModChoices() {
 }
 
 export function onPreAttackRoll(item, attacker, target, config) {
+	if (attacker?.actor && target) noteCombatAdvantage(attacker.actor, target, !!config?.commonAttackBonuses?.comAdv?.shouldApply);
 	const bonuses = config?.targetOptions?.bonuses;
 	if (!bonuses?.untyped) return;
 	const off = disabledMods.get(targetKey(target)) ?? new Set();

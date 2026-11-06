@@ -1,7 +1,7 @@
 import { MODULE_ID, SOCKET } from "../constants.mjs";
 import { F, L, setting, log, tokenForActor, areAllies, areEnemies, isDefeated, gridDistance } from "../utils.mjs";
 import { pickMovement } from "./picker.mjs";
-import { freeShiftFor } from "../actions/free-shift.mjs";
+import { freeShiftFor, freeShiftTiming } from "../actions/free-shift.mjs";
 import { combatantForActor, isCombatantsTurn, spend, getState } from "../actions/state.mjs";
 import { meleeBasicAttack } from "../reactions/opportunity.mjs";
 import { addPendingAttackMod } from "../features/conditional.mjs";
@@ -13,7 +13,8 @@ import { forcedMovesFor, allyShiftsFor } from "./parse.mjs";
  *   - Forced movement in a power's text: "push/pull/slide the target N squares",
  *     "o alvo é empurrado/puxado/conduzido N quadrados". After the attack (and Dice So Nice) the
  *     attacker picks the square for each target; skipping leaves a button in chat for later.
- *   - Free shifts of the power's user ("Shift 1 square before or after you attack"): picker right away.
+ *   - Free shifts of the power's user ("Shift 1 square before or after you attack"): picker right away;
+ *     a shift that only comes after the attack ("Effect: The wolf shifts up to 4 squares") waits for the roll.
  *   - Shifts granted to allies ("the target/an ally can shift N squares"): the ally's player picks.
  *   - "During the slide, you or an ally can make a melee basic attack" (Blunder): a chat card with a
  *     button per creature that can make that attack, with its power bonus.
@@ -31,13 +32,20 @@ export async function onAttackRolled(itemData, targetData, actor) {
 	const attacker = tokenForActor(actor);
 	if (!attacker) return;
 	const groups = { hit: targetData?.targetHit ?? [], miss: targetData?.targetMissed ?? [], effect: targetData?.targets ?? [] };
+	const later = shiftAfter.get(actor.uuid);
+	shiftAfter.delete(actor.uuid);
 	for (const move of forcedMovesFor(item)) {
 		for (const target of groups[move.when]) await offerForced({ power: item.name, attacker, target, move });
 	}
 	for (const shift of allyShiftsFor(item)) {
 		for (const target of groups[shift.when]) if (target !== attacker && areAllies(attacker, target)) requestShift(target, shift.squares, item.name);
 	}
+	if (later && Date.now() - later.time < 10 * 60 * 1000 && !isDefeated(attacker)) {
+		await pickMovement({ token: attacker, mode: "shift", squares: later.squares, power: item.name, moveOptions: { countMovement: later.count } });
+	}
 }
+
+const shiftAfter = new Map(); // actor uuid -> { squares, count, time }: free shift to pick once the attack is rolled
 
 /** Non-attack powers (e.g. Majestic Word: "you also slide the target 1 square"), and free shifts. */
 export async function onUsePower(item, actor) {
@@ -50,7 +58,9 @@ export async function onUsePower(item, actor) {
 		const combatant = combatantForActor(actor);
 		const count = !!combatant?.combat?.started && isCombatantsTurn(combatant);
 		// In combat the tracker already refunded a shift made just before the power: nothing left to pick
-		if (!count || (getState(combatant).freeShift || 0) > 0) pickMovement({ token: me, mode: "shift", squares: free, power: item.name, moveOptions: { countMovement: count } });
+		const available = !count || (getState(combatant).freeShift || 0) > 0;
+		if (available && freeShiftTiming(item) === "after") shiftAfter.set(actor.uuid, { squares: free, count, time: Date.now() });
+		else if (available) pickMovement({ token: me, mode: "shift", squares: free, power: item.name, moveOptions: { countMovement: count } });
 	}
 	if (item.system?.attack?.isAttack) return false; // forced movement waits for the attack result
 	const targets = Array.from(game.user.targets).filter((t) => t.actor);

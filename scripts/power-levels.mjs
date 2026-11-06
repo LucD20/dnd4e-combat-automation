@@ -1,6 +1,6 @@
 import { MODULE_ID, MATCHERS } from "./constants.mjs";
 import { matches, isRagePower } from "./utils.mjs";
-import { forcedMovesFor, allyShiftsFor } from "./movement/parse.mjs";
+import { forcedMovesFor, allyShiftsFor, proneRiderFor, sectionTexts } from "./movement/parse.mjs";
 import { freeShiftFor } from "./actions/free-shift.mjs";
 
 /*
@@ -58,8 +58,9 @@ const BOILERPLATE = /^(published in|publicado em|level \d+|n[íi]vel \d+|special
 
 /** The rules clauses of a power's Hit / Miss / Effect text (one per sentence or "and the target..." part). */
 export function clauses(item) {
-	const sys = item?.system ?? {};
-	const text = [sys.hit?.detail, sys.miss?.detail, sys.effect?.detail].map(plain).filter(Boolean).join(" ");
+	// Detail fields, or the description's Hit/Miss/Effect paragraphs when those are empty (monster sheets)
+	const s = sectionTexts(item);
+	const text = [s.hit, s.miss, s.effect].map((t) => plain(t).replace(/\*/g, "")).filter(Boolean).join(" ");
 	return text.split(/(?<=[.;])\s+/)
 		.flatMap((s) => s.split(/,?\s+(?:and|e)\s+(?=(?:the target|you|each|o alvo|voc[êe]|cada|ele|ela)\b)/i))
 		.map((s) => s.trim().replace(/[.;]$/, ""))
@@ -79,6 +80,7 @@ function isPureClause(sys, clause) {
 
 const CONDITION = /\b(dazed|stunned|slowed|immobilized|weakened|blinded|deafened|prone|restrained|marked|grants combat advantage|pasmo|atordoado|lento|imobilizado|enfraquecido|cego|surdo|derrubado|impedido|marcado|vantagem de combate)\b/i;
 const MOVEMENT = /\b(push|pull|slide|shift|empurr|pux|conduz|ajust)\w*\b/i;
+const PRONE = /\bprone\b|derrubad/i;
 
 /**
  * Instructions in the "Attack:" line beyond "Ability vs. Defence" ("two attacks", "make two attack
@@ -89,8 +91,12 @@ export function attackLineExtras(item) {
 	const desc = plain(sys.description?.value);
 	const line = [sys.attack?.detail, desc.match(/\b(?:Ataque|Attack)\s*:\s*(.*?)(?=\b(?:Sucesso|Hit|Acerto|Fracasso|Miss|Erro|Efeito|Effect|Especial|Special|Published|Publicado)\b\s*:?|$)/i)?.[1]]
 		.filter(Boolean).join(" ");
-	const rest = line.replace(/\([^)]*\)/g, " ")
+	const rest = line.replace(/\*/g, " ").replace(/\([^)]*\)/g, " ")
+		.replace(/[+−-]?\s*\d+\s+vs\.?\s+[\wÀ-ú]+/gi, " ")
 		.replace(/[\wÀ-ú]+(?:\s*[+−-]\s*\d+)?\s+vs\.?\s+[\wÀ-ú]+/gi, " ")
+		// monster attack lines start with the range: "Melee 1", "Corpo a corpo 1", "Close burst 2"
+		.replace(/(?<![\wÀ-ú])(melee|ranged|reach|close|area|burst|blast|wall|corpo a corpo|[àa] dist[âa]ncia|toque|explos[ãa]o|rajada|cont[íi]gua|[áa]rea|muralha|weapon|arma)(?![\wÀ-ú])/gi, " ")
+		.replace(/[+−-]?\d+/g, " ")
 		.replace(/(?<![\wÀ-ú])(or|ou|and|e)(?![\wÀ-ú])/gi, " ")
 		.replace(/[.,;:]/g, " ").replace(/\s+/g, " ").trim();
 	return rest.split(" ").filter((w) => w.length > 2).length >= 2 ? [rest] : [];
@@ -99,14 +105,19 @@ export function attackLineExtras(item) {
 /** Automation level guessed from the power's text. */
 export function guessAutomation(item) {
 	const sys = item?.system ?? {};
-	if (sys.attack?.isBasic) return 3;
 	const all = clauses(item);
 	const extra = [...all.filter((c) => !isPureClause(sys, c)), ...attackLineExtras(item)];
 	const pure = all.length - all.filter((c) => !isPureClause(sys, c)).length;
 	if (!extra.length) return 3; // attack + damage (or healing): the system does it
 	const hasEffects = (item.effects?.size ?? item.effects?.length ?? 0) > 0;
 	const moves = forcedMovesFor(item).length + allyShiftsFor(item).length + (freeShiftFor(item) ? 1 : 0);
-	const covered = extra.filter((c) => (moves && MOVEMENT.test(c)) || (hasEffects && CONDITION.test(c))).length;
+	const prone = !!proneRiderFor(item);
+	// Movement and prone riders are done by the module itself; a condition word next to the power's own
+	// effects only probably is (the effect may need a click)
+	const sure = (c) => (moves && MOVEMENT.test(c)) || (prone && PRONE.test(c));
+	const likely = (c) => hasEffects && CONDITION.test(c);
+	const covered = extra.filter((c) => sure(c) || likely(c)).length;
+	if (extra.every(sure)) return 3;
 	if (covered >= extra.length) return 2;
 	// The system still rolls the attack/damage: a little automated; nothing at all: not automated
 	return covered || pure ? 1 : 0;

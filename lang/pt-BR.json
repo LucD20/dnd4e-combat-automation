@@ -277,7 +277,8 @@
       "PrimeShot": "Tiro Primoroso",
       "GreatCleave": "Grande Trespassar +{count} (inimigos adjacentes)",
       "GreatCleaveHint": "+1 de dano para cada inimigo adjacente a você.",
-      "AutoModsLegend": "Modificadores automáticos (automação 4e)"
+      "AutoModsLegend": "Modificadores automáticos (automação 4e)",
+      "Prone": "<strong>{target}</strong> fica derrubado ({power})."
     },
     "TempHp": {
       "Rageblood": "<strong>{actor}</strong> recebe {amount} pontos de vida temporários (Vigor da Fúria Sangrenta, {target} caiu).",

@@ -37,6 +37,15 @@ function descriptionSections(html) {
 	return out;
 }
 
+/** Hit / Miss / Effect texts of a power: its detail fields, or the description's sections when those are empty. */
+export function sectionTexts(item) {
+	const sys = item?.system ?? {};
+	const fields = { hit: plain(sys.hit?.detail).trim(), miss: plain(sys.miss?.detail).trim(), effect: plain(sys.effect?.detail).trim() };
+	const desc = descriptionSections(sys.description?.value);
+	for (const k of Object.keys(fields)) if (!fields[k] && desc[k]) fields[k] = desc[k].trim();
+	return fields;
+}
+
 function powerTexts(item) {
 	const sys = item?.system ?? {};
 	const fields = { hit: plain(sys.hit?.detail), miss: plain(sys.miss?.detail), effect: plain(sys.effect?.detail) };
@@ -86,4 +95,43 @@ export function allyShiftsFor(item) {
 		if (m) out.push({ squares: Number(m[3]), when });
 	}
 	return out;
+}
+
+/* -------------------------------------------- */
+/*  "The target falls prone" riders               */
+/* -------------------------------------------- */
+
+/*
+ * Read from the power's Hit text (detail field or the description's "Hit:/Sucesso:" paragraph):
+ *   "If the wolf has combat advantage against the target, the target falls prone" -> only when the attack
+ *     had combat advantage against that target (the Combat Advantage box of the attack dialog)
+ *   "the target falls prone" / "o alvo fica derrubado" -> on every hit
+ * "2d6 + 5 against a prone target" / "contra um alvo derrubado" is not a rider.
+ */
+const PRONE_CA = [
+	/combat advantage against (?:the |that |a )?target[^.]*?\b(?:falls|is knocked|knocked|knocks it) prone/i,
+	/\b(?:falls|is knocked|knocked) prone[^.]*?combat advantage/i,
+	/vantagem de combate contra (?:o|esse|um) alvo[^.]*?\bderrubad[oa]/i,
+	/(?<![\wÀ-ú])(?:fica|cai|é) derrubad[oa][^.]*?vantagem de combate/i,
+];
+const PRONE_ALWAYS = [
+	/\b(?:the )?target (?:falls|is knocked) prone\b/i,
+	/\bknocks? (?:the target|it) prone\b/i,
+	/\bo alvo (?:fica|cai|é) derrubad[oa]\b/i,
+	/\bderruba o alvo\b/i,
+];
+
+/**
+ * { combatAdvantage, when } when the power knocks targets prone, else null. when = "hit" (Hit line, hit
+ * targets) or "effect" (Effect line, every target).
+ */
+export function proneRiderFor(item) {
+	const texts = sectionTexts(item);
+	for (const when of ["hit", "effect"]) {
+		const text = texts[when];
+		if (!text) continue;
+		if (PRONE_CA.some((re) => re.test(text))) return { combatAdvantage: true, when };
+		if (PRONE_ALWAYS.some((re) => re.test(text))) return { combatAdvantage: false, when };
+	}
+	return null;
 }
