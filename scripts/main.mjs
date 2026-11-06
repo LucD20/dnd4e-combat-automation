@@ -11,6 +11,7 @@ import * as furiousAssault from "./features/furious-assault.mjs";
 import * as onHit from "./features/on-hit.mjs";
 import * as tempHp from "./features/temp-hp.mjs";
 import * as conditional from "./features/conditional.mjs";
+import * as classFeatures from "./features/class-features.mjs";
 import * as forcedMove from "./movement/forced.mjs";
 import * as charge from "./movement/charge.mjs";
 import * as powerBadges from "./power-badges.mjs";
@@ -38,6 +39,7 @@ Hooks.once("init", () => {
 	opportunity.registerOpportunityHooks();
 	triggers.registerTriggerHooks();
 	tempHp.registerTempHpHooks();
+	classFeatures.registerClassFeatureHooks();
 	registerSheetModHooks();
 	conditional.registerConditionalHooks();
 	forcedMove.registerMovementHooks();
@@ -66,7 +68,7 @@ Hooks.on("dnd4e.usePower", async (item) => {
 	try {
 		await spendPowerAction(item);
 		opportunity.onUsePower(item);
-		for (const feature of [quarry, curse, rage, furiousAssault, conditional]) {
+		for (const feature of [quarry, curse, rage, furiousAssault, conditional, classFeatures]) {
 			if (await feature.onUsePower(item, actor)) break;
 		}
 		await forcedMove.onUsePower(item, actor);
@@ -82,6 +84,7 @@ Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 		const actor = actorFromSpeaker(speaker);
 		damageApply.onAttackRolledForDamage(itemData, targetData, speaker);
 		onHit.clearAttackModChoices();
+		opportunity.clearOpportunityAttack(actor);
 		// Everything below depends on hit/miss: wait for Dice So Nice so it doesn't spoil the roll.
 		await waitForDice();
 		if (actor) await mark.onAttackRolled(itemData, targetData, actor);
@@ -89,6 +92,7 @@ Hooks.on("dnd4e.rollAttack", async (itemData, targetData, speaker) => {
 		await triggers.onAttackRolled(itemData, targetData, speaker);
 		await conditional.onAttackRolled(itemData, targetData, actor);
 		await forcedMove.onAttackRolled(itemData, targetData, actor);
+		await classFeatures.onAttackRolled(itemData, targetData, actor);
 	} catch (err) {
 		console.error(`${MODULE_ID} | rollAttack`, err);
 	}

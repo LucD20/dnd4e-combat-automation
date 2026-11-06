@@ -2,6 +2,7 @@ import { MODULE_ID, MATCHERS } from "../constants.mjs";
 import { F, L, matches, actorHas, abilityMod, setting, log, tokenForActor, gridDistance, areAllies, areEnemies, isRangedPower } from "../utils.mjs";
 import { buildEffect, createEffects } from "../effects.mjs";
 import { conditionalModifiers, markApplied } from "./conditional.mjs";
+import { bloodhuntModifier } from "./class-features.mjs";
 
 /*
  * Power riders applied automatically to the targets a power hits, plus attack-roll modifiers:
@@ -152,6 +153,8 @@ export function attackModifiers(item, attacker, target) {
 		}
 	}
 	if (setting("primeShot") && primeShotApplies(item, attacker, target)) mods.push({ key: "primeShot", label: L("OnHit.PrimeShot"), value: 1 });
+	const bloodhunt = bloodhuntModifier(attacker, target);
+	if (bloodhunt) mods.push(bloodhunt);
 	mods.push(...conditionalModifiers(item, attacker));
 	return mods;
 }

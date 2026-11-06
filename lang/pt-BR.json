@@ -88,7 +88,11 @@
       },
       "tempHpFeatures": {
         "Name": "PV temporários de características",
-        "Hint": "Vigor da Fúria Sangrenta (automático quando seu ataque derruba um inimigo) e Virtude da Bravura (cartão para o bardo quando um aliado a até 5 quadrados deixa um inimigo sangrando ou o derruba)."
+        "Hint": "Vigor da Fúria Sangrenta (automático quando seu ataque derruba um inimigo), Half-Orc Resilience (automático na primeira vez que você fica sangrando no encontro) e Virtude da Bravura (cartão para o bardo quando um aliado a até 5 quadrados deixa um inimigo sangrando ou o derruba)."
+      },
+      "classFeatures": {
+        "Name": "Regras de classe, raça e talentos",
+        "Hint": "Bloodhunt (+1 racial contra inimigos sangrando), Defensive Mobility (+2 de CA contra ataques de oportunidade), Shadow Walk (camuflagem depois de andar 3 quadrados), Rampage (ataque básico corpo a corpo grátis depois de um crítico) e Palavras de Amizade (+5 no próximo teste de Diplomacia)."
       },
       "sheetModHighlights": {
         "Name": "Destacar defesas modificadas nas fichas",
@@ -283,7 +287,8 @@
       "ValorButton": "Dar {amount} PV temporários a {ally}",
       "ValorUsed": "Já usada nesta rodada",
       "ValorGranted": "<strong>{bard}</strong> dá {amount} pontos de vida temporários a <strong>{ally}</strong> (Virtude da Bravura).",
-      "ValorNotHigher": "{ally} já tem essa quantidade de PV temporários; Virtude da Bravura usada sem efeito."
+      "ValorNotHigher": "{ally} já tem essa quantidade de PV temporários; Virtude da Bravura usada sem efeito.",
+      "Resilience": "<strong>{actor}</strong> recebe {amount} pontos de vida temporários ({feature}, primeira vez sangrando no encontro)."
     },
     "RollVars": {
       "wepAttack": "Arma (Treinamento)",
@@ -393,6 +398,14 @@
       "GMHint": "Clique para mudar",
       "UseGuess": "Estimativa do módulo",
       "ChooseHint": "Escolha o nível de {power}. Vale para todas as cópias deste poder no mundo."
+    },
+    "Features": {
+      "ShadowWalk": "<strong>{actor}</strong> se afastou 3 quadrados de onde começou o turno: camuflagem até o fim do próximo turno ({feature}).",
+      "ShadowWalkDesc": "Camuflagem (−2 nas jogadas de ataque contra esta criatura) até o fim do próximo turno dela.",
+      "Rampage": "<strong>{actor}</strong> conseguiu um acerto crítico com <strong>{power}</strong> e pode fazer um ataque básico corpo a corpo como ação livre.",
+      "RampageButton": "Ataque básico corpo a corpo (ação livre)",
+      "WordsArmed": "{actor}: +5 de bônus de poder no próximo teste de Diplomacia até o fim do próximo turno ({power}).",
+      "WordsDesc": "+5 de bônus de poder no próximo teste de Diplomacia. Termina depois desse teste ou no fim do próximo turno."
     }
   },
   "EFFECT": {

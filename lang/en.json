@@ -88,7 +88,11 @@
       },
       "tempHpFeatures": {
         "Name": "Temporary HP features",
-        "Hint": "Rageblood Vigor (automatic when your attack drops an enemy) and Virtue of Valor (card for the bard when an ally within 5 squares bloodies or drops an enemy)."
+        "Hint": "Rageblood Vigor (automatic when your attack drops an enemy), Half-Orc Resilience (automatic the first time you are bloodied in an encounter) and Virtue of Valor (card for the bard when an ally within 5 squares bloodies or drops an enemy)."
+      },
+      "classFeatures": {
+        "Name": "Class, racial and feat rules",
+        "Hint": "Bloodhunt (+1 racial vs bloodied foes), Defensive Mobility (+2 AC vs opportunity attacks), Shadow Walk (concealment after moving 3 squares), Rampage (free melee basic attack after a critical hit) and Words of Friendship (+5 to the next Diplomacy check)."
       },
       "sheetModHighlights": {
         "Name": "Highlight modified defences on sheets",
@@ -283,7 +287,8 @@
       "ValorButton": "Give {ally} {amount} temporary HP",
       "ValorUsed": "Already used this round",
       "ValorGranted": "<strong>{bard}</strong> gives <strong>{ally}</strong> {amount} temporary hit points (Virtue of Valor).",
-      "ValorNotHigher": "{ally} already has as many temporary hit points; Virtue of Valor used without effect."
+      "ValorNotHigher": "{ally} already has as many temporary hit points; Virtue of Valor used without effect.",
+      "Resilience": "<strong>{actor}</strong> gains {amount} temporary hit points ({feature}, first time bloodied this encounter)."
     },
     "RollVars": {
       "wepAttack": "Weapon (Training)",
@@ -393,6 +398,14 @@
       "GMHint": "Click to change",
       "UseGuess": "Module's estimate",
       "ChooseHint": "Choose the level for {power}. It applies to every copy of this power in the world."
+    },
+    "Features": {
+      "ShadowWalk": "<strong>{actor}</strong> moved 3 squares away from where the turn started: concealment until the end of the next turn ({feature}).",
+      "ShadowWalkDesc": "Concealment (−2 to attack rolls against this creature) until the end of its next turn.",
+      "Rampage": "<strong>{actor}</strong> scored a critical hit with <strong>{power}</strong> and can make a melee basic attack as a free action.",
+      "RampageButton": "Melee basic attack (free action)",
+      "WordsArmed": "{actor}: +5 power bonus to the next Diplomacy check before the end of the next turn ({power}).",
+      "WordsDesc": "+5 power bonus to the next Diplomacy check. Ends after that check or at the end of the next turn."
     }
   }
 }

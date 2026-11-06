@@ -40,6 +40,7 @@ const REGISTRY = [
 	[m(["ranger-01-nimble-strike"], /nimble strike|golpe l[ée]pido/i), 3],
 	[m(["bard-01-blunder"], /\bblunder\b|\bgafe\b/i), 3],
 	[m(["bard-majestic-word"], /majestic word|palavra majestosa/i), 3],
+	[m(["bard-words-of-friendship"], /words of friendship|palavras de amizade/i), 3],
 	[m(["barbarian-swift-charge"], /swift charge|investida c[ée]lere/i), 3],
 	[m(["barbarian-01-howling-strike"], /howling strike|golpe uivante/i), 3],
 	[m(["warlock-pact-boon-01-fate-of-the-void", "fate-of-the-void"], /fate of the void|destino do v[áa]cuo/i), 3],

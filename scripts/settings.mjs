@@ -24,6 +24,7 @@ export function registerSettings() {
 	world("powerRiders");
 	world("primeShot");
 	world("tempHpFeatures");
+	world("classFeatures");
 	world("conditionalRiders");
 	world("clickMovement");
 

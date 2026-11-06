@@ -14,6 +14,17 @@ const NO_OPPORTUNITY = ["dazed", "stunned", "dominated", "helpless", "unconsciou
 const SAFE_ACTIONS = ["shift", "teleport"];
 const pendingOpportunity = new Map(); // actor uuid -> timestamp
 const recentCards = new Map(); // dedupe key -> timestamp
+const activeOpportunity = new Map(); // actor uuid -> timestamp: the next attack roll is an opportunity attack
+
+/** Is this actor's attack being rolled from an opportunity card? (Defensive Mobility and the like) */
+export function isOpportunityAttack(actor) {
+	const t = activeOpportunity.get(actor?.uuid);
+	return !!t && Date.now() - t < 120000;
+}
+
+export function clearOpportunityAttack(actor) {
+	if (actor) activeOpportunity.delete(actor.uuid);
+}
 
 /** Was this power use started from an opportunity card? (consumed once) */
 export function consumePendingOpportunity(actor) {
@@ -175,6 +186,7 @@ async function onAttackButton(ev) {
 	if (!power) return ui.notifications.warn(F("Opportunity.NoBasic", { name: actor.name }));
 	if (provokerDoc?.object) provokerDoc.object.setTarget(true, { releaseOthers: true });
 	pendingOpportunity.set(actor.uuid, Date.now());
+	activeOpportunity.set(actor.uuid, Date.now());
 	if (typeof actor.usePower === "function") await actor.usePower(power, { configureDialog: true, fastForward: false, variance: { isOpp: true } });
 	else await power.roll({ variance: { isOpp: true } });
 }

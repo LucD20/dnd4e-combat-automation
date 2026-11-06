@@ -1,5 +1,5 @@
 import { MODULE_ID, SOCKET } from "../constants.mjs";
-import { F, L, actorHas, abilityMod, setting, log, tokenForActor, gridDistance, areAllies, areEnemies } from "../utils.mjs";
+import { F, L, matches, actorHas, abilityMod, setting, log, tokenForActor, gridDistance, areAllies, areEnemies } from "../utils.mjs";
 
 /*
  * Temporary hit point features (active GM watches HP changes):
@@ -8,10 +8,13 @@ import { F, L, actorHas, abilityMod, setting, log, tokenForActor, gridDistance, 
  *   Virtue of Valor (bard): once per round, when an ally within 5 squares of you bloodies an
  *     enemy or drops it to 0 HP, you can give that ally temp HP equal to 1 + Con mod (3 + at 11th,
  *     5 + at 21st). Offered to the bard as a chat card.
+ *   Half-Orc Resilience: the first time you are bloodied during an encounter, gain 5 temp HP
+ *     (10 at 11th, 15 at 21st). Applied automatically.
  * The "attacker" is the combatant whose turn it is.
  */
 
 const RAGEBLOOD = { ids: ["rageblood-vigor"], names: /rageblood vigor|vigor da f[úu]ria sangrenta|vigor sanguin[áa]rio/i };
+const RESILIENCE = { ids: ["half-orc-resilience"], names: /^(half-orc resilience|resili[êe]ncia (do )?meio-orc)$/i };
 const VALOR = { ids: ["virtue-of-valor"], names: /virtue of valor|virtude da bravura|virtude do valor/i };
 const oldHp = new Map(); // actor uuid -> hp before the update (GM side)
 
@@ -49,6 +52,16 @@ export async function onUpdateActor(actor, changes) {
 	const dropped = hp <= 0 && (before === undefined || before > 0);
 	const bloodied = !dropped && hp <= bloodiedAt && hp > 0 && (before === undefined || before > bloodiedAt);
 	if (!dropped && !bloodied) return;
+
+	// Half-Orc Resilience (the one who got bloodied)
+	const resilience = bloodied ? actor.items.find((i) => matches(i, RESILIENCE)) : null;
+	if (resilience && actor.getFlag(MODULE_ID, "resilience") !== game.combat.id) {
+		await actor.setFlag(MODULE_ID, "resilience", game.combat.id);
+		const amount = tier(actor, 5, 10, 15);
+		if (await grantTempHp(actor, amount)) {
+			ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor }), content: `<p>${F("TempHp.Resilience", { actor: actor.name, amount, feature: resilience.name })}</p>` });
+		}
+	}
 
 	const fallen = tokenForActor(actor);
 	const current = game.combat.combatant;
