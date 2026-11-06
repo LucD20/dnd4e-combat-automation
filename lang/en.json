@@ -325,7 +325,8 @@
       "training": "Training",
       "armourPen": "Armor penalty",
       "skillOther": "Other bonuses",
-      "wordsOfFriendship": "Words of Friendship"
+      "wordsOfFriendship": "Words of Friendship",
+      "fateOfTheVoid": "Fate of the Void"
     },
     "Conditional": {
       "FoxArmed": "{name}: the next basic attack gets +{bonus} (Fox's Cunning).",

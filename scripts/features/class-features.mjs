@@ -12,6 +12,7 @@ import { meleeBasicAttack, isOpportunityAttack } from "../reactions/opportunity.
  *   Rampage (barbarian)         once per round, a critical hit with a barbarian attack power offers a melee basic
  *                               attack as a free action (chat card)
  *   Words of Friendship (bard)  +5 power bonus to the next Diplomacy check before the end of your next turn
+ *                               (shown and used up by skill-rolls.mjs)
  * Half-Orc Resilience (temporary HP) lives in temp-hp.mjs.
  * Labels use the item's own name on the sheet, so they follow whatever language the sheet is in.
  */
@@ -205,33 +206,9 @@ export async function onUsePower(item, actor) {
 	return true;
 }
 
-/** After a Diplomacy check, the bonus is used up. */
-async function consumeWords(actor) {
-	const effects = effectsOfKind(actor, WORDS);
-	if (effects.length) await deleteEffects(actor, effects.map((e) => e.id));
-}
-
-function wrapRollSkill() {
-	const proto = CONFIG.Actor?.documentClass?.prototype;
-	if (!proto?.rollSkill || proto.rollSkill.d4eaWrapped) return;
-	const original = proto.rollSkill;
-	const wrapped = async function (skillId, options) {
-		const result = await original.call(this, skillId, options);
-		try {
-			if (skillId === "dip" && result) await consumeWords(this);
-		} catch (err) {
-			console.error(`${MODULE_ID} | words of friendship`, err);
-		}
-		return result;
-	};
-	wrapped.d4eaWrapped = true;
-	proto.rollSkill = wrapped;
-}
-
 /* -------------------------------------------- */
 
 export function registerClassFeatureHooks() {
-	Hooks.once("ready", wrapRollSkill);
 	Hooks.on("dnd4e.evaluateTargetDefence", (...args) => {
 		try { onEvaluateTargetDefence(...args); } catch (e) { console.error(`${MODULE_ID} | defensive mobility`, e); }
 	});

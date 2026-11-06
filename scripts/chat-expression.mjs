@@ -23,7 +23,7 @@ const LABEL_KEYS = {
 	extraDamage: "extraDamage", actorBonusDamage: "bonusDamage", dmg: "bonusDamage",
 	ammo: "ammo", ammoC: "ammo", ammoM: "ammo", powAmmo: "ammo", powAmmoC: "ammo", powAmmoM: "ammo",
 	wep2ndryDamage: "wep2ndryDamage", pow2ndryDamage: "wep2ndryDamage",
-	training: "training", armourPen: "armourPen", skillOther: "skillOther", wordsOfFriendship: "wordsOfFriendship",
+	training: "training", armourPen: "armourPen", skillOther: "skillOther", wordsOfFriendship: "wordsOfFriendship", fateOfTheVoid: "fateOfTheVoid",
 };
 
 /** Readable name for a roll variable ("@training" -> "Training"). */

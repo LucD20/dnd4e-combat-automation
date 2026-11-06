@@ -325,7 +325,8 @@
       "training": "Treinamento",
       "armourPen": "Penalidade de armadura",
       "skillOther": "Outros bônus",
-      "wordsOfFriendship": "Palavras de Amizade"
+      "wordsOfFriendship": "Palavras de Amizade",
+      "fateOfTheVoid": "Destino do Vácuo"
     },
     "Conditional": {
       "FoxArmed": "{name}: o próximo ataque básico ganha +{bonus} (Astúcia da Raposa).",
