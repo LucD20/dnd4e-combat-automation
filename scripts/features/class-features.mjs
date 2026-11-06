@@ -199,6 +199,7 @@ export async function onUsePower(item, actor) {
 		durationType: "endOfUserTurn",
 		changes: [{ key: "system.skills.dip.power", type: "add", value: "5", priority: null }],
 		description: L("Features.WordsDesc"),
+		extraFlags: { skillBonus: { skill: "dip", value: 5, var: "wordsOfFriendship" } },
 	})]);
 	ui.notifications.info(F("Features.WordsArmed", { actor: actor.name, power: item.name }));
 	return true;

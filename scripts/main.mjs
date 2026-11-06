@@ -28,6 +28,7 @@ import * as opportunity from "./reactions/opportunity.mjs";
 import * as triggers from "./reactions/triggers.mjs";
 import * as damageApply from "./damage-apply.mjs";
 import * as chatExpression from "./chat-expression.mjs";
+import * as skillRolls from "./skill-rolls.mjs";
 
 Hooks.once("init", () => {
 	// Must run in "init": Foundry loads translations right after this hook.
@@ -40,6 +41,7 @@ Hooks.once("init", () => {
 	triggers.registerTriggerHooks();
 	tempHp.registerTempHpHooks();
 	classFeatures.registerClassFeatureHooks();
+	skillRolls.registerSkillRollHooks();
 	registerSheetModHooks();
 	conditional.registerConditionalHooks();
 	forcedMove.registerMovementHooks();
@@ -104,6 +106,7 @@ Hooks.on("renderRollDialog", (app, element) => {
 	try {
 		onRenderRollDialog(app, element);
 		onHit.onRenderAttackDialog(app, element);
+		skillRolls.onRenderRollDialog(app, element, chatExpression.labelForVariable);
 	} catch (err) {
 		console.error(`${MODULE_ID} | renderRollDialog`, err);
 	}

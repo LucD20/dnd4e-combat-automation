@@ -23,7 +23,11 @@ const LABEL_KEYS = {
 	extraDamage: "extraDamage", actorBonusDamage: "bonusDamage", dmg: "bonusDamage",
 	ammo: "ammo", ammoC: "ammo", ammoM: "ammo", powAmmo: "ammo", powAmmoC: "ammo", powAmmoM: "ammo",
 	wep2ndryDamage: "wep2ndryDamage", pow2ndryDamage: "wep2ndryDamage",
+	training: "training", armourPen: "armourPen", skillOther: "skillOther", wordsOfFriendship: "wordsOfFriendship",
 };
+
+/** Readable name for a roll variable ("@training" -> "Training"). */
+export const labelForVariable = (variable) => labelFor(variable, null);
 
 function abilityName(ability) {
 	const a = CONFIG.DND4E?.abilities?.[ability];
@@ -32,6 +36,8 @@ function abilityName(ability) {
 }
 
 function labelFor(variable, info) {
+	const ability = variable.match(/^ability_(\w+)$/)?.[1];
+	if (ability) return abilityName(ability) || ability;
 	if (variable === "powerMod") {
 		const ab = abilityName(info?.ability);
 		return ab ? L("powerModNamed", { ability: ab }) : L("powerMod");

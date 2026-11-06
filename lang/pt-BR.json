@@ -321,7 +321,11 @@
         "item": "item",
         "power": "poder",
         "race": "racial"
-      }
+      },
+      "training": "Treinamento",
+      "armourPen": "Penalidade de armadura",
+      "skillOther": "Outros bônus",
+      "wordsOfFriendship": "Palavras de Amizade"
     },
     "Conditional": {
       "FoxArmed": "{name}: o próximo ataque básico ganha +{bonus} (Astúcia da Raposa).",
