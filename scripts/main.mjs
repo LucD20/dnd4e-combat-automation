@@ -29,6 +29,7 @@ import * as triggers from "./reactions/triggers.mjs";
 import * as damageApply from "./damage-apply.mjs";
 import * as chatExpression from "./chat-expression.mjs";
 import * as skillRolls from "./skill-rolls.mjs";
+import * as textOverrides from "./features/text-overrides.mjs";
 
 Hooks.once("init", () => {
 	// Must run in "init": Foundry loads translations right after this hook.
@@ -45,11 +46,13 @@ Hooks.once("init", () => {
 	registerSheetModHooks();
 	conditional.registerConditionalHooks();
 	forcedMove.registerMovementHooks();
+	textOverrides.registerTextOverrideHooks();
 	game.modules.get(MODULE_ID).api = {
 		applyMark: mark.applyMark,
 		computeCover,
 		drawCoverPreview: drawPreview,
 		openActionPanel: () => ActionPanel.open(),
+		translateExisting: textOverrides.translateExisting,
 	};
 });
 
